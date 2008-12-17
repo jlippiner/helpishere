@@ -20,8 +20,7 @@ $(document).ready(function() {
 
 function showResponse(responseText, statusText)  {
     if(statusText=='success'){
-        log(responseText);
-        //eval(responseText);
+        eval(responseText);
     }
 }
 

@@ -93,7 +93,7 @@ class SearchController < ApplicationController
       @search.save
       respond_to do |format|
         format.js {
-          render :text => "saved"
+          render :text => "join_hih_complete()"
         }
         format.html {
           flash[:error] = "You should not see this"

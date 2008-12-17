@@ -9,7 +9,7 @@ function step3_zip_show() {
     });
 }
 
-function s() {
+function join_hih_complete() {
     alert('welcome')
 }
 
