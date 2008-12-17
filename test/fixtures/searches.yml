@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  disease_id: 1
+  affected: MyString
+  relationship: MyString
+  age: 1
+  location: MyString
+
+two:
+  disease_id: 1
+  affected: MyString
+  relationship: MyString
+  age: 1
+  location: MyString

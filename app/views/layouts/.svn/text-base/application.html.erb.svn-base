@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http:www.w3.or/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-type" context="text/html; charset=utf-8" />
+	<title>HelpIsHelp.org</title>
+	<%= stylesheet_link_tag 'style', 'in_place_styles'  %>
+    <%= javascript_include_tag :defaults %>
+</head>
+<body>
+	<div id="content">
+		<h2>HelpIsHere.org</h2>
+		<% unless flash[:notice].blank? %>
+			<div id="notification"><%= flash[:notice] %></div>
+            <script type="text/javascript">
+              setTimeout("new Effect.Fade('notification');", 3000)
+            </script>
+		<% end %>
+        <% unless flash[:error].blank? %>
+			<div id="error"><%= flash[:error] %></div>
+		<% end %>
+         <% unless flash[:warning].blank? %>
+			<div id="warning"><%= flash[:warning] %></div>
+		<% end %>
+        <%= inplace_error_div %>
+		<%= yield %>
+	</div>
+
+    <ul id="navigation">
+      <li><%= link_to 'Diseases', diseases_path %></li>
+    </ul>
+</body>
+</html>

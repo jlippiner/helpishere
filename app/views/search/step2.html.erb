@@ -1,0 +1,32 @@
+<h1>Search for Resources</h1>
+<div class="step">
+  <div class="step_off" onclick='document.location="<%= search_index_path %>"'>
+    Step 1. Please select an illness or disease: <span id="selected_disease" class="answer"><%= @disease.name if !@disease.nil? %></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step_question">Step 2: How are you affected?</div>
+  <div id="step2" class="step_question">
+    <%= link_to "Diagnosed", { :action => "step2_link", :id => @search, :value => "Diagnosed", } ,{ :class => "step_choices"}  %><br>
+    <a href="#div_caregiver" rel="facebox" class="step_choices">Caregiver</a><br>
+    <%= link_to "Other", { :action => "step2_link", :id => @search, :value => "Other", } ,{ :class => "step_choices"}  %><br>
+  </div>
+
+
+  <div id="div_caregiver" style="display:none;">
+    <% form_for :search, :url => {:action => "step2_form",:id => @search}, :html => { :onsubmit => "return validate(this);" } do |f| %>
+      How old is person you are caring for?
+      <div style="text-align:center;margin:10px">
+        <%= f.select :affected_age, [["SELECT",''], "Younger than 2", "2-5 years old", "6-10 years old", "10-17 years old", "18 - 25 years old", "25-35 years old", "35-55 years old", "55-64 years old", "65-80 years old", "older than 80"] %>
+      </div>
+      What is your relationship?
+      <div style="text-align:center;margin:10px">
+        <%= f.select :affected_relationship, [["SELECT",""], "Parent", "Sibling", "Relative", "Friend", "Patient", "Other"] %>
+      </div>
+      <div style="text-align:right">
+        <%= submit_tag  "Next >" %>
+      <% end %>
+    </div>
+  </div>
+</div>

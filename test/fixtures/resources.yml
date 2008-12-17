@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  listing_id: 1
+  disease_id: 1
+  user_id: 1
+  comment: MyText
+
+two:
+  listing_id: 1
+  disease_id: 1
+  user_id: 1
+  comment: MyText

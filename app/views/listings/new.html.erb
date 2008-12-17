@@ -1,0 +1,73 @@
+<h1>New Listing</h1>
+<% form_for @listing do |f| %>
+  <table>
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td>
+              Name:
+            </td>
+            <td>
+              <%= f.text_field :title %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Who Pays?
+            </td>
+            <td>
+              <%= select_tag :who_pays, options_for_select(%w{Self Listing Insurance Government}) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cost:
+            </td>
+            <td>
+              <%= f.text_field :cost, :size => "10" %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Phone:
+            </td>
+            <td>
+              <%= f.text_field :phone,:size => "15" %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Website:
+            </td>
+            <td>
+              <%= f.text_field :website,:size => "30" %>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              Services Rendered:
+            </td>
+            <td>
+              <%= f.text_area :services_rendered %>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td valign="top">
+          Listing relates to:<br>
+          <% @listing.resources.each_with_index do |resource, index|%>
+            <% fields_for "resources[#{index}]", resource do |d| %>
+                    <%= d.check_box :disease_id, {:checked => "no"}%>
+                    <%= resource.disease.name %><br>
+            <% end %>
+          <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <%= submit_tag  "Submit" %>
+      </td>
+    </tr>
+  </table>
+<% end %>

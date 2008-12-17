@@ -1,0 +1,9 @@
+<h1>Search for Resources</h1>
+<div class="step_question">Step 1. Please select an illness or disease:</div>
+<div id="step1" class="step_choices">
+  <% @disease.each do |disease| %>
+           <%= link_to  disease.name, {:action => :step1, :id => disease  } %><br>
+  <% end %>
+</div>
+
+

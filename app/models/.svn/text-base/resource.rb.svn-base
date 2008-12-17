@@ -1,0 +1,5 @@
+class Resource < ActiveRecord::Base
+  has_many :diseaseresources
+  has_many :diseases, :through => :diseaseresources
+  belongs_to :user
+end

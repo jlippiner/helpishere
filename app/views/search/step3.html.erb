@@ -1,0 +1,30 @@
+<h1>Search for Resources</h1>
+<div class="step">
+  <div class="step_off" onclick='document.location="<%=  search_index_path  %>"'>
+    Step 1. Please select an illness or disease: <span id="selected_disease" class="answer"><%= @search.disease.name %></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step_off" onclick='document.location="<%= url_for :controller => "search", :action => "step2", :id => @search %>"'>Step 2: How are you affected? <span class="answer"><%= @search.how_affected %></span></div>
+</div>
+
+<div class="step">
+  <div id="step3" class="step_question">
+    <% form_for @search, :url => {:action => "step3_form", :id => @search}, :html => {:rel => "remote"} do |f|  %>
+      Step 3: Where are you located? <%= country_select("location",nil,["United States"],{}) %>
+      <%= submit_tag 'Submit' %>
+    <% end %>
+  </div>
+
+  <a href="#step3_zip" id="step3_zip_show" rel="facebox" style="display:none">Show Zip</a>
+  <div id="step3_zip" class="step_question" style="display:none;width:500px">
+    <% form_for :search, :url => {:action => "step3_zip_form", :id => @search } do |f| %>
+      Please enter your zip code:
+      <%= f.text_field :zipcode, :class => "text ui.large", :size => "5" %>
+      <%= submit_tag 'Submit' %>
+      <%= submit_tag 'Cancel', :name => 'cance_button',
+          :onclick => "jQuery(document).trigger('close.facebox');return false;" %>
+    <%  end  %>
+  </div>
+</div>

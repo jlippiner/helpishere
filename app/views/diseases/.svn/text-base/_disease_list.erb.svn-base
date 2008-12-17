@@ -1,0 +1,10 @@
+<%- @disease = disease_list -%>
+<div style="overflow:hidden;width:auto">
+  <div style="float:left;width:auto">
+    <span style="font-size:smaller"><%= disease_list_counter + 1 %>:</span>
+    <%= in_place_text_field :disease, :name, {:br => false} %>
+  </div>
+  <div style="float:right;width:50px">
+    <%= link_to "[X]",  disease_list, :method => "delete"    %>
+  </div>
+</div>

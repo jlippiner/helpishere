@@ -1,0 +1,70 @@
+<h1>Search for Resources</h1>
+<div class="step">
+  <div class="step_off" onclick='document.location="<%=  search_index_path  %>"'>
+    Step 1. Please select an illness or disease: <span id="selected_disease" class="answer"><%= @search.disease.name %></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step_off" onclick='document.location="<%= url_for :controller => "search", :action => "step2", :id => @search %>"'>Step 2: How are you affected? <span class="answer"><%= @search.how_affected %></span></div>
+</div>
+
+<div class="step">
+  <div class="step_off" onclick='document.location="<%= url_for :controller => "search", :action => "step3", :id => @search %>"'>Step 3: Where are you located? <span class="answer"><%= @search.location %> <%= @search.zipcode if !@search.zipcode.nil? %></span></div>
+</div>
+
+<div class="signup">
+  <a href="#join_form" rel="facebox">Would you like to join HelpIsHere?</a>
+</div>
+
+<div style="display:none;width:550px">
+  <% form_for :user, :url => {:action => "join_hih", :id => @search }, :html => {:id => "join_form"} do |f| %>
+    <h1>Join HelpIsHere</h1>
+    <table>
+      <tr>
+        <td class="label"><%= f.label :name, "Name:" %></td>
+        <td class="field"><%= f.text_field  :name, :class => "text ui.large", :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+
+      <tr>
+        <td class="label"><%= f.label :nickname,"Nickname:" %></td>
+        <td class="field"><%= f.text_field :nickname, :class => "text ui.large", :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+       <tr>
+
+        <td class="label"><%= f.label :email %></td>
+        <td class="field"><%= f.text_field :email, :class => "text ui.large", :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+      <tr>
+        <td class="label"><%= f.label :password %></td>
+        <td class="field"><%= f.password_field  :password, :class => "text ui.large", :size => "20"   %></td>
+
+        <td class="status"></td>
+      </tr>
+      <tr>
+        <td class="label"><%= f.label "password_confirm" %></td>
+        <td class="field"><%= password_field  "password_confirm", "", :class => "text ui.large",  :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+
+
+      <tr>
+        <td class="label"><label id="lsignupsubmit" for="signupsubmit">Signup</label></td>
+        <td class="field" colspan="2" style="text-align:right">
+          <%= submit_tag  'Join Now', :class => "ui.large", :style => "font-size:16pt"  %>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" style="border-top:solid 1px gray;text-align:left;padding:5px;font-size:10pt">
+          Already a Member?  <%= link_to  "Sign in", "#" %>
+        </td>
+      </tr>
+    </table>
+
+
+  <% end %>
+</div>

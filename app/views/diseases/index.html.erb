@@ -1,0 +1,13 @@
+<h1>Diseases</h1>
+ <div id="dList" style="margin-bottom:10px">
+<% if @disease.empty? %>
+  <em>No diseases yet!</em>
+<% else %> 
+    <%= render :partial => "disease_list", :collection => @disease   %>
+<% end %>
+  </div>
+
+  <% remote_form_for @new_disease,
+                       :url => { :action => 'save_remote', :id => @new_disease } do |d| %>
+    New: <%= d.text_field :name %>
+  <% end %>

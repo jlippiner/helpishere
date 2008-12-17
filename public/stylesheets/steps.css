@@ -1,0 +1,134 @@
+.step {
+    margin:10px 0px 10px 0px;
+}
+.step_choices {
+    font-size: 16pt;    
+    margin: 20px;
+    line-height:30px;
+}
+.answer {
+    font-size: 16pt;
+    color: #705E1C;
+    
+}
+.step_question {
+    margin: 25px 0px 10px 0px;
+    font-size: 14pt;
+}
+.step select {
+    font-size:1.2em;
+}
+
+.step_off {
+    color: gray;
+    font-size: 12pt;
+}
+
+.signup {
+    margin:30px;
+    text-align:center;
+    color:blue;
+    font-size:20pt;
+}
+
+/* Signup form */
+
+#join_form table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  empty-cells: show;
+}
+
+#join_form .label {
+  padding-top: 2px;
+  padding-right: 8px;
+  vertical-align: top;
+  text-align: right;
+  width: 125px;
+  white-space: nowrap;
+}
+
+#join_form .field {
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+#join_form .status {
+  padding-top: 2px;
+  padding-left: 8px;
+  vertical-align: top;
+  width: 246px;
+  white-space: nowrap;
+}
+
+#join_form .textfield {
+  width: 150px;
+}
+
+#join_form label.error {
+  background:url("/images/unchecked.gif") no-repeat 0px 0px;
+
+  padding-left: 16px;
+
+  padding-bottom: 2px;
+
+  font-weight: bold;
+
+  color: #EA5200;
+}
+
+#join_form label.checked {
+  background:url("/images/checked.gif") no-repeat 0px 0px;
+}
+
+#join_form .success_msg {
+  font-weight: bold;
+  color: #0060BF;
+  margin-left: 19px;
+}
+
+#join_form #dateformatStatus, #join_form #termsStatus {
+  margin-left: 6px;
+}
+
+#join_form #dateformat_eu {
+ vertical-align: middle;
+}
+
+#join_form #ldateformat_eu {
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+#join_form #dateformat_am {
+  vertical-align: middle;
+}
+
+#join_form #ldateformat_am {
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+#join_form #termswrap {
+  float: left;
+}
+
+#join_form #terms {
+  vertical-align: middle;
+  float: left;
+  display: block;
+  margin-right: 5px;
+}
+
+#join_form #lterms {
+  font-weight: normal;
+  vertical-align: middle;
+  float: left;
+  display: block;
+  width: 350px;
+  white-space: normal;
+}
+
+#join_form #lsignupsubmit {
+  visibility: hidden;
+}
