@@ -1,40 +1,62 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http:www.w3.or/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-type" context="text/html; charset=utf-8" />
-	<title>HelpIsHelp.org</title>
-	<%= stylesheet_link_tag 'style', 'in_place_styles', 'steps', 'facebox'  %>
-    <%= javascript_include_tag :defaults, 'facebox.js', 'jquery.form.js', 'jquery.validate.pack.js', 
+  <head>
+    <meta http-equiv="Content-type" context="text/html; charset=utf-8" />
+    <title>HelpIsHelp.org</title>
+    <%= stylesheet_link_tag 'style', 'in_place_styles', 'steps', 'facebox'  %>
+    <%= javascript_include_tag :defaults, 'facebox.js', 'jquery.form.js', 'jquery.validate.pack.js',
       'jquery.livequery.pack.js',params[:controller] %>
-</head>
-<body>
+  </head>
+  <body>
     <div id="header">
-      <div id="logo"><%= image_tag 'header_logo.jpg' %></div>
-      <div id="tabs">
-        <div id="tab1" class="tab"><%= image_tag 'tab_search.jpg' %></div>
-        <div id="tab2" class="tab"><%= image_tag 'tab_add.jpg' %></div>        
-      </div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td>
+            <%= image_tag 'header_logo.jpg' %>
+          </td>
+          <td valign="bottom">
+            <div id="tab1" class="tab"><%= image_tag 'tab_search.jpg' %></div>
+            <div id="tab2" class="tab"><%= image_tag 'tab_add.jpg' %></div>
+          </td>
+          <td align="right" valign="top">
+            <div id="login_logout">
+              <% if @current_user %>
+                Welcome <%= @current_user.name %>
+                <em><%= link_to "(Logout)", user_logout_path  %></em>
+              <% else %>
+                <a href="#join_form" rel="facebox">Join</a>&nbsp;&nbsp;
+                <%= link_to "Login", user_login_path %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      </table>
+
     </div>
-	<div id="content">		
-		<% unless flash[:notice].blank? %>
-			<div id="notification"><%= flash[:notice] %></div>
-            <script type="text/javascript">
-              setTimeout("new Effect.Fade('notification');", 3000)
-            </script>
-		<% end %>
-        <% unless flash[:error].blank? %>
-			<div id="error"><%= flash[:error] %></div>
-		<% end %>
-         <% unless flash[:warning].blank? %>
-			<div id="warning"><%= flash[:warning] %></div>
-		<% end %>
-        <%= yield %>
-	</div>
+    <div id="content">
+      <% unless flash[:notice].blank? %>
+        <div id="notification"><%= flash[:notice] %></div>
+        <script type="text/javascript">
+          setTimeout(function(){ $("#notification").fadeOut() }, 3000);
+        </script>
+      <% end %>
+      <% unless flash[:error].blank? %>
+        <div id="error"><%= flash[:error] %></div>
+      <% end %>
+      <% unless flash[:warning].blank? %>
+        <div id="warning"><%= flash[:warning] %></div>
+      <% end %>
+      <%= yield %>
+    </div>
 
     <ul id="navigation">
       <li><%= link_to 'Diseases', diseases_path %></li>
-      <li><%= link_to 'Search for Resources', search_index_path %></li>
+      <li><%= link_to 'Search for Resources', search_start_path %></li>
     </ul>
-</body>
+
+    <% if !@current_user  %>
+        <%= render  :partial => "shared/joindiv" %>
+    <% end %>
+  </body>
 </html>

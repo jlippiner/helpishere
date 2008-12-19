@@ -1,12 +1,12 @@
 <h1>Search for Resources</h1>
 <div class="step">
-  <div class="step_off" onclick='document.location="<%=  search_index_path  %>"'>
+  <div class="step_off" onclick='document.location="<%=  search_start_path  %>"'>
     Step 1. Please select an illness or disease: <span id="selected_disease" class="answer"><%= @search.disease.name %></span>
   </div>
 </div>
 
 <div class="step">
-  <div class="step_off" onclick='document.location="<%= url_for :controller => "search", :action => "step2", :id => @search %>"'>Step 2: How are you affected? <span class="answer"><%= @search.how_affected %></span></div>
+  <div class="step_off" onclick='document.location="<%= search_step2_path(@search) %>"'>Step 2: How are you affected? <span class="answer"><%= @search.how_affected %></span></div>
 </div>
 
 <div class="step">

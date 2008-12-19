@@ -72,4 +72,16 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
+
+  
+end
+
+class String
+  def nilemp?
+    if !self.nil?
+      return self.empty?
+    else
+      return true
+    end  
+  end
 end

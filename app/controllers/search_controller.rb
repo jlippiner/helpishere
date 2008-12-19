@@ -83,47 +83,8 @@ class SearchController < ApplicationController
 
   def step4
     @search = Search.find(params[:id])
+    session[:search_id] = @search.id
   end
 
-  def join_hih
-    @search = Search.find(params[:id])
-    @user = User.new(params[:user])
-    if @user.save
-      @search.user = @user
-      @search.save
-      respond_to do |format|
-        format.js {
-          render :text => "join_hih_complete()"
-        }
-        format.html {
-          flash[:error] = "You should not see this"
-          render :action => "step4"
-        }
-      end
-    else
-      respond_to do |format|
-        format.js {
-          render :text => "save failed"
-        }
-        format.html {
-          flash[:error] = "Save failed"
-          render :action => "step4"
-        }
-      end
-    end
-  end
-
-  def remote_handler
-    #    first check for nickname
-    @value = params["user"]["nickname"]
-    if !@value.nil?
-      @valid = User.find_by_nickname(@value).nil?
-    else
-      @value = params["user"]["email"]
-      @valid = User.find_by_email(@value).nil?
-    end
-
-    
-  end
-
+ 
 end

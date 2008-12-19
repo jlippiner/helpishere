@@ -1,8 +1,25 @@
 ActionController::Routing::Routes.draw do |map|
- map.resources :diseases
+  map.resources :diseases
   map.resources :listings
-  map.resources :search
-  map.root :controller => "search"
+  
+  map.with_options(:controller => "search", :name_prefix => "search_") do |search|
+    search.connect 'search/:action/:id'
+    search.start 'search', :action => "step1"
+    search.step2 'search/step2/:id', :action => "step2"
+    search.step3 'search/step3/:id', :action => "step3"
+    search.step4 'search/step4/:id', :action => "step4"
+  end
+
+  map.with_options(:controller => "user", :name_prefix => "user_") do |user|
+    user.connect 'user/login', :action => 'login'
+    user.connect 'user/remote_handler', :action => "remote_handler"
+    user.join  'user/login',  :action => 'join'
+    user.login 'user/login',  :action => "login"
+    user.logout 'user/login',  :action => "logout"
+    user.connect 'user',  :action => "index"
+  end
+
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -42,6 +59,9 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.  
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+#  map.connect ':controller/:action/:id'
+#  map.connect ':controller/:action/:id.:format'
+# 
+  map.root :controller => "search"
+ 
 end

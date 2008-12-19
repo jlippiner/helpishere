@@ -12,15 +12,10 @@ body {
     margin: 0px;
     overflow:hidden;
 }
-#logo {
-    margin-left: 25px;
-    float:left;
-}
-#tabs {
-    margin-left:400px;
-    margin-top:113px;
-    width: 350px;
-    height:150px;
+#login_logout {
+    color: #D02B3C;
+    font-size: smaller;
+    margin:10px 25px;
 }
 .tab {
     float:left;
@@ -62,7 +57,17 @@ h2  {
     border: 5px solid #f66;
 }
 #navigation {
-    text-align: center;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    text-align:center;
+}
+#navigation li {
+    display: inline;
+    padding: 0 5px;
+}
+#navigation li a {
+    color: #fff;
 }
 input.text
 {
@@ -81,4 +86,10 @@ input.ui-large
     border-bottom-color: #c8c8c8;
     border-right-color: #c8c8c8;
     background: #fff url(/images/input-bg.png) repeat-x left bottom;
+}
+
+/* Login Form */
+#login td {
+    font-size: 14pt;
+    font-weight: bold;
 }
