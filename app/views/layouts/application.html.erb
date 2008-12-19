@@ -17,7 +17,7 @@
           </td>
           <td valign="bottom">
             <div id="tab1" class="tab"><%= image_tag 'tab_search.jpg' %></div>
-            <div id="tab2" class="tab"><%= image_tag 'tab_add.jpg' %></div>
+            <div id="tab2" class="tab"><%= link_to image_tag('tab_add.jpg', :border => "0"), resource_new_path %></div>
           </td>
           <td align="right" valign="top">
             <div id="login_logout">

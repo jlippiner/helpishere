@@ -20,6 +20,7 @@ $(document).ready(function() {
 
 function showResponse(responseText, statusText)  {
     if(statusText=='success'){
+        log(responseText);
         eval(responseText);
     }
 }
@@ -65,7 +66,7 @@ $(document).ready(function() {
 
     $('#facebox #join_form').livequery(function() {
         $(this).ajaxForm(options);
-
+       
         // validate signup form on keyup and submit
         var validator = $(this).validate({
             rules: {
@@ -123,7 +124,8 @@ $(document).ready(function() {
             },
             // specifying a submitHandler prevents the default submit, good for the demo
             submitHandler: function() {
-                $(this).ajaxSubmit();
+                 $(this).ajaxSubmit();
+                //
             },
             // set this class to error-labels to indicate valid fields
             success: function(label) {

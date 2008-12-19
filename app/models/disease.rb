@@ -5,4 +5,5 @@ class Disease < ActiveRecord::Base
   has_many :listings, :through => :resources
   has_many :resources
   has_many :searches
+  has_many :profiles
 end
