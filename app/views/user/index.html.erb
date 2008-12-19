@@ -1,0 +1,9 @@
+<h1>Welcome Back <%= @current_user.name.capitalize %>.</h1>
+
+<h2>Profiles</h2>
+<ul>
+<% @current_user.profiles.each do |p|  %>
+  <li><%= p.name   %></li>
+<% end %>
+</ul>
+<%= link_to "Create a profile" %>

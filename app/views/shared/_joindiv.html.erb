@@ -1,0 +1,51 @@
+  <div style="display:none;width:550px">
+    <% form_for :user, :url => user_join_path, :html => {:id => "join_form"} do |f| %>
+        <h1>Join HelpIsHere</h1>
+        <table>
+          <tr>
+            <td class="label"><%= f.label :name, "Name:" %></td>
+            <td class="field"><%= f.text_field  :name, :class => "text ui.large", :size => "20"  %></td>
+            <td class="status"></td>
+          </tr>
+
+          <tr>
+            <td class="label"><%= f.label :nickname,"Nickname:" %></td>
+            <td class="field"><%= f.text_field :nickname, :class => "text ui.large", :size => "20"  %></td>
+            <td class="status"></td>
+          </tr>
+          <tr>
+
+            <td class="label"><%= f.label :email %></td>
+            <td class="field"><%= f.text_field :email, :class => "text ui.large", :size => "20"  %></td>
+            <td class="status"></td>
+          </tr>
+          <tr>
+            <td class="label"><%= f.label :password %></td>
+            <td class="field"><%= f.password_field  :password, :class => "text ui.large", :size => "20"   %></td>
+
+            <td class="status"></td>
+          </tr>
+          <tr>
+            <td class="label"><%= f.label "password_confirm" %></td>
+            <td class="field"><%= password_field  "password_confirm", "", :class => "text ui.large",  :size => "20"  %></td>
+            <td class="status"></td>
+          </tr>
+
+
+          <tr>
+            <td class="label"><label id="lsignupsubmit" for="signupsubmit">Signup</label></td>
+            <td class="field" colspan="2" style="text-align:right">
+              <%= submit_tag  'Join Now', :class => "ui.large", :style => "font-size:16pt"  %>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2" style="border-top:solid 1px gray;text-align:left;padding:5px;font-size:10pt">
+              Already a Member?  <%= link_to  "Sign in", user_login_path %>
+            </td>
+          </tr>
+        </table>
+
+
+      <% end %>
+    </div>

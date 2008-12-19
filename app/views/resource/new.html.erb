@@ -1,0 +1,14 @@
+<h1>Add a Resource</h1>
+
+<% if !@current_user  %>
+  <p>
+    Sorry, but you must be logged in to add a new resource.
+  </p>
+  <p>
+    Please <%= link_to 'click here', user_login_path %> to login.
+  </p>
+<% elsif @current_user.searches.count > 1 %>
+  Multiple Profile
+<% else %>
+  One Profile
+<% end %>

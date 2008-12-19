@@ -1,0 +1,5 @@
+class User < ActiveRecord::Base
+  has_many :resources
+  has_many :resources, :through => :diseaseresources
+  has_many :disearcresources
+end
