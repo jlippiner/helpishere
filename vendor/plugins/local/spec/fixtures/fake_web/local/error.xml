@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Error xmlns="urn:yahoo:api">
+    The following errors were detected:
+  <Message>error message</Message>
+</Error>

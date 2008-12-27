@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>http_client_errors (FakeWebHelper)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File spec/mixins/fake_web_helper.rb, line 44</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">http_client_errors</span>(<span class="ruby-identifier">urls</span> = [], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    {
+      <span class="ruby-value">400</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Bad Request'</span>,
+      <span class="ruby-value">401</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Unauthorized'</span>,
+      <span class="ruby-value">402</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Payment Required'</span>,
+      <span class="ruby-value">403</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Forbidden'</span>,
+      <span class="ruby-value">404</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Not Found'</span>,
+      <span class="ruby-value">405</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Method Not Allowed'</span>,
+      <span class="ruby-value">406</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Not Acceptable'</span>,
+      <span class="ruby-value">407</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Proxy Authentication Required'</span>,
+      <span class="ruby-value">408</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Request Timeout'</span>,
+      <span class="ruby-value">409</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Conflict'</span>,
+      <span class="ruby-value">410</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Gone'</span>,
+      <span class="ruby-value">411</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Length Required'</span>,
+      <span class="ruby-value">412</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Precondition Failed'</span>,
+      <span class="ruby-value">413</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Request Entity Too Large'</span>,
+      <span class="ruby-value">414</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Request-URI Too Long'</span>,
+      <span class="ruby-value">415</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Unsupported Media Type'</span>,
+      <span class="ruby-value">416</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Requested Range Not Satisfiable'</span>,
+      <span class="ruby-value">417</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'Expectation Failed'</span>
+    }.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">code</span>, <span class="ruby-identifier">message</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">fake_web</span>(<span class="ruby-identifier">urls</span>, <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">code</span>, <span class="ruby-identifier">message</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

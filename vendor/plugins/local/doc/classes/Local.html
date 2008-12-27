@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Local</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Local</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/local_rb.html">
+                local.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Library for searching Yahoo <a href="Local.html">Local</a>
+</p>
+<p>
+How to use:
+</p>
+<p>
+Set Yahoo application id on the <a href="Local.html">Local</a> Module:
+</p>
+<p>
+Local.app_id = &#8216;yourapikeygoeshere&#8216;
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000001">search</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="Local/Rating.html" class="link">Local::Rating</a><br />
+Class <a href="Local/Request.html" class="link">Local::Request</a><br />
+Class <a href="Local/Response.html" class="link">Local::Response</a><br />
+Class <a href="Local/Result.html" class="link">Local::Result</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="Local.src/M000001.html" target="Code" class="method-signature"
+            onclick="popupCode('Local.src/M000001.html');return false;">
+          <span class="method-name">search</span><span class="method-args">(query, options)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <tt><a href="Local.html#M000001">search</a></tt> method takes two
+parameters <a href="Local.html#M000001">Local.search</a>(query, options)
+</p>
+<p>
+example: <a href="Local.html#M000001">Local.search</a>(&quot;pizza&quot; ,
+{:zip =&gt; 32304, :results =&gt; 10, :sort =&gt; :relevance})
+</p>
+<p>
+query is a string (what your searching for (eg: &#8216;pizza&#8217;))
+</p>
+<p>
+more options:
+</p>
+<ul>
+<li>:results - integer (default: 10, max: 20) - the number of results to return
+
+</li>
+<li>:start - integer (default: 1) - the starting result position to return
+
+</li>
+<li>:sort - string (&#8216;relevance&#8217; default , &#8216;title&#8217; ,
+&#8216;distance&#8217;, &#8216;rating&#8217;) - sorts the results by the
+chosen criteria
+
+</li>
+<li>:radius - float - How far (in miles) from the specified location to <a
+href="Local.html#M000001">search</a> for the query terms. The default
+radius varies according to the location given.
+
+</li>
+<li>:street - string - street name. the number is optional
+
+</li>
+<li>:city - string - City name.
+
+</li>
+<li>:state - string - The United States state. You can spell out the full state
+name or you can use the two-letter abbreviation
+
+</li>
+<li>:zip - integer or &lt;integer&gt;-&lt;integer&gt; - The five-digit zip
+code, or the five-digit code plus four-digit extension. If this location
+contradicts the city and state specified, the zip code will be used for
+determining the location and the city and state will be ignored.
+
+</li>
+<li>:location - string - This free field lets users enter any of the following:
+
+<pre>
+  * city, state
+  * city, state, zip
+  * zip
+  * street, city, state
+  * street, city, state, zip
+  * street, zip
+</pre>
+</li>
+</ul>
+<p>
+If location is specified, it will take priority over the individual fields
+in determining the location for the query. City, state and zip will be
+ignored.
+</p>
+<ul>
+<li>:latitude - float: -90 to 90 - The latitude of the starting location.
+
+</li>
+<li>:longitude - float: -180 to 180 - The longitude of the starting location.
+If both latitude and longitude are specified, they will take priority over
+all other location data. If only one of latitude or longitude is specified,
+both will be ignored.
+
+</li>
+</ul>
+<p>
+Returns a <a href="Local/Response.html">Response</a> object
+</p>
+<p>
+response = <a
+href="Local.html#M000001">Local.search</a>(&#8216;pizza&#8217;, {:zip =&gt;
+32304})
+</p>
+<p>
+response.results will return an array of <tt><a
+href="Local/Result.html">Result</a></tt> objects
+</p>
+<p>
+eg: response.results.each {|result| puts result.title }
+</p>
+<p>
+&gt; Hungry Howies
+</p>
+<p>
+&gt; Pizza Hut
+</p>
+<p>
+&gt; Dominoes
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

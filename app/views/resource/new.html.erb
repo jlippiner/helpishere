@@ -1,14 +1,54 @@
 <h1>Add a Resource</h1>
 
-<% if !@current_user  %>
+<% if !@current_profile %>
   <p>
     Sorry, but you must be logged in to add a new resource.
   </p>
   <p>
-    Please <%= link_to 'click here', user_login_path %> to login.
+    Please <%= link_to 'click here', user_index_path %> to login.
   </p>
-<% elsif @current_user.searches.count > 1 %>
-  Multiple Profile
 <% else %>
-  One Profile
+  <% content_for :head do %>
+    <%= javascript_include_tag 'jquery.autocomplete.pack.js' %>
+    <%= stylesheet_link_tag 'jquery.autocomplete'  %>
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+        jQuery.ajaxSetup({
+          'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+        })
+
+        $('#s').focus();
+        $("#yList").hide();
+        $("#sForm").submit(function(){
+          $("#spinner").show('fast');
+          $("#yList").hide();
+          $('#sOut').load('remote_search?value='+escape($("#s").val()),{},
+          function (responseText, textStatus, XMLHttpRequest) {
+            $("#spinner").hide('fast');
+            $('#yList').show();
+          }
+        );
+          return false
+        })
+
+      });
+    </script>
+  <% end%>
+
+  <% form_tag resource_index_path, :method => 'get', :id => "sForm"  do %>
+    Resource Name: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "30"} %>
+    <%= submit_tag "Find Resource", :name => nil, :class => "ui-large"  %>
+  <% end %>
+  <div id="spinner" style="text-align:center;margin:20px;display:none;">
+    <%= image_tag 'spinner.gif' %>
+  </div>
+  <div id="yList" style="margin-top:15px;border-top:solid 1px gray">
+    <p><em>Select resource from the list below</em></p>
+    <ul id="sOut"></ul>
+    <p style="border-top:dashed 1px gray">
+      <b><%= link_to "+ Add a resource not listed above" %></b>
+    </p>
+  </div>
+
 <% end %>

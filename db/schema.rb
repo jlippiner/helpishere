@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081219184812) do
+ActiveRecord::Schema.define(:version => 20081227012711) do
 
   create_table "diseases", :force => true do |t|
     t.string   "name"
@@ -28,6 +28,13 @@ ActiveRecord::Schema.define(:version => 20081219184812) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "website"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "postalcode"
+    t.decimal  "longitude",                       :precision => 19, :scale => 15
+    t.decimal  "latitude",                        :precision => 19, :scale => 15
   end
 
   create_table "profiles", :force => true do |t|
@@ -40,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20081219184812) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "zipcode"
   end
 
   create_table "resources", :force => true do |t|

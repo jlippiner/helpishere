@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+ppp:
+  id: 1
+  name: The PPP Lunch Crew
+  private: 1
+  created_at: <%= 1.day.from_now %>
+  creator_id: 1
+Just Deve:
+  id: 2
+  name: The PPP Dev Lunch Crew
+  private: 1
+  created_at: <%= 1.day.from_now %>
+  creator_id: 2

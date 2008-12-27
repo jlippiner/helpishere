@@ -1,0 +1,5 @@
+#!/opt/local/bin/ruby
+require 'rubygems'
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'

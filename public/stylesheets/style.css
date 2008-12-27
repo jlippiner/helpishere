@@ -26,12 +26,16 @@ form {
 }
 h1  {
     color: #D02B3C;
+    margin-bottom:0px;
 }
 h2  {
     clear:both;
-    margin:0;
+    margin:5px 0px;
     padding: 10px 0;
     color:teal;
+}
+li {
+    margin-bottom:10px
 }
 #content {
     background-color: #fff;
@@ -53,8 +57,19 @@ h2  {
     margin: 10px 0;
     color:white;
 }
-.fieldWithErrors {
-    border: 5px solid #f66;
+.errorExplanation {
+    border: 5px solid #990000;    
+    padding: 5px;
+    margin: 25px;
+    padding: 10px;
+    color: white;
+    background: red;
+}
+.errorExplanation h2 {    
+    color: black;
+}
+.fieldWithErrors {    
+    display:inline;
 }
 #navigation {
     list-style: none;

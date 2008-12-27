@@ -11,18 +11,33 @@ ActionController::Routing::Routes.draw do |map|
 
   map.with_options(:controller => "user", :name_prefix => "user_") do |user|
     user.connect 'user/remote_handler', :action => "remote_handler"
+    user.connect 'user', :action => "index"
     user.login 'user/login',  :action => "login"
     user.join  'user/join',  :action => 'join'
-    user.logout 'user/login',  :action => "logout"
+    user.logout 'user/logout',  :action => "logout"
     user.index 'user/index',  :action => "index"
+    user.connect 'user/change_profile/:id', :action => "change_profile"
+    user.connect 'user/get_current_profile/:id', :action => "get_current_profile"    
   end
 
+  map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
+    r.index 'resource/index', :action => "index"
+    r.connect 'resource/remote_search', :action => "remote_search"
+    r.connect 'resource/new/:step/:source/:title/:address/:city/:state/:phone/:latitude/:longitude/:website',
+      :action => "new", :controller => "resource", :website => nil, :phone => nil, :latitude => nil, :longitude => nil,
+      :requirements => { :latitude => %r([^/;,?]+),  :longitude => %r([^/;,?]+),  :website => %r([^/;,?]+)}
+    r.connect 'resource/new/:step/:id', :action => "new"
 
-  map.with_options(:controller => "resource",:name_prefix => "resource_") do |r|
-    r.connect ':resource/:action/:id'
-    r.new 'resource/new', :action => "new"
-  end
+    r.new 'resource/new', :action => "new", :controller => "resource"
+  end  
   
+  map.with_options(:controller => "profile", :name_prefix => "profile_") do |p|
+    p.new 'profile/new/:id', :action => "new"
+    p.edit 'profile/edit/:id', :action => "edit"
+    p.create 'profile/create/:id', :action => 'create'
+  end
+  map.resources :profiles, :controller => "profile"
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

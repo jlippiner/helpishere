@@ -68,7 +68,7 @@ $(document).ready(function() {
         $(this).ajaxForm(options);
        
         // validate signup form on keyup and submit
-        var validator = $(this).validate({
+        $(this).validate({
             rules: {
                 'user[name]': "required",
                 'user[nickname]': {
@@ -124,8 +124,7 @@ $(document).ready(function() {
             },
             // specifying a submitHandler prevents the default submit, good for the demo
             submitHandler: function() {
-                 $(this).ajaxSubmit();
-                //
+                
             },
             // set this class to error-labels to indicate valid fields
             success: function(label) {
@@ -133,15 +132,7 @@ $(document).ready(function() {
                 label.html("&nbsp;").addClass("checked");
             },
             invalidHandler: function() {
-                var errors = validator.numberOfInvalids();
-                if (errors) {
-                    var message = errors == 1
-                    ? 'You missed 1 field. It has been highlighted'
-                    : 'You missed ' + errors + ' fields. They have been highlighted';
-                //alert(message);
-                } else {
-                    $("div.error").hide();
-                }
+              return false;
             }
 
         });

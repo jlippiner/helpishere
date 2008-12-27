@@ -1,0 +1,70 @@
+<center>
+<div style="width:600px;text-align:left">
+  <h1>Add Resource - Overview</h1>
+  <h2><%= "#{ue('title')} <span style='color:black'>+</span> #{@current_profile.disease.name}" %></h2>
+
+  <p>Please briefly explain why <%= ue('title') %> is a resource for those affected by <%= @current_profile.disease.name %></p>
+  <ul>
+    <li>
+      <b>You SHOULD write...</b> an <em>overview</em> about <%= ue('title') %> and why it's a resource for those with <%= @current_profile.disease.name %>
+    </li>
+    <li>
+      <b>You SHOULD NOT write...</b> about your experiences with <%= ue('title') %>.  You will do that on the next step and rate the resource.
+    </li>
+  </ul>
+  <p>For an example of what to write, <%= link_to 'click here.' %></p>
+  <div style="width:600px">
+    <% form_for :resource do |f| %>
+      <%= f.text_area :overview, :style => "width:600px", :rows => "10", :maxlength => "200" %>
+      <span class="remaining" style="font-size:10pt;font-style:italic"> </span>
+
+      <div style="text-align:right;margin-top:10px">
+        <%= submit_tag  'Submit', :class => "ui-large" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</center>
+
+
+<script language="javascript">
+  $(document).ready(function(){
+
+    var countdown = {
+      init: function() {
+        countdown.remaining = countdown.max - $(countdown.obj).val().length;
+        if (countdown.remaining > countdown.max) {
+          $(countdown.obj).val($(countdown.obj).val().substring(0,countdown.max));
+        }
+        $(countdown.obj).siblings(".remaining").html(countdown.remaining + " characters remaining.");
+      },
+      max: null,
+      remaining: null,
+      obj: null
+    };
+
+    $("#resource_overview").each(function() {
+      $(this).focus(function() {
+        countdown.max = this.getAttribute("maxlength")
+        countdown.obj = this;
+        iCount = setInterval(countdown.init,100);
+      }).blur(function() {
+        countdown.init();
+        clearInterval(iCount);
+      });
+    }).focus();
+
+
+
+
+
+    /*
+        2.) Characters Remaining Countdown
+     */
+
+
+
+  });
+
+
+</script>

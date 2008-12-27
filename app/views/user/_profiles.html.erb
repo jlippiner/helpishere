@@ -1,0 +1,8 @@
+<li style="margin-bottom:10px;">
+  <%= "<strong>" if profiles == @current_profile %>
+  <a href="#" rel="change_profile" style="text-decoration:none;color:black;" id="<%= profiles.id %>"><%= profiles.name %></a>
+
+  <%= "</strong>" if profiles == @current_profile %>
+  <%= link_to "(edit)", profile_edit_path(profiles.id) %>
+  <%= link_to "(delete)", profiles, :confirm => "Are you sure?", :method => :delete  %>
+</li>

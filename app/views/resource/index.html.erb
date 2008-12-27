@@ -1,2 +1,59 @@
-<h1>Resource#index</h1>
-<p>Find me in app/views/resource/index.html.erb</p>
+<h1>Resources</h1>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.autocomplete.pack.js' %>
+  <%= stylesheet_link_tag 'jquery.autocomplete'  %>
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+      jQuery.ajaxSetup({
+        'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+      })
+      $("#q").autocomplete( 'remote_search?format=js', {
+        mustMatch : false,
+        delay : 1000,
+        matchContains : false
+      }
+    );
+
+      $("#q").result(function(event, data, formatted) {
+        if (data)
+          $(this).parent().next().find("input").val(data[1]);
+      });
+
+      $("#yList").hide();
+      $("#sForm").submit(function(){        
+        $("#spinner").show('fast');
+        $("#yList").hide();
+        $('#sOut').load('remote_search_2?value='+escape($("#s").val()),{},function (responseText, textStatus, XMLHttpRequest) {
+          $("#spinner").hide('fast');
+          $('#yList').show();
+        }
+      );
+        return false
+      })
+
+    });
+  </script>
+<% end%>
+
+<% if params[:v]=="2" %>
+  <% form_tag resource_index_path, :method => 'get', :id => "sForm"  do %>
+    <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "50"} %>
+    <%= submit_tag "Find Resource", :name => nil %>
+  <% end %>
+  <div id="spinner" style="text-align:center;margin:20px;display:none;">
+    <%= image_tag 'spinner.gif' %>
+  </div>
+  <div id="yList">
+    <p><em>Select resource from the list below</em></p>
+    <ul id="sOut"></ul>
+    <p style="border-top:dashed 1px gray">
+      <p><%= link_to "+ Add a resource not listed above" %></p>
+    </p>
+  </div>
+<% else %>
+  <% form_tag resource_index_path, :method => 'get', :autocomplete => "off"  do %>
+    <%= text_field_tag :q, params[:q], { :class => "text ui-large", :size => "50"} %>
+    <%= submit_tag "Add Resource", :name => nil %>
+  <% end %>
+<% end %>

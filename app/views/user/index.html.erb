@@ -1,9 +1,57 @@
-<h1>Welcome Back <%= @current_user.name.capitalize %>.</h1>
+<h1>Welcome <%= @current_user.name.capitalize %>.</h1>
 
 <h2>Profiles</h2>
-<ul>
-<% @current_user.profiles.each do |p|  %>
-  <li><%= p.name   %></li>
+<% if @current_user.profiles.count == 0 %>
+  <p><em>No profile found.  You need to create a profile to add resources.</em></p>  
+<% else %>  
+    <%= "<em>Select the profile you would like to use:</em>" if @current_user.profiles.count > 1 %>
+    <ul  id="profile_list">
+      <%=  render  :partial => "profiles", :collection => @current_user.profiles  %>
+    </ul>  
 <% end %>
-</ul>
-<%= link_to "Create a profile" %>
+<div style="margin-top:30px">
+  <%= link_to "+ Create a profile", profile_new_path(@current_user) %>
+</div>
+
+<div style="margin-top:30px">
+<h2>About Me</h2>
+<table cellpadding="5">
+  <tr>
+    <td>
+      Name:
+    </td>
+    <td style="font-weight:bold;">
+      <%= @current_user.name %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Nickname:
+    </td>
+    <td style="font-weight:bold;">
+      <%= @current_user.nickname %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Email:
+    </td>
+    <td style="font-weight:bold;">
+      <%= @current_user.email %>
+    </td>
+  </tr>
+</table>
+</div>
+
+
+<script language="javascript">
+  $(document).ready(function(){
+    $('a[rel*=change_profile]').livequery('click',function(){      
+      $('#profile_list').load('change_profile/'+this.id);
+      $('#header_current_profile').load('get_current_profile/'+this.id)
+      return false;
+    });    
+  })
+
+
+</script>

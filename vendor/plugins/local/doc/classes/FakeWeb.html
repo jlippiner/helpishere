@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: FakeWeb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">FakeWeb</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/spec/fake_web/fake_web_rb.html">
+                spec/fake_web/fake_web.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000001">clean_registry</a>&nbsp;&nbsp;
+      <a href="#M000002">register_uri</a>&nbsp;&nbsp;
+      <a href="#M000003">registered_uri?</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="FakeWeb.src/M000001.html" target="Code" class="method-signature"
+            onclick="popupCode('FakeWeb.src/M000001.html');return false;">
+          <span class="method-name">clean_registry</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Resets the <a href="FakeWeb.html">FakeWeb</a> Registry. This will force all
+subsequent web requests to behave as real requests.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000002" class="method-detail">
+        <a name="M000002"></a>
+
+        <div class="method-heading">
+          <a href="FakeWeb.src/M000002.html" target="Code" class="method-signature"
+            onclick="popupCode('FakeWeb.src/M000002.html');return false;">
+          <span class="method-name">register_uri</span><span class="method-args">(uri, options)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Register <tt>uri</tt> to be handled according to <tt>options</tt>.
+<tt>uri</tt> can be a <tt>String</tt> or an <tt>URI</tt> object.
+<tt>options</tt> must be a <tt>Hash</tt> that must contain any one of the
+following keys:
+</p>
+<table>
+<tr><td valign="top"><tt>:string</tt>:</td><td>Takes a <tt>String</tt> argument that is returned as the body of the
+response.
+
+<pre>
+  FakeWeb.register_uri('http://example.com/', :string =&gt; &quot;Hello World!&quot;)
+</pre>
+</td></tr>
+<tr><td valign="top"><tt>:file</tt>:</td><td>Takes a valid filesystem path to a file that is slurped and returned as the
+body of the response.
+
+<pre>
+  FakeWeb.register_uri('http://example.com/', :file =&gt; &quot;/tmp/my_response_body.txt&quot;)
+</pre>
+</td></tr>
+<tr><td valign="top"><tt>:response</tt>:</td><td>Either an <tt>Net::HTTPResponse</tt>, an <tt>IO</tt> or a <tt>String</tt>.
+
+<p>
+The easier way by far is to pass the <tt>:response</tt> option to <tt><a
+href="FakeWeb.html#M000002">register_uri</a></tt> as a <tt>String</tt> or
+an (open for reads) <tt>IO</tt> object which will be used as the complete
+HTTP response, including headers and body. If the string points to a
+readable file, this file will be used as the content for the request.
+</p>
+<p>
+To obtain a complete response document, you can use the <tt>curl</tt>
+command, like so:
+</p>
+<pre>
+  curl -i http://www.example.com/ &gt; response_for_www.example.com
+</pre>
+<p>
+which can then be used in your test environment like so:
+</p>
+<pre>
+  FakeWeb.register_uri('http://www.example.com/', :response =&gt; 'response_for_www.example.com')
+</pre>
+<p>
+See the <tt>Net::HTTPResponse</tt> <a
+href="http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/classes/Net/HTTPResponse.html">documentation</a>
+for more information on creating custom response objects.
+</p>
+</td></tr>
+</table>
+<p>
+Two optional arguments are also accepted:
+</p>
+<table>
+<tr><td valign="top"><tt>:status</tt>:</td><td>Passing <tt>:status</tt> as a two-value array will set the response code
+and message. The defaults are <tt>200</tt> and <tt>OK</tt>, respectively.
+Example:
+
+<pre>
+  FakeWeb.register_uri('http://www.example.com/', :response =&gt; &quot;Go away!&quot;, :status =&gt; [ 404, &quot;Not Found&quot; ])
+</pre>
+</td></tr>
+<tr><td valign="top"><tt>:exception</tt>:</td><td>The argument passed via <tt>:exception</tt> will be raised when the
+specified URL is requested. Any <tt>Exception</tt> class is valid. Example:
+
+<pre>
+  FakeWeb.register_uri('http://www.example.com/', :exception =&gt; Net::HTTPError)
+</pre>
+</td></tr>
+</table>
+        </div>
+      </div>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="FakeWeb.src/M000003.html" target="Code" class="method-signature"
+            onclick="popupCode('FakeWeb.src/M000003.html');return false;">
+          <span class="method-name">registered_uri?</span><span class="method-args">(uri)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Checks for presence of <tt>uri</tt> in the <tt><a
+href="FakeWeb.html">FakeWeb</a></tt> registry.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

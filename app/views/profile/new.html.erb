@@ -1,0 +1,65 @@
+<% form_for @profile,  :html => {:id => "profile_form"} do |f|  %>
+
+  <h1>
+    <% if (:action=='new')  %>
+      Add A Profile
+    <% else %>
+      Edit a Profile
+    <% end %>
+  </h1>
+
+  <%= f.error_messages %>
+
+  <div style="width:700px">
+    <%= hidden_field :profile, :user_id %>
+
+    <div class="step" style="margin-bottom:30px;font-size:large;border-bottom:solid 1px gray;padding-bottom:10px">
+      <span id="divPName_label" style="display:none">Profile Name: </span>
+      <span id="divPName" style="display:none;font-weight:bold;"></span>
+      <%= f.text_field :name, {:class => "text ui-large", :style => "display:none" } %>
+    </div>
+
+    <div class="step">
+      Select A Disease:
+      <% @disease = Disease.find(:all) %>
+      <%= f.collection_select :disease_id, @disease, :id, :name, {:prompt => "SELECT"} %>
+    </div>
+
+    <div class="step">
+      I am: <%= radio_button("profile","how_affected","Diagnosed") %><%= label "profile", "how_affected_diagnosed", "Diagnosed" %>
+      <%= radio_button("profile","how_affected","Caregiver") %><%= label "profile", "how_affected_caregiver", "the Caregiver" %>
+      <%= radio_button("profile","how_affected","Other") %><%= label "profile", "how_affected_other", "not directly affected" %>
+    </div>
+
+    <div id="caregiver" class="step" style="margin:10px 0px 20px 0px;padding:15px">
+      <div style="margin-left:40px">
+        How old is person you are caring for? <%= f.select :affected_age, [["SELECT",''], "Younger than 2", "2-5 years old", "6-10 years old", "10-17 years old", "18 - 25 years old", "25-35 years old", "35-55 years old", "55-64 years old", "65-80 years old", "older than 80"] %>
+      </div>
+      <div style="margin:10px 0px 0px 40px">
+        What is your relationship?
+        <%= f.select :affected_relationship, [["SELECT",""], "Parent", "Sibling", "Relative", "Friend", "Patient", "Other"] %>
+      </div>
+    </div>
+
+    <div class="step">
+      Where are you located?
+      <div style="display:inline;">
+        <%= country_select("profile","location",[["SELECT",""],"United States"],{:id => "country_select"}) %>
+      </div>
+    </div>
+
+    <div id="zipcode_div" class="step" style="display:none;margin:10px 0px 20px 10px;padding:15px">
+      <div style="margin-left:40px">
+        Please enter your zipcode: <%= f.text_field :zipcode, :class => "text ui-large", :size => "8"  %>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;text-align:right">
+      <input type="button" value="Cancel" onclick="document.location='<%= user_index_path %>'">&nbsp;&nbsp;
+      <%= submit_tag 'Submit Profile', :class => "ui-large" %>
+    </div>
+
+  </div>
+
+
+<% end %>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ResultSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:yahoo:lcl" xsi:schemaLocation="urn:yahoo:lcl http://local.yahooapis.com/LocalSearchService/V2/LocalSearchResponse.xsd" totalResultsAvailable="40" totalResultsReturned="2" firstResultPosition="1">
+  <ResultSetMapUrl>http://local.yahoo.com/mapview?stx=pizza&csz=Palo+Alto%2C+CA&city=Palo+Alto&state=CA&radius=2.5257046222687&ed=BVD56a131DxIV6V7_5O_wO8KQY1.bxtOAd8qew--</ResultSetMapUrl>
+  <Result>
+    <Title>Round Table Pizza Palo Alto</Title>
+    <Address>3407 Alma St</Address>
+    <City>Palo Alto</City>
+    <State>CA</State>
+    <Phone>(650) 494-2928</Phone>
+    <Rating></Rating>
+    <Distance>0.28</Distance>
+    <Url>http://local.yahoo.com/details?id=21395990&state=CA&stx=pizza&csz=Palo+Alto+CA&ed=o9pJ_q160Sy74qzFN72I0cSInA8HkgnO3mChobdW6IFvjLcw9Npqo0NC0IKIFIrT</Url>
+    <ClickUrl>http://local.yahoo.com/details?id=21395990&state=CA&stx=pizza&csz=Palo+Alto+CA&ed=o9pJ_q160Sy74qzFN72I0cSInA8HkgnO3mChobdW6IFvjLcw9Npqo0NC0IKIFIrT</ClickUrl>
+    <MapUrl>http://maps.yahoo.com/maps_result?name=Round+Table+Pizza+Palo+Alto&desc=6504942928&csz=Palo+Alto+CA&qty=9&cs=9&ed=o9pJ_q160Sy74qzFN72I0cSInA8HkgnO3mChobdW6IFvjLcw9Npqo0NC0IKIFIrT</MapUrl>
+    <BusinessUrl>http://www.roundtablepizza.com/</BusinessUrl>
+    <BusinessClickUrl>http://www.roundtablepizza.com/</BusinessClickUrl>
+  </Result>
+  <Result>
+    <Title>Pizza Chicago</Title>
+    <Address>4115 El Camino Real</Address>
+    <City>Palo Alto</City>
+    <State>CA</State>
+    <Phone>(650) 424-9400</Phone>
+    <Rating>5</Rating>
+    <Distance>0.32</Distance>
+    <Url>http://local.yahoo.com/details?id=21398996&state=CA&stx=pizza&csz=Palo+Alto+CA&ed=0nwP1q160SxzRsMU9iFZd3ThSoGjC1q2fILvS.UrBC4c39UJCdp_fpisxGrQu8gUAo3GZEZ77g--</Url>
+    <ClickUrl>http://local.yahoo.com/details?id=21398996&state=CA&stx=pizza&csz=Palo+Alto+CA&ed=0nwP1q160SxzRsMU9iFZd3ThSoGjC1q2fILvS.UrBC4c39UJCdp_fpisxGrQu8gUAo3GZEZ77g--</ClickUrl>
+    <MapUrl>http://maps.yahoo.com/maps_result?name=Pizza+Chicago&desc=6504249400&csz=Palo+Alto+CA&qty=9&cs=9&ed=0nwP1q160SxzRsMU9iFZd3ThSoGjC1q2fILvS.UrBC4c39UJCdp_fpisxGrQu8gUAo3GZEZ77g--</MapUrl>
+    <BusinessUrl>http://www.pizzachicago.com/pa/</BusinessUrl>
+    <BusinessClickUrl>http://www.pizzachicago.com/pa/</BusinessClickUrl>
+  </Result>
+</ResultSet>

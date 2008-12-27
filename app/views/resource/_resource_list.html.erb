@@ -1,0 +1,5 @@
+<% result = resource_list %>
+<li style="margin-bottom:10px">
+  <%= link_to "<b>#{result.title}</b> - #{result.address}, #{result.city}",
+    "new/2/yahoo/#{CGI::escape(result.title)}/#{CGI::escape(result.address)}/#{CGI::escape(result.city)}/#{CGI::escape(result.state)}/#{CGI::escape(result.phone)}/#{CGI::escape(result.latitude)}/#{CGI::escape(result.longitude)}/#{CGI::escape(result.businessurl)}" %>
+</li>

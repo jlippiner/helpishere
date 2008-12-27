@@ -1,5 +1,0 @@
-class DiseaseResource < ActiveRecord::Base
-  belongs_to :disease
-  belongs_to :user
-  belongs_to :resource
-end

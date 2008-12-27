@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   before_filter :fetch_logged_in_user
+  before_filter :fetch_current_profile
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -16,9 +17,27 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def fetch_current_profile    
+    if !session[:profile_id].nil?
+      @current_profile ||= Profile.find(session[:profile_id])
+    elsif logged_in?
+      @current_user.profiles.each do |p|
+        session[:profile_id] = p.id
+        @current_profile=p
+        return
+      end
+    end
+  end
+
+  def profile_required
+    return true if !@current_profile.nil?
+    session[:return_to] = request.request_uri
+    redirect_to user_index_path and return false
+  end
+
   def fetch_logged_in_user
     return unless session[:user_id]
-    @current_user ||= User.find_by_id(session[:user_id])
+    @current_user ||= User.find_by_id(session[:user_id])    
   end
 
   def logged_in?
@@ -29,7 +48,7 @@ class ApplicationController < ActionController::Base
   def login_required
     return true if logged_in?
     session[:return_to] = request.request_uri
-    redirect_to login_url and return false 
+    redirect_to user_login_path and return false
   end
 
   def fading_flash_message(text, seconds=3)
