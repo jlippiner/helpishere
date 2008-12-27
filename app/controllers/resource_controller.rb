@@ -7,12 +7,13 @@ class ResourceController < ApplicationController
   
   def new
     case params[:step]
-    when "2"      
+    when "2"
       h = {}
       params.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
       h[:user_id]=@current_user.id
-
-      @listing = Listing.create(h)      
+      @listing = Listing.find_by_title_and_address(:title => h['title'], :address => h['address'])
+      @listing ||= Listing.create(h)
+      
       render  :template => "resource/new_step_overview"
     when "3"
       render  :template => "resource/new_step_experience"

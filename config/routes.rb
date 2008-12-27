@@ -26,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
     r.connect 'resource/new/:step/:source/:title/:address/:city/:state/:phone/:latitude/:longitude/:website',
       :action => "new", :controller => "resource", :website => nil, :phone => nil, :latitude => nil, :longitude => nil,
       :requirements => { :latitude => %r([^/;,?]+),  :longitude => %r([^/;,?]+),  :website => %r([^/;,?]+)}
-    r.connect 'resource/new/:step/:id', :action => "new"
+    r.steps 'resource/new/:step/:id', :action => "new"
 
     r.new 'resource/new', :action => "new", :controller => "resource"
   end  

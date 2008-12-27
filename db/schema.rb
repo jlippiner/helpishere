@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081227012711) do
+ActiveRecord::Schema.define(:version => 20081227144704) do
 
   create_table "diseases", :force => true do |t|
     t.string   "name"
@@ -19,10 +19,7 @@ ActiveRecord::Schema.define(:version => 20081227012711) do
 
   create_table "listings", :force => true do |t|
     t.string   "title"
-    t.string   "who_pays"
-    t.text     "services_rendered"
     t.integer  "user_id"
-    t.integer  "cost",              :limit => 10, :precision => 10, :scale => 0
     t.binary   "status"
     t.string   "phone"
     t.datetime "created_at"
@@ -33,8 +30,8 @@ ActiveRecord::Schema.define(:version => 20081227012711) do
     t.string   "state"
     t.string   "country"
     t.string   "postalcode"
-    t.decimal  "longitude",                       :precision => 19, :scale => 15
-    t.decimal  "latitude",                        :precision => 19, :scale => 15
+    t.decimal  "longitude",  :precision => 19, :scale => 15
+    t.decimal  "latitude",   :precision => 19, :scale => 15
   end
 
   create_table "profiles", :force => true do |t|
@@ -57,6 +54,9 @@ ActiveRecord::Schema.define(:version => 20081227012711) do
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "cost",       :precision => 10, :scale => 2
+    t.string   "who_pays"
+    t.string   "overview"
   end
 
   create_table "searches", :force => true do |t|

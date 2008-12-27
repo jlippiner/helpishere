@@ -14,7 +14,7 @@
   </ul>
   <p>For an example of what to write, <%= link_to 'click here.' %></p>
   <div style="width:600px">
-    <% form_for :resource do |f| %>
+    <% form_for :resource, :url => resource_steps_path(:id => @listing, :step => "3")  do |f| %>
       <%= f.text_area :overview, :style => "width:600px", :rows => "10", :maxlength => "200" %>
       <span class="remaining" style="font-size:10pt;font-style:italic"> </span>
 
