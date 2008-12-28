@@ -11,11 +11,18 @@ class ResourceController < ApplicationController
       h = {}
       params.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
       h[:user_id]=@current_user.id
-      @listing = Listing.find_by_title_and_address(:title => h['title'], :address => h['address'])
+      
+      @listing = Listing.find_by_title_and_address( h['title'], h['address'])
       @listing ||= Listing.create(h)
       
       render  :template => "resource/new_step_overview"
     when "3"
+      @resource = Resource.new(params[:resource])
+      @resource.user = @current_user
+      @resource.listing_id = params[:id]
+      @resource.disease = @current_profile.disease 
+      @resource.save
+
       render  :template => "resource/new_step_experience"
     when "4"
       render  :template => "resource/new_step_categorize"
