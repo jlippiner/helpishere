@@ -10,8 +10,8 @@ require 'rake/rdoctask'
 require 'tasks/rails'
 
 begin
-    require 'vlad'
-    Vlad.load
-  rescue LoadError
-    # do nothing
-  end
+  require 'vlad'
+  Vlad.load :scm => "git"
+rescue LoadError
+  # do nothing
+end
