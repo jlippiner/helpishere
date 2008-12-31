@@ -17,15 +17,31 @@ class ResourceController < ApplicationController
       
       render  :template => "resource/new_step_overview"
     when "3"
-      @resource = Resource.new(params[:resource])
-      @resource.user = @current_user
-      @resource.listing_id = params[:id]
-      @resource.disease = @current_profile.disease 
-      @resource.save
+      @resource = Resource.create(params[:resource]) do |r|
+        r.user = @current_user
+        r.listing_id = params[:id]
+        r.disease = @current_profile.disease        
+      end
 
       render  :template => "resource/new_step_experience"
     when "4"
-      render  :template => "resource/new_step_categorize"
+      @resource = Resource.find(params[:id])
+      @experience = Experience.create(params[:experience]) do |e|
+        e.resource = @resource
+        e.user = @current_user
+      end
+
+      @categories = Category.find(:all, :order=>'title')
+      render  :template => "resource/new_step_details"
+    when "5"
+      @resource = Resource.find(params[:id])
+      params[:resource][:category_ids] ||= []
+      
+      if @resource.update_attributes(params[:resource])
+        flash[:notice] = 'Updated'
+        @categories = Category.find(:all, :order=>'title')
+        render  :template => "resource/new_step_summary"
+      end
     else
       
     end
@@ -81,9 +97,16 @@ class ResourceController < ApplicationController
   end
 
   def destroy
+    @resource = Resource.find(params[:id])
+    @resource.destroy
+
+    flash[:notice] = "Resource Deleted"
+    redirect_to user_index_path
   end
 
-  def index    
+  def index
+    @resource = Resource.find(params[:id])
+    render  :template => "resource/new_step_summary"
   end
 
 end

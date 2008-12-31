@@ -102,6 +102,13 @@ input.ui-large
     border-right-color: #c8c8c8;
     background: #fff url(/images/input-bg.png) repeat-x left bottom;
 }
+input.error, textarea.error {
+    border:solid 2px red;
+}
+select.error {
+    border:solid 2px red;
+    padding:5px;
+}
 
 /* Login Form */
 #login td {

@@ -1,0 +1,20 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.editable' %>
+  <%= javascript_tag "window.AUTH_TOKEN = '#{form_authenticity_token}';" %>
+
+<% end %>
+
+<h1>Categories</h1>
+<div id="dList" style="margin:10px">
+  <% if @category.empty? %>
+    <em>No categories yet!</em>
+  <% else %>
+    <%= render :partial => "category_list", :collection => @category   %>
+  <% end %>
+</div>
+
+<% remote_form_for @new_category,
+  :url => { :action => 'save_remote', :id => @new_category } do |d| %>
+New: <%= d.text_field :title, :class => "text" %>
+<% end %>
+

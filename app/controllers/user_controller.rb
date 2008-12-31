@@ -21,7 +21,9 @@ class UserController < ApplicationController
 
     if @current_user
       session[:user_id]=@current_user.id
-      redirect_to user_index_path
+      url = user_index_path
+      url = session[:return_to] if !session[:return_to].nil?
+      redirect_to url
     else
       flash[:notice]="Invalid email or password.  Please try again"
       render :action => "login"

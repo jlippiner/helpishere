@@ -14,13 +14,24 @@
     </ul>
     <p>For an example of what to write, <%= link_to 'click here.' %></p>
     <div style="width:600px">
-      <% form_for :resource, :url => resource_steps_path(:id => @listing, :step => "3")  do |f| %>
-        <%= f.text_area :overview, :style => "width:600px", :rows => "10", :maxlength => "200" %>
-        <span class="remaining" style="font-size:10pt;font-style:italic"> </span>
+      <div class="errorExplanation">
+        <h4>There are serious errors in your form submission, please see below for details.</h4>
+        <ol>
 
-        <div style="text-align:right;margin-top:10px">
-          <%= submit_tag  'Submit', :class => "ui-large" %>
-        </div>
+        </ol>
+      </div>
+
+      <% form_for :resource, :url => resource_steps_path(:id => @listing, :step => "3"), :html => {:id => "form_overview"}  do |f| %>
+        <fieldset class="steps">
+          <div>
+          <%= f.text_area :overview, :style => "width:600px", :rows => "10", :maxlength => "2000" %>
+          <span class="remaining" style="font-size:10pt;font-style:italic"> </span>
+          </div>
+
+          <div>
+            <%= submit_tag  'Submit', :class => "ui-large" %>
+          </div>
+        </fieldset>
       <% end %>
     </div>
   </div>
@@ -29,6 +40,27 @@
 
 <script language="javascript">
   $(document).ready(function(){
+
+    var container = $('div.errorExplanation');
+    $('div.errorExplanation').hide();
+    $('#form_overview').validate({
+      errorContainer: container,
+      errorLabelContainer: $("ol", container),
+      wrapper: 'li',
+      rules:  {
+        'resource[overview]': {
+          required: true,
+          minlength: 20,
+          maxlength: 2000
+        },
+        messages: {
+          'resource[overview]': {
+            required: 'The overview is a required field',
+            minlength: 'Please write a bit more of an overview'
+          }
+        }
+      }
+    });
 
     var countdown = {
       init: function() {
@@ -53,17 +85,6 @@
         clearInterval(iCount);
       });
     }).focus();
-
-
-
-
-
-    /*
-        2.) Characters Remaining Countdown
-     */
-
-
-
   });
 
 

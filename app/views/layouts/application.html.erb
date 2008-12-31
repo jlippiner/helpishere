@@ -56,9 +56,10 @@
       <%= yield %>
     </div>
 
-    <ul id="navigation">
-      <li><%= link_to 'Diseases', diseases_path %></li>
+    <ul id="navigation">      
       <li><%= link_to 'Search for Resources', search_start_path %></li>
+      <li><%= link_to 'Diseases', diseases_path %></li>
+      <li><%= link_to 'Categories', category_index_path %></li>
     </ul>
 
     <% if !@current_user  %>

@@ -1,56 +1,75 @@
 <h1>Welcome <%= @current_user.name.capitalize %>.</h1>
 
-<h2>Profiles</h2>
-<% if @current_user.profiles.count == 0 %>
-  <p><em>No profile found.  You need to create a profile to add resources.</em></p>  
-<% else %>  
-    <%= "<em>Select the profile you would like to use:</em>" if @current_user.profiles.count > 1 %>
-    <ul  id="profile_list">
-      <%=  render  :partial => "profiles", :collection => @current_user.profiles  %>
-    </ul>  
+<h2>My Resources</h2>
+<% if @current_user.resources.count == 0 %>
+  <p><em>You haven't added any resources.  <%= link_to "Click here", resource_new_path %> to add some now</em></p>
+<% else %>
+  <ul>
+    <% for r in @current_user.resources.find(:all) %>
+      <li>
+<%= link_to "#{r.listing.title} for  #{r.disease.name}", resource_index_path(r.id) %>
+ <%= link_to "(delete)", r, :confirm => "Are you sure?", :method => :delete  %>
+</li>
+    <% end %>
+  </ul>
 <% end %>
 <div style="margin-top:30px">
-  <%= link_to "+ Create a profile", profile_new_path(@current_user) %>
+  <%= link_to "+ Add a resource", resource_new_path %>
 </div>
 
 <div style="margin-top:30px">
-<h2>About Me</h2>
-<table cellpadding="5">
-  <tr>
-    <td>
-      Name:
-    </td>
-    <td style="font-weight:bold;">
-      <%= @current_user.name %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Nickname:
-    </td>
-    <td style="font-weight:bold;">
-      <%= @current_user.nickname %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Email:
-    </td>
-    <td style="font-weight:bold;">
-      <%= @current_user.email %>
-    </td>
-  </tr>
-</table>
+  <h2>Profiles</h2>
+  <% if @current_user.profiles.count == 0 %>
+    <p><em>No profile found.  You need to create a profile to add resources.</em></p>
+  <% else %>
+    <%= "<em>Select the profile you would like to use:</em>" if @current_user.profiles.count > 1 %>
+    <ul  id="profile_list">
+      <%=  render  :partial => "profiles", :collection => @current_user.profiles  %>
+    </ul>
+  <% end %>
+  <div style="margin-top:30px">
+    <%= link_to "+ Create a profile", profile_new_path(@current_user) %>
+  </div>
+</div>
+
+<div style="margin-top:30px">
+  <h2>About Me</h2>
+  <table cellpadding="5">
+    <tr>
+      <td>
+        Name:
+      </td>
+      <td style="font-weight:bold;">
+        <%= @current_user.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Nickname:
+      </td>
+      <td style="font-weight:bold;">
+        <%= @current_user.nickname %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Email:
+      </td>
+      <td style="font-weight:bold;">
+        <%= @current_user.email %>
+      </td>
+    </tr>
+  </table>
 </div>
 
 
 <script language="javascript">
   $(document).ready(function(){
-    $('a[rel*=change_profile]').livequery('click',function(){      
+    $('a[rel*=change_profile]').livequery('click',function(){
       $('#profile_list').load('change_profile/'+this.id);
       $('#header_current_profile').load('get_current_profile/'+this.id)
       return false;
-    });    
+    });
   })
 
 

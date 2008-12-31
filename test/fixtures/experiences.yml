@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  resource_id: 1
+  comments: MyString
+  would_recommend: MyString
+
+two:
+  resource_id: 1
+  comments: MyString
+  would_recommend: MyString

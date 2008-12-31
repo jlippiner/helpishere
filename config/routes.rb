@@ -1,6 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :diseases
-    
+  map.resources :diseases  
+  map.resources :category
+  map.connect  'category/:action/:id', :controller => "category"
+
   map.with_options(:controller => "search", :name_prefix => "search_") do |search|
     search.connect 'search/:action/:id'
     search.start 'search', :action => "step1"
@@ -21,15 +23,15 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
-    r.index 'resource/index', :action => "index"
+    r.index 'resource/index/:id', :action => "index"
     r.connect 'resource/remote_search', :action => "remote_search"
     r.connect 'resource/new/:step/:source/:title/:address/:city/:state/:phone/:latitude/:longitude/:website',
       :action => "new", :controller => "resource", :website => nil, :phone => nil, :latitude => nil, :longitude => nil,
       :requirements => { :latitude => %r([^/;,?]+),  :longitude => %r([^/;,?]+),  :website => %r([^/;,?]+)}
-    r.steps 'resource/new/:step/:id', :action => "new"
-
+    r.steps 'resource/new/:step/:id', :action => "new"    
     r.new 'resource/new', :action => "new", :controller => "resource"
-  end  
+  end
+  map.resources :resource, :controller => "resource"
   
   map.with_options(:controller => "profile", :name_prefix => "profile_") do |p|
     p.new 'profile/new/:id', :action => "new"

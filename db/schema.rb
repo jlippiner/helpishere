@@ -9,12 +9,43 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081227144704) do
+ActiveRecord::Schema.define(:version => 20081230172603) do
+
+  create_table "categories", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories_resources", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "resource_id"
+  end
+
+  add_index "categories_resources", ["category_id"], :name => "index_categories_resources_on_category_id"
+  add_index "categories_resources", ["resource_id"], :name => "index_categories_resources_on_resource_id"
+
+  create_table "categorizations", :force => true do |t|
+    t.integer  "resource_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "diseases", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "experiences", :force => true do |t|
+    t.integer  "resource_id"
+    t.string   "title"
+    t.string   "would_recommend"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "comment"
+    t.integer  "user_id"
   end
 
   create_table "listings", :force => true do |t|
@@ -51,7 +82,6 @@ ActiveRecord::Schema.define(:version => 20081227144704) do
     t.integer  "listing_id"
     t.integer  "disease_id"
     t.integer  "user_id"
-    t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "cost",       :precision => 10, :scale => 2

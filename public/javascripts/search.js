@@ -4,8 +4,7 @@
 
 function step3_zip_show() {
     $(document).ready(function() {
-        $('#step3_zip_show').click();
-        log('step3_zip_show')
+        $('#step3_zip_show').click();        
     });
 }
 

@@ -1,0 +1,14 @@
+<%- @category = category_list -%>
+  <table border="0">
+    <tr>
+      <td style="width:15px;">
+      <font style="font-size:smaller"><%= category_list_counter + 1 %>:</font>
+      </td>
+      <td style="width:300px;">
+        <div class="edit_title" id="<%= @category.id %>"><%= @category.title %></div>
+      </td>
+      <td style="">
+        <%= link_to "[X]",  category_list, :method => "delete"    %>
+      </td>
+    </tr></table>
+   

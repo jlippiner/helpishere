@@ -1,3 +1,18 @@
+fieldset {
+    margin:10px 0px;
+}
+fieldset legend {
+    color: #705E1C;
+}
+fieldset.steps div {
+    margin:0px 0px 15px 0px;
+    font-weight: bold;
+}
+fieldset.steps div.submit {
+    margin:30px 0px 10px 0px;
+    font-weight: bold;
+    text-align:right;
+}
 .step {
     margin:10px 0px 10px 0px;
 }
