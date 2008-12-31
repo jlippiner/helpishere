@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :diseases  
+  map.resources :diseases
+  map.connect  'diseases/:action/:id', :controller => "diseases"
   map.resources :category
   map.connect  'category/:action/:id', :controller => "category"
 
