@@ -1,6 +1,6 @@
 class UserController < ApplicationController
   layout proc{ |c| c.request.xhr? ? false : "application" }
-  before_filter :login_required, :only => [:index, :logout]
+  before_filter :login_required, :only => [:index, :logout, :welcome]
    
   
   def logout
@@ -12,6 +12,12 @@ class UserController < ApplicationController
 
   def index
     
+  end
+
+  def welcome
+    if !@current_profile.nil?
+      render :action => "index"
+    end
   end
   
   def login
@@ -46,11 +52,11 @@ class UserController < ApplicationController
 
       respond_to do |format|
         format.js {
-          render :text => "redirect('#{user_index_path}')"
+          render :text => "redirect('#{user_welcome_path}')"
         }
         format.html {
           flash[:error] = "You should not see this"
-          render :action => "index"
+          render :action => "index", :template => "welcome"
         }
       end
     else

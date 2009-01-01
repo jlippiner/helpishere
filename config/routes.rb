@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
     user.join  'user/join',  :action => 'join'
     user.logout 'user/logout',  :action => "logout"
     user.index 'user/index',  :action => "index"
+    user.welcome 'user/welcome',  :action => "welcome"
     user.connect 'user/change_profile/:id', :action => "change_profile"
     user.connect 'user/get_current_profile/:id', :action => "get_current_profile"    
   end

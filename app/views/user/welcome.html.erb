@@ -1,0 +1,12 @@
+<h1>Welcome <%= @current_user.name.capitalize %> To HelpIsHere.org.</h1>
+
+<p>Welcome to HelpIsHere.org, where people help people navigate the maze of resources when faced with the question "What Now?</p>
+<p>To begin using HiH, you first need to create a <em>Profile.</em></p>
+<p>A profile basically contains the disease affecting your life, how you are affected and where you live.  Most people will only
+have one profile, but if you are a social worker, nurse or other professional counseling others, you can create as many profiles
+as you need.</p>
+<p>Once you create a profile you can start adding resources and finding other people in similar situations to learn what
+resources they turned to in their time of need.</p>
+<div style="margin:20px;font-size:16pt;">
+   <%= link_to "Click Here To Create a Profile Now", profile_new_path(@current_user) %>
+</div>

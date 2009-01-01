@@ -1,5 +1,7 @@
 # Settings specified here will take precedence over those in config/environment.rb
 
+GOOGLE_MAPS_KEY = "ABQIAAAA-ClHV9cqqgGz8JA-fGno7BT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQn86O7CT-qQfO7vzqImieuTTYERA"
+
 # In the development environment your application's code is reloaded on
 # every request.  This slows down response time but is perfect for development
 # since you don't have to restart the webserver when you make code changes.
