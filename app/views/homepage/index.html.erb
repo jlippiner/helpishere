@@ -1,0 +1,25 @@
+<center>
+<div style="overflow:hidden;width:800px">
+  <div style="float:left;margin:30px;width:250px;">
+    <% i = 0 %>
+    <% @photos.each do |p| %>
+      <%= "<div style='margin:0px;padding:0px'>" if i % 3 == 0 -%>
+      <span style='margin:0px;padding:0px;'>
+      <img class='photo'  style='margin:0px;padding:0px' src="<%= p.sizes[0]['source'] %>"></span>
+      <% i += 1 %>
+      <% if i % 3 == 0 %>
+        <%= "</div>"  -%>
+        <% i = 0 end %>
+    <%  end %>
+  </div>
+  
+  <div style="float:right;width:400px;margin:10px;text-align:left">
+    <h2>WHAT NOW?</h2>
+    <p>HelpIsHere.org will help you answer this critical post-diagnosis question.</p>
+    <p>We are a resource search engine for those impacted by life-altering diseases.</p>
+    <p>We'll help you find and navigate resources specific to your disease, demographic, and geographic location.</p>
+    <p>HelpIsHere.org is here to help.</p>
+    <p><b>Launching in 2009</b></p>
+  </div>
+</div>
+</center>

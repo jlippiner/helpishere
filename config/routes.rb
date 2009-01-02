@@ -84,6 +84,6 @@ ActionController::Routing::Routes.draw do |map|
   #  map.connect ':controller/:action/:id'
   #  map.connect ':controller/:action/:id.:format'
   #
-  map.root :controller => "search"
+  map.root :controller => "homepage", :action => "index"
  
 end

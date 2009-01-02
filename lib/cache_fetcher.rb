@@ -16,3 +16,6 @@ class MemFetcher
       @cache[url] = [Time.now, Net::HTTP.get_response(URI.parse(url)).body]
    end
 end
+
+
+

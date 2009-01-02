@@ -75,7 +75,22 @@ Rails::Initializer.run do |config|
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 
+
+
   
+end
+
+require 'rubygems'
+require 'flickr'
+MY_KEY='deeb7beb2d63fc6868e540bed5dd6786'
+class Flickr
+  alias old_initialize initialize
+  def initialize(api_key=MY_KEY, email=nil, password=nil)
+    puts "new_initialize " + MY_KEY
+    old_initialize(api_key, email, password)
+    @host="http://api.flickr.com"
+    @activity_file='flickr_activity_cache.xml'
+  end
 end
 
 class String
