@@ -6,6 +6,8 @@ class ResourceController < ApplicationController
   before_filter :login_required,  :profile_required
   
   def new
+    @categories = Category.find(:all, :order=>'title')
+
     case params[:step]
     when "2"
       h = {}
@@ -57,15 +59,15 @@ class ResourceController < ApplicationController
   end
 
   def remote_add
-    title = params[:title]
-    address = params[:address]
+    parts = params[:listing].split(/&|=/)
+    l = Hash[*parts]
 
-    # listing does not exist so create and add resource
     h = {}
-    params.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
+    l.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
     h[:user_id]=@current_user.id
 
-    listing = Listing.find_by_title_and_address(title,address)
+    # listing does not exist so create and add resource    
+    listing = Listing.find_by_title_and_address(h['title'],h['address'])
     listing ||= Listing.create(h)
 
     # Exists so check on resource for this disease
@@ -76,11 +78,12 @@ class ResourceController < ApplicationController
       resource = Resource.new() do |r|
         r.user = @current_user
         r.listing = listing
-        r.disease = @current_profile.disease
-        r.save
+        r.disease = @current_profile.disease        
       end
-    end
 
+      resource.update_attributes(params[:resource])
+    end
+          
     # Add profile to resource
     if !@current_profile.resources.include?(resource)
       @current_profile.resources << resource
@@ -170,7 +173,11 @@ class Result
   def define_attr_method(name, value) # :nodoc:
     singleton_class.class_eval do
       define_method(name) do
+        if value!=''
         value
+        else
+          ' '
+        end
       end
     end
   end

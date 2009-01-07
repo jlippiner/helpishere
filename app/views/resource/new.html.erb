@@ -38,17 +38,10 @@
               $('.add_resource').livequery('click',function(){
                 $("#yList").hide();
 
-                $.ajax({
-                  url: "remote_add",
-                  type: "POST",
-                  data: $(this).attr('rel')+'&authenticity_token=<%=  form_authenticity_token %>',
-                  success: function (response) {
-                    $('#resourceList').html(response);
-                    $('#resourceList tr:first').highlight();
 
-                  }
-                });
-
+                $('#listing').attr('value',$(this).attr('rel').serialize())
+                $('.resource_title').html($(this).attr('title'))
+                $("#show_details").trigger('click');
                 return false;
               });
 
@@ -62,7 +55,6 @@
 
                 return false;
               })
-
             });
           </script>
         <% end%>
@@ -83,9 +75,9 @@
         </div>
       </td>
       <td valign="top">
-      <div class="box" style="width:250px">        
+      <div class="box" style="width:250px">
         <h3 style="color:#705E1C;text-align:center;">My Resources <span style="color:black">for</span>
-            <%= @current_profile.disease.name %></h3>
+        <%= @current_profile.disease.name %></h3>
         <% if @current_profile.resources == 0 %>
           <em>No Resources Found</em>
         <% else %>
@@ -97,4 +89,128 @@
     </tr>
   </table>
 
-<% end %>
+  <a href="#details" id="show_details" rel="facebox" style="display:none"></a>
+  <div id="details" style="width:600px;text-align:left;display:none">
+    <p><span class="resource_title"></span> has never been associated with <%= @current_profile.disease.name %>.
+    Please take a moment to provide some more details for others who view this resource later.</p>
+    <div class="errorExplanation" style="display:none">
+      <h4>There are serious errors in your form submission, please see below for details.</h4>
+      <ol>
+
+      </ol>
+    </div>
+    <% form_for :resource, :url => 'remote_add', :html => {:id => "form_details"}  do |f| %>
+      <input type="hidden" id="listing" name="listing" value=""/>
+      <fieldset class="steps">
+        <div>
+          Who pays for the services provided by <span class="resource_title"></span>?
+          <div style="text-align:center;margin-top:10px">
+            <%= f.select :who_pays, ["You do", "They do", "Insurance", "Government", "Various Charities", "No Cost", "Other"], {:include_blank => true}, {:class => "ui-large", :style => "font-size:16pt"} %>
+          </div>
+        </div>
+        <div id="div_cost" style="display:none;">
+          How much does it cost?
+          $ <%= f.text_field :cost, :class => "text ui-large", :size => "5" %>
+          <input type="checkbox" id="cbfree"><label for="cbfree" style="font-weight:normal;">Free?</label>
+        </div>
+        <div>
+          What type of services does <span class="resource_title"></span> provide?
+          <div style="font-weight:normal">
+            <% i = 0 %>
+            <table>
+              <% for category in @categories do %>
+                  <%= "<tr>" if i % 3 == 0  %>
+                  <td><%= check_box_tag "resource[category_ids][]", category.id%><%= label_tag "checkbox[#{category.id}]", category.title %></td>
+                  <%= "</tr>" if i % 2 == 3  %>
+                  <% i += 1 %>
+                <% end %>
+              </table>
+            </div>
+          </div>
+          <div class="submit">
+            <%= submit_tag  'Submit', :class => "ui-large" %>
+          </div>
+        </fieldset>
+      <% end %>
+    </div>
+
+    <script language="javascript">
+      $(document).ready(function(){
+
+        if ($('#resource_who_pays').val()=='') $('#div_cost').hide()
+
+        $('#facebox #cbfree').livequery('change',function(){
+          if ($(this).attr('checked')) {
+            $('#facebox #resource_cost').attr('value','0')
+          }
+        })
+
+        $('#facebox #resource_cost').livequery('keypress',function(){
+          if ($(this).val()!=0)
+            $('#facebox #cbfree').attr('checked',false)
+        })
+
+        $('#facebox #resource_who_pays').livequery('change',function(event){
+          if($('this').val()!='')
+            $('#facebox #div_cost').show().focus().highlight(2000);
+
+          if($('this').val()=='No Cost') {
+            $('#facebox #cbfree').attr('checked',true)
+            $('#facebox #resource_cost').attr('value','0')
+          }
+        })
+
+        var options = {
+          success:  loadResources
+        };
+
+        $("#facebox #form_details").livequery(function() {
+          $(this).submit(function(){
+
+            log('submitted')
+            var container = $('div.errorExplanation');
+            $(this).validate({
+              errorContainer: container,
+              errorLabelContainer: $("ol", container),
+              wrapper: 'li',
+              rules:  {
+                'resource[who_pays]': {
+                  required: true
+                },
+                'resource[cost]': {
+                  number: true
+                }
+              },
+              messages: {
+                'resource[who_pays]': {
+                  required: 'Please let us know who pays for this resource'
+                },
+                'resource[cost]': {
+                  number: 'Cost must be a number without the $'
+                }
+              }
+            }).form();
+
+            if ($(this).valid()) {
+              $(this).ajaxSubmit(options);
+              jQuery(document).trigger('close.facebox'); 
+            }
+
+            return false; //$('#facebox #form_details').valid();
+          })
+        });
+
+        
+        function loadResources(responseText, statusText)  {
+          if(statusText=='success'){
+            $('#resourceList').html(responseText);
+          }
+        }
+
+
+      });
+
+
+    </script>
+
+  <% end %>

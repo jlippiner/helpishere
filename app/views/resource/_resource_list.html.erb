@@ -1,4 +1,4 @@
 <% result = resource_list %>
 <li style="margin-bottom:10px">
-  <a href="#" class="add_resource" rel="<%= "title=#{CGI::escape(result.title)}&address=#{CGI::escape(result.address)}&city=#{CGI::escape(result.city)}&state=#{CGI::escape(result.state)}&phone=#{CGI::escape(result.phone)}&latitude=#{CGI::escape(result.latitude)}&longitude=#{CGI::escape(result.longitude)}&businessurl=#{CGI::escape(result.businessurl)}" %>"><%= "<b>#{result.title}</b> - #{result.address}& #{result.city}" %></a>
+  <a href="#" class="add_resource" title="<%= result.title %>" rel="<%= "title=#{esc(result.title)}&address=#{esc(result.address)}&city=#{esc(result.city)}&state=#{esc(result.state)}&phone=#{esc(result.phone)}&latitude=#{esc(result.latitude)}&longitude=#{esc(result.longitude)}&website=#{esc(result.businessurl)}" %>"><%= "<b>#{result.title}</b> - #{result.address}& #{result.city}" %></a>
 </li>
