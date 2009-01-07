@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081230172603) do
+ActiveRecord::Schema.define(:version => 20090107185317) do
 
   create_table "categories", :force => true do |t|
     t.string   "title"
@@ -24,13 +24,6 @@ ActiveRecord::Schema.define(:version => 20081230172603) do
 
   add_index "categories_resources", ["category_id"], :name => "index_categories_resources_on_category_id"
   add_index "categories_resources", ["resource_id"], :name => "index_categories_resources_on_resource_id"
-
-  create_table "categorizations", :force => true do |t|
-    t.integer  "resource_id"
-    t.integer  "category_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "diseases", :force => true do |t|
     t.string   "name"
@@ -65,6 +58,13 @@ ActiveRecord::Schema.define(:version => 20081230172603) do
     t.decimal  "latitude",   :precision => 19, :scale => 15
   end
 
+  create_table "my_resources", :force => true do |t|
+    t.integer  "profile_id"
+    t.integer  "resource_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "profiles", :force => true do |t|
     t.integer  "user_id"
     t.integer  "disease_id"
@@ -76,6 +76,13 @@ ActiveRecord::Schema.define(:version => 20081230172603) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "zipcode"
+  end
+
+  create_table "profiles_resources", :force => true do |t|
+    t.integer  "profile_id"
+    t.integer  "resource_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "resources", :force => true do |t|

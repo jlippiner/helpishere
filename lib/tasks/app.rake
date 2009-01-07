@@ -31,6 +31,26 @@ namespace :staging do
     puts "starting mongrel"
     %x{#{ssh_command} "source ~/.profile &&  mongrel start"}
   end
+
+  task :deploy_josh do
+    ssh_command = "ssh hih_staging"
+    user        = "helpishere"
+    branch      = "master"
+    revision    = ENV["revision"] || "HEAD"
+    application = "helpishere"
+
+    puts "updating application"
+    %x{#{ssh_command} "cd ~/shared/#{user}&& git checkout master && git pull origin master
+      && rsync -avg --exclude='.git/*' ~/shared/#{user}/ /home/#{user}/current && echo '#{branch}/#{revision}' > ~/current/RELEASE
+      && ln -nfs ~/shared/config/database.yml ~/current/config/database.yml
+      && ln -nfs ~/shared/config/keys.rb ~/current/config/keys.rb
+      && ln -nfs ~/shared/log ~/current/log
+      && ln -nfs ~/shared/assets ~/current/public/assets
+      && ~/shared/#{user}/rake db:migrate
+      && source ~/.profile &&  mongrel stop
+      && source ~/.profile &&  mongrel start
+      "}
+  end
 end
 
 namespace :production do

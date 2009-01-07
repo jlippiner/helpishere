@@ -1,6 +1,8 @@
 class Profile < ActiveRecord::Base
   belongs_to :disease
   belongs_to :user
+  has_many :resources, :through => :my_resources
+  has_many :my_resources
 
   validates_presence_of :disease_id, :location, :how_affected
   validates_presence_of :name, :message => "is blank.  Please select a disease and how you are affected."

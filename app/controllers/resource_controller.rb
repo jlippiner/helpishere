@@ -56,6 +56,48 @@ class ResourceController < ApplicationController
     render  :partial => "resource_list", :collection => @results
   end
 
+  def remote_add
+    title = params[:title]
+    address = params[:address]
+
+    # listing does not exist so create and add resource
+    h = {}
+    params.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
+    h[:user_id]=@current_user.id
+
+    listing = Listing.find_by_title_and_address(title,address)
+    listing ||= Listing.create(h)
+
+    # Exists so check on resource for this disease
+    resource = Resource.find_by_disease_id_and_listing_id(@current_profile.disease.id,listing.id)
+
+    if !resource
+      # does not exist so create resource
+      resource = Resource.new() do |r|
+        r.user = @current_user
+        r.listing = listing
+        r.disease = @current_profile.disease
+        r.save
+      end
+    end
+
+    # Add profile to resource
+    if !@current_profile.resources.include?(resource)
+      @current_profile.resources << resource
+    end
+
+    render  :partial => "resource_basket", :collection => @current_profile.resources.find(:all, :order => "created_at DESC")
+  end
+
+  def remote_delete
+    resource = Resource.find(params[:id])
+    if resource
+      @current_profile.resources.delete(resource)
+    end
+
+    render  :partial => "resource_basket", :collection => @current_profile.resources
+  end
+
   def get_from_yahoo(query)
     if (!query.include?(','))
       return if @current_profile.zipcode.nil?

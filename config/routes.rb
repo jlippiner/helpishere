@@ -27,6 +27,8 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
     r.index 'resource/index/:id', :action => "index"
     r.connect 'resource/remote_search', :action => "remote_search"
+    r.connect 'resource/remote_add', :action => "remote_add"
+    r.connect 'resource/remote_delete/:id', :action => "remote_delete"
     r.connect 'resource/new/:step/:source/:title/:address/:city/:state/:phone/:latitude/:longitude/:website',
       :action => "new", :controller => "resource", :website => nil, :phone => nil, :latitude => nil, :longitude => nil,
       :requirements => { :latitude => %r([^/;,?]+),  :longitude => %r([^/;,?]+),  :website => %r([^/;,?]+)}

@@ -35,7 +35,7 @@ h2  {
     color:teal;
 }
 li {
-    margin-bottom:10px
+    margin-bottom:10px;
 }
 #content {
     background-color: #fff;
@@ -84,6 +84,11 @@ li {
 #navigation li a {
     color: #fff;
 }
+.box {
+    border: 2px solid #705E1C;
+    background: #F7DA73;
+    padding:0px 10px;
+}
 input.text
 {
     /*padding: 0.3em 0;*/
@@ -114,4 +119,8 @@ select.error {
 #login td {
     font-size: 14pt;
     font-weight: bold;
+}
+
+DIV.space-line {
+  clear: both; margin: 0; padding: 0; width: auto;
 }

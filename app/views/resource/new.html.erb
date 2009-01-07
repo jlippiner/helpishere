@@ -1,52 +1,99 @@
-<h1>Add a Resource</h1>
 
-<% if !@current_profile %>
-  <p>
-    Sorry, but you must be logged in to add a new resource.
-  </p>
-  <p>
-    Please <%= link_to 'click here', user_index_path %> to login.
-  </p>
-<% else %>
-  <% content_for :head do %>
-    <script type="text/javascript">
+<table width="100%">
+  <tr>
+    <td valign="top" width="650">
+      <h1 style="margin-bottom:15px;">Add a Resource</h1>
 
-      $(document).ready(function(){
-        jQuery.ajaxSetup({
-          'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-        })
+      <% if !@current_profile %>
+        <p>
+          Sorry, but you must be logged in to add a new resource.
+        </p>
+        <p>
+          Please <%= link_to 'click here', user_index_path %> to login.
+        </p>
+      <% else %>
+        <% content_for :head do %>
+          <%= javascript_tag "window.AUTH_TOKEN = '#{form_authenticity_token}';" %>
+          <script type="text/javascript">
 
-        $('#s').focus();
-        $("#yList").hide();
-        $("#sForm").submit(function(){
-          $("#spinner").show('fast');
-          $("#yList").hide();
-          $('#sOut').load('remote_search?value='+escape($("#s").val()),{},
-          function (responseText, textStatus, XMLHttpRequest) {
-            $("#spinner").hide('fast');
-            $('#yList').show();
-          }
-        );
-          return false
-        })
+            $(document).ready(function(){
+              jQuery.ajaxSetup({
+                'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+              })
 
-      });
-    </script>
-  <% end%>
+              $('#s').focus();
+              $("#yList").hide();
+              $("#sForm").submit(function(){
+                $("#spinner").show('fast');
+                $("#yList").hide();
+                $('#sOut').load('remote_search?value='+escape($("#s").val()),{},
+                function (responseText, textStatus, XMLHttpRequest) {
+                  $("#spinner").hide('fast');
+                  $('#yList').show();
+                }
+              );
+                return false
+              })
 
-  <% form_tag resource_index_path, :method => 'get', :id => "sForm"  do %>
-    Resource Name: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "30"} %>
-    <%= submit_tag "Find Resource", :name => nil, :class => "ui-large"  %>
-  <% end %>
-  <div id="spinner" style="text-align:center;margin:20px;display:none;">
-    <%= image_tag 'spinner.gif' %>
-  </div>
-  <div id="yList" style="margin-top:15px;border-top:solid 1px gray">
-    <p><em>Select resource from the list below</em></p>
-    <ul id="sOut"></ul>
-    <p style="border-top:dashed 1px gray">
-      <b><%= link_to "+ Add a resource not listed above" %></b>
-    </p>
-  </div>
+              $('.add_resource').livequery('click',function(){
+                $("#yList").hide();
+
+                $.ajax({
+                  url: "remote_add",
+                  type: "POST",
+                  data: $(this).attr('rel')+'&authenticity_token=<%=  form_authenticity_token %>',
+                  success: function (response) {
+                    $('#resourceList').html(response);
+                    $('#resourceList tr:first').highlight();
+
+                  }
+                });
+
+                return false;
+              });
+
+              $('.delete_profile_resource').livequery('click',function(){
+                $.ajax({
+                  url: "remote_delete/"+this.id,
+                  success: function (response) {
+                    $('#resourceList').html(response);
+                  }
+                });
+
+                return false;
+              })
+
+            });
+          </script>
+        <% end%>
+
+        <% form_tag resource_index_path, :method => 'get', :id => "sForm"  do %>
+          Resource Name: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "20"} %>
+          <%= submit_tag "Find Resource", :name => nil, :class => "ui-large"  %>
+        <% end %>
+        <div id="spinner" style="text-align:center;margin:20px;display:none;">
+          <%= image_tag 'spinner.gif' %>
+        </div>
+        <div id="yList" style="margin-top:15px;border-top:solid 1px gray">
+          <p><em>Select resource from the list below</em></p>
+          <ul id="sOut"></ul>
+          <p style="border-top:dashed 1px gray">
+            <b><%= link_to "+ Add a resource not listed above" %></b>
+          </p>
+        </div>
+      </td>
+      <td valign="top">
+      <div class="box" style="width:250px">
+        <h3 style="color:#705E1C">My Resources for <%= @current_profile.disease.name %></h3>
+        <% if @current_profile.resources == 0 %>
+          <em>No Resources Found</em>
+        <% else %>
+          <table id="resourceList" border="0" cellpadding="0" cellspacing="0">
+            <%= render :partial => "resource_basket", :collection => @current_profile.resources  %>
+          </table>
+        <% end %>
+      </div>
+    </tr>
+  </table>
 
 <% end %>
