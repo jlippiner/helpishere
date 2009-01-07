@@ -39,7 +39,7 @@
                 $("#yList").hide();
 
 
-                $('#listing').attr('value',$(this).attr('rel').serialize())
+                $('#listing').attr('value',$(this).attr('rel'))
                 $('.resource_title').html($(this).attr('title'))
                 $("#show_details").trigger('click');
                 return false;
