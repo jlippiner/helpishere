@@ -83,8 +83,9 @@
         </div>
       </td>
       <td valign="top">
-      <div class="box" style="width:250px">
-        <h3 style="color:#705E1C">My Resources for <%= @current_profile.disease.name %></h3>
+      <div class="box" style="width:250px">        
+        <h3 style="color:#705E1C;text-align:center;">My Resources <span style="color:black">for</span>
+            <%= @current_profile.disease.name %></h3>
         <% if @current_profile.resources == 0 %>
           <em>No Resources Found</em>
         <% else %>
