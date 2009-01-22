@@ -4,6 +4,9 @@
   <% @disease.each do |disease| %>
            <%= link_to  disease.name, {:action => :step1, :id => disease  } %><br>
   <% end %>
+  <div style="margin-top:25px">
+  <%= link_to "+ Suggest a new disease or affliction", disease_welcome_path  %>
+  </div>
 </div>
 
 

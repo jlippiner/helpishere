@@ -1,0 +1,14 @@
+<%- @disease = disease_list -%>
+  <table border="0">
+    <tr>
+      <td style="width:15px;">
+      <font style="font-size:smaller"><%= disease_list_counter + 1 %>:</font>
+      </td>
+      <td style="width:300px;">       
+          <%= in_place_text_field :disease, :name, {:br => false} -%>
+      </td>
+      <td style="">
+        <%= link_to "[X]",  disease_list, :method => "delete"    %>
+      </td>
+    </tr></table>
+   

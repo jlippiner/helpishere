@@ -1,6 +1,10 @@
 class DiseasesController < ApplicationController
   in_place_edit_for :disease, :name
 
+  def welcome
+    session[:return_to] = request.path
+  end
+
   def index
     @disease = Disease.find(:all)
     @new_disease = Disease.new

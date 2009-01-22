@@ -94,4 +94,11 @@ class UserController < ApplicationController
     render :text => "Current Profile: <a href='#{url_for user_index_path}'>#{@current_profile.name}</a>"
   end
 
+  def update_picture
+    @user = User.find(@current_user.id)
+    @user.update_attributes(params[:user])
+    @current_user = @user
+    render  :action => "index"
+  end
+
 end

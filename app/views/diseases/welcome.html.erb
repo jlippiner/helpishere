@@ -1,0 +1,38 @@
+<h1>Suggesting a Disease or Ailment</h1>
+
+<% if !@current_user %>
+  <p><b>You must be a member of HelpIsHere.org to suggest a new affliction.</b></p>
+  <p><%= link_to "Click here", user_login_path %> to login or <a href="#join_form" rel="facebox">click here</a> to join now.</p>
+<% else %>
+  <h2>Important Disclaimer</h2>
+  <p>
+    HelpIsHere.org is an open network of resources for those affected by illness or disease.  While we welcome the
+    inclusion of any affliction that affects daily lives, we also take the value of this service seriously.  As a
+    social resource directory, the value of HiH depends 100% on the involvement and contributions of its users, just
+    like you.  Let's face it, we could add every disease known to man but if no one ever added any resources for those
+    diseases or let others who might benefit know about the service, what could is HiH!
+  </p>
+
+  <h2>Your Responsibilities</h2>
+  <p>
+    All suggested affilictions for inclusion will be promptly reviewed by HiH.  If the affiliction is added to HiH,
+    you will become the <b>moderator</b> for the disease you requested.  As such, you will have the following responsbilities:
+  </p>
+  <ul>
+    <li>Post at least FIVE initial resources, including an overview, rating and your own experiences with each resource</li>
+    <li>Share the link to these resources on HiH with as many other people affected as possible</li>
+    <li>Create (or select from others) lists of resources for this affiliction that will help others suffering</li>
+    <li>Review any "flagged" resources for abuse or removal</li>
+    <li>Help answer any private messages sent to you by others who are looking for guidance on this disease</li>
+  </ul>
+  <p>
+    While these responsibilities will probably take no more than an hour or two, we hope you will take them seriously.  Thank you
+    in advance for expanding the benefit of HiH and helping to make just one more person's life that much easier.
+  </p>
+  <center style="margin:25px;font-size:16pt">
+    <%= link_to "I would like to suggest a disease for inclusion", disease_suggest_path  %>
+  </center>
+  <center>
+    <%= link_to "No thank you.", search_start_path  %>
+  </center>
+<% end %>

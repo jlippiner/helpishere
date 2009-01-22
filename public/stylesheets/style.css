@@ -30,7 +30,7 @@ h1  {
 }
 h2  {
     clear:both;
-    margin:5px 0px;
+    margin:15px 0px;
     padding: 10px 0;
     color:teal;
 }
@@ -43,6 +43,7 @@ li {
     padding: 10px 10px 20px 10px;
     overflow: hidden;
     margin: 15px 25px;
+    line-height:16pt;
 }
 #notification {
     border: 5px solid #9c9;
@@ -124,3 +125,16 @@ select.error {
 DIV.space-line {
   clear: both; margin: 0; padding: 0; width: auto;
 }
+
+/* CSS Tables */
+.row {
+    width: 100%;
+    min-width: 800px;
+}
+.row .left {
+    float: left;    
+}
+.row .right {
+    float:right;    
+}
+

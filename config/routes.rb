@@ -1,8 +1,13 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :diseases
-  map.connect  'diseases/:action/:id', :controller => "diseases"
+ActionController::Routing::Routes.draw do |map|  
   map.resources :category
   map.connect  'category/:action/:id', :controller => "category"
+
+  map.with_options(:controller => "diseases", :name_prefix => "disease_") do |disease|
+    disease.welcome 'diseases/welcome', :action => "welcome"
+    disease.suggest 'diseases/suggest', :action => "suggest"
+    map.resources :diseases    
+  
+  end
 
   map.with_options(:controller => "search", :name_prefix => "search_") do |search|
     search.connect 'search/:action/:id'
@@ -21,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
     user.index 'user/index',  :action => "index"
     user.welcome 'user/welcome',  :action => "welcome"
     user.connect 'user/change_profile/:id', :action => "change_profile"
+    user.connect 'user/update_picture', :action => "update_picture"
     user.connect 'user/get_current_profile/:id', :action => "get_current_profile"    
   end
 
