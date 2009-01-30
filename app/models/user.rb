@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :photo,
-     :url => "/:class/:attachment/:id/:style_:basename.:extension",
+    :url => "/:class/:attachment/:id/:style_:basename.:extension",
     :path => ":rails_root/Public/:class/:attachment/:id/:style_:basename.:extension",        
     :default_url => "/images/missing.gif",
     :whiny_thumbnails => true,

@@ -121,7 +121,7 @@ class UserController < ApplicationController
       end
       flash[:error] = out 
     end
-    render  :action => "edit"
+    render  :action => params[:next]
   end
 
 end

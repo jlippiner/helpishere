@@ -25,6 +25,9 @@ namespace :staging do
     puts "linking assets directory"
     %x{#{ssh_command} "ln -nfs ~/shared/assets ~/current/public/assets"}
 
+    puts "linking Public to public directory"
+    %x{#{ssh_command} "ln -nfs ~/current/public ~/current/Public"}
+
     puts "stopping mongrel"
     %x{#{ssh_command} "source ~/.profile &&  mongrel stop"}
 

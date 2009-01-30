@@ -35,59 +35,73 @@
     </div>
   </div>
   <div class="right">
-        <div>
-          <div class="left">
-            <h2 style="padding:0px;margin:0px;">About Me</h2>
-          </div>
-          <div class="left" style="margin-left:15px;">
-            <%= link_to "(edit)", edit_user_path(@current_user) %>
-          </div>
-        </div>
-        <table cellpadding="5">
-          <tr>
-            <td colspan="2">
-              <%= image_tag @current_user.photo.url(:thumb) %><br>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Name:
-            </td>
-            <td style="font-weight:bold;">
-              <%= @current_user.name %>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Nickname:
-            </td>
-            <td style="font-weight:bold;">
-              <%= @current_user.nickname %>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Email:
-            </td>
-            <td style="font-weight:bold;">
-              <%= @current_user.email %>
-              <div id=""
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">
-              Bio:
-            </td>
-            <td style="font-weight:bold;width:200px;">
-              <%= !@current_user.bio.nil? ? @current_user.bio : "None" %>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              
-            </td>
-          </tr>
-        </table>      
+    <div>
+      <div class="left">
+        <h2 style="padding:0px;margin:0px;">About Me</h2>
+      </div>
+      <div class="left" style="margin-left:15px;">
+        <%= link_to "(edit)", edit_user_path(@current_user) %>
+      </div>
+    </div>
+    <table cellpadding="5">
+      <tr>
+        <td colspan="2">
+          <%  if(!@current_user.photo_file_name.nil?) %>
+             <%= image_tag @current_user.photo.url(:thumb) %><br>
+<% else %>
+<a href="#" id="#add_picture" rel="toggle">+ Add your photo</a>
+<div id="add_picture" style="margin:5px 0px">
+  <% form_for :user, :url => { :action => "update_picture", :next => "index" },  :html => { :multipart => true } do |f|  %>
+    Select a picture: <%= f.file_field :photo, :size => 10%>
+    <%= submit_tag 'Update' %>
+  <% end %>
+</div>
+<% end %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Name:
+        </td>
+        <td style="font-weight:bold;">
+          <%= @current_user.name %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Nickname:
+        </td>
+        <td style="font-weight:bold;">
+          <%= @current_user.nickname %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Email:
+        </td>
+        <td style="font-weight:bold;">
+          <%= @current_user.email %>
+          <div id=""
+             </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          Bio:
+        </td>
+        <td style="font-weight:bold;width:200px;">
+          <% if (@current_user.bio.nil?) %>
+            <%= (@current_user.bio.to_s=="") ? "None" : @current_user.bio%>
+          <% else %>
+            None
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
