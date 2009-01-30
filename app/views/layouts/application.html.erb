@@ -23,7 +23,7 @@
           <td align="right" valign="top">
             <div id="login_logout">
               <% if @current_user %>
-                Welcome <%= link_to @current_user.name, user_index_path %>
+                Welcome <%= link_to @current_user.nickname, user_index_path %>
                 <em><%= link_to "(Logout)", user_logout_path  %></em><br>
                 <div id="header_current_profile" style="margin-top:3px">
                   <% if @current_profile %>

@@ -24,6 +24,9 @@ form {
     margin: 0;
     padding: 0;
 }
+form table tr td {
+    padding: 5px;
+}
 h1  {
     color: #D02B3C;
     margin-bottom:0px;
@@ -90,6 +93,15 @@ li {
     background: #F7DA73;
     padding:0px 10px;
 }
+#edit_user_form table tr td {
+    padding: 5px;
+}
+A.small {
+    font-size:10pt;
+}
+.big-text {
+    font-size: 1.2em;
+    }
 input.text
 {
     /*padding: 0.3em 0;*/
@@ -98,6 +110,7 @@ input.text
     border-bottom-color: #c8c8c8;
     border-right-color: #c8c8c8;
     background: #fff url(/images/input-bg.png) repeat-x left bottom;
+    padding: 5px;
 }
 input.ui-large
 {

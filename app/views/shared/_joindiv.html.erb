@@ -1,7 +1,7 @@
   <div style="display:none;width:550px">
     <% form_for :user, :url => user_join_path, :html => {:id => "join_form"} do |f| %>
         <h1>Join HelpIsHere</h1>
-        <table>
+        <table style="margin-top:5px">
           <tr>
             <td class="label"><%= f.label :name, "Name:" %></td>
             <td class="field"><%= f.text_field  :name, :class => "text ui.large", :size => "20"  %></td>

@@ -11,13 +11,18 @@ class User < ActiveRecord::Base
 
   # Paperclip
   has_attached_file :photo,
-    :styles => {
-    :thumb => "100x100>",
-    :small => "150x150>",
-    :medium => ["300x300>", :gif]
-  }, :url => "/:class/:attachment/:id/:style_:basename.:extension",
+     :url => "/:class/:attachment/:id/:style_:basename.:extension",
     :path => ":rails_root/Public/:class/:attachment/:id/:style_:basename.:extension",        
     :default_url => "/images/missing.gif",
-    :whiny_thumbnails => true
+    :whiny_thumbnails => true,
+    :styles => {
+    :thumb => "100x100#",
+    :tiny => "50x50>",
+    :medium => "75x75>"
+  },
+    :default_style => :thumb,
+    :convert_options => {
+    :thumb => "-border 5 -frame 3x3"
+    }
 
 end

@@ -1,8 +1,10 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
+$('a[rel*=divtoggle]').load(function(){
+    log(this.id);
+})
 
 $(document).ready(function() {
-    // bind 'myForm' and provide a simple callback function
     var options = {
         success:  showResponse
     };
@@ -12,10 +14,32 @@ $(document).ready(function() {
 
     $('a[rel*=facebox]').facebox()
 
-    $(document).bind('reveal.facebox', function() {  
+    $('a[rel*=facebox_close]').facebox().click(function(){
+        $('#faceBoxClose').show();
+    })
+
+    
+    $(document).bind('reveal.facebox', function() {        
         $('#faceBoxClose').hide();
     })
 
+    $('a[rel*=toggle]').bind('click', function(){
+        var el = this;
+        
+        $('a[rel*=toggle]').each(function(){
+            if (this.id!=el.id)
+                $(this.id).hide();
+        })
+
+        $(this.id).toggle();
+        return false;
+    })
+
+    $('a[rel*=toggle]').each(function(){
+        $(this.id).hide();
+    })
+
+      
 });
 
 function showResponse(responseText, statusText)  {
@@ -132,7 +156,7 @@ $(document).ready(function() {
                 label.html("&nbsp;").addClass("checked");
             },
             invalidHandler: function() {
-              return false;
+                return false;
             }
 
         });

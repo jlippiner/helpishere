@@ -1,0 +1,94 @@
+<table border="0">
+  <tr>
+    <td>
+      <%= image_tag @current_user.photo.url(:medium), :style => "border:solid 1px gray;padding:2px" %>
+    </td>
+    <td>
+      <h1>Edit User</h1>
+    </td>
+  </tr>
+</table>
+
+<div style="margin:15px;"s>
+  <% form_for @current_user, :html => { :id => "form_user"}  do |f| %>
+    <table>
+      <tr>
+        <td class="label"><%= f.label :name, "Name:" %></td>
+        <td class="field"><%= f.text_field  :name, :class => "text ui.large", :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+
+      <tr>
+        <td class="label"><%= f.label :nickname,"Nickname:" %></td>
+        <td class="big-text" colspan="2"><%= @current_user.nickname %><a href="#nickname_div" rel="facebox_close" class="small" id="nickname_edit" style="margin-left:15px">why can't I edit this?</a></td>
+
+      </tr>
+      <tr>
+
+        <td class="label"><%= f.label :email, "Email:" %></td>
+        <td class="field"><%= f.text_field :email, :class => "text ui.large", :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+      <tr>
+        <td colspan="3" style="padding-top:25px">Please enter a couple of words to describe yourself:</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><%= f.text_area :bio, :rows => "5", :cols => "40"  %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="field" colspan="2" style="text-align:right">
+          <%= submit_tag  'Update', :class => "ui.large", :style => "font-size:16pt"  %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+
+<div style="margin:25px 15px;">
+  <%= link_to "Change Password","", :rel => "toggle", :id => "#change_password"  %>
+  <%= link_to "Upload Picture","", :id => "#change_picture", :rel => "toggle", :style => "margin-left:10px" %>
+  <%= link_to "Delete Account","", :rel => "toggle", :id => "#delete_account", :style => "margin-left:10px" %>
+</div>
+
+<div id="nickname_div" style="display:none">
+  <h3>Why can't I change my nickname?</h3>
+  <p>
+    As a social web site, trust is extremely important.  Others come to know and hopefully trust your resources, reviews, thoughts, etc.  If we let people continually change
+    their virtual "identity," it would be very difficult to get to really know each other.
+  </p>
+</div>
+
+<div id="change_picture">
+  <h2>Upload A Picture</h2>
+  <% form_for :user, :url => {:action => "update_picture" },  :html => { :multipart => true } do |f|  %>
+    Select a picture: <%= f.file_field :photo, :size => 10%>
+    <%= submit_tag 'Update' %>
+  <% end %>
+</div>
+
+<div id="change_password">
+  <h2>Change Password</h2>
+  <% form_for @current_user,  :html => { :id => 'form_pwd' }  do |f| %>
+    <table>
+      <tr>
+        <td class="label"><%= f.label :password, "Password:"%></td>
+        <td class="field"><%= f.password_field  :password,  :value => "", :class => "text ui.large", :size => "20"   %></td>
+        <td class="status"></td>
+      </tr>
+      <tr>
+        <td class="label"><%= f.label "password_confirm:" %></td>
+        <td class="field"><%= password_field  "password_confirm", "", :class => "text ui.large",  :size => "20"  %></td>
+        <td class="status"></td>
+      </tr>
+      <tr>
+        <td class="field" colspan="2" style="text-align:right">
+          <%= submit_tag  'Update', :class => "ui.large", :style => "font-size:16pt"  %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  <% end %>
+</div>

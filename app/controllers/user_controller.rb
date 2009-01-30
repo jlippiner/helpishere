@@ -79,7 +79,13 @@ class UserController < ApplicationController
       @valid = User.find_by_nickname(@value).nil?
     else
       @value = params["user"]["email"]
-      @valid = User.find_by_email(@value).nil?
+      if (@current_user.email==@value)
+        #        need to do this to allow people updating their
+        #        info to use same email address
+        @valid = true
+      else
+        @valid = User.find_by_email(@value).nil?
+      end
     end
   end
   
@@ -94,11 +100,28 @@ class UserController < ApplicationController
     render :text => "Current Profile: <a href='#{url_for user_index_path}'>#{@current_profile.name}</a>"
   end
 
+  def update
+    @user = User.find(@current_user.id)
+    if @user.update_attributes(params[:user])
+      @current_user = @user
+      flash[:notice] = "Your information has been updated.  Have a wonderful day."
+    end
+    render  :action => "index"
+  end
+
   def update_picture
     @user = User.find(@current_user.id)
-    @user.update_attributes(params[:user])
-    @current_user = @user
-    render  :action => "index"
+    if @user.update_attributes(params[:user])
+      @current_user = @user
+      flash[:notice] = "Picture updated!  That's pretty."
+    else
+      out = "ERROR: "
+      @user.errors.each do |e|
+        out = out + e.join("<br>")
+      end
+      flash[:error] = out 
+    end
+    render  :action => "edit"
   end
 
 end

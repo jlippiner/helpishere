@@ -39,7 +39,6 @@ doc\:clobber_rails=Remove rdoc products
 doc\:guides=Generate Rails guides
 doc\:plugins=Generate documentation for all installed plugins
 doc\:plugins\:country_select=Generate documentation for the country_select plugin
-doc\:plugins\:imagemagick_tag=Generate documentation for the imagemagick_tag plugin
 doc\:plugins\:in_place_editing=Generate documentation for the in_place_editing plugin
 doc\:plugins\:jrails=Generate documentation for the jrails plugin
 doc\:plugins\:local=Generate documentation for the local plugin

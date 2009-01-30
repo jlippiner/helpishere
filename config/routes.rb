@@ -27,7 +27,8 @@ ActionController::Routing::Routes.draw do |map|
     user.welcome 'user/welcome',  :action => "welcome"
     user.connect 'user/change_profile/:id', :action => "change_profile"
     user.connect 'user/update_picture', :action => "update_picture"
-    user.connect 'user/get_current_profile/:id', :action => "get_current_profile"    
+    user.connect 'user/get_current_profile/:id', :action => "get_current_profile"
+    map.resources :user
   end
 
   map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
