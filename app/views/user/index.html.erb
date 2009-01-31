@@ -1,12 +1,11 @@
 <% content_for :head do %>
-  <% if @current_user.resources.count > 0 %>
+  <% if (@current_user.resources.count > 0 && !@map.nil?) %>
     <%= GMap.header(:host => request.host) %>
     <%= @map.to_html %>
   <% end %>
 <% end %>
 
 <h1>Welcome <%= @current_user.nickname %>.</h1>
-
 <table border="0" cellpadding="3">
   <tr>
     <td valign="top">
@@ -17,7 +16,7 @@
         <table border="0" cellpadding="2">
           <tr>
             <td valign="top">
-              <div style="border:solid 1px gray">
+              <div style="border:solid 1px gray">                
                 <%= @map.div(:width => 200, :height => 200) %>
               </div>
             </td>

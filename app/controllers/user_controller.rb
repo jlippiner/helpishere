@@ -1,8 +1,8 @@
 class UserController < ApplicationController
   layout proc{ |c| c.request.xhr? ? false : "application" }
-  before_filter :login_required, :only => [:index, :logout, :welcome]
-   
-  
+  before_filter :login_required, :only => [:index, :logout, :welcome, :edit, :update]
+  before_filter :create_map
+     
   def logout
     session[:user_id] = @current_user = nil
     session[:profile_id] = @current_profile = nil
@@ -10,24 +10,30 @@ class UserController < ApplicationController
     render :action => "login"
   end
 
-  def index
-    #     deal with maps
-    if (@current_user.resources.count>0)
-      @map = GMap.new("map_div")
-      @map.control_init(:small_map => true)
-      @map.center_zoom_init([@current_user.resources.first.listing.latitude,@current_user.resources.first.listing.longitude],7)
+  def create_map
+    if @current_user      
+      if (@current_user.resources.count > 0)
+        #     deal with maps
+        @map = GMap.new("map_div")
+        @map.control_init(:small_map => true)
+        @map.center_zoom_init([@current_user.resources.first.listing.latitude,@current_user.resources.first.listing.longitude],7)
 
-      markers = []
-      @current_user.resources.each do |t|
-        markers << GMarker.new([t.listing.latitude,t.listing.longitude],:title => t.listing.title,:info_window => t.listing.title + "<br>" + t.listing.address)
+        markers = []
+        @current_user.resources.each do |t|
+          markers << GMarker.new([t.listing.latitude,t.listing.longitude],:title => t.listing.title,:info_window => t.listing.title + "<br>" + t.listing.address)
+        end
+
+        managed_markers = ManagedMarker.new(markers,0,7)
+
+        mm = GMarkerManager.new(@map,:managed_markers => [managed_markers])
+        @map.declare_init(mm,"mgr")
+
       end
-      
-      managed_markers = ManagedMarker.new(markers,0,7)
-
-      mm = GMarkerManager.new(@map,:managed_markers => [managed_markers])
-      @map.declare_init(mm,"mgr")      
-
     end
+  end
+
+  def index
+    
   end
 
   def welcome
@@ -122,7 +128,8 @@ class UserController < ApplicationController
       @current_user = @user
       flash[:notice] = "Your information has been updated.  Have a wonderful day."
     end
-    render  :action => "index"
+
+    render :action => "index"
   end
 
   def update_picture
@@ -137,7 +144,7 @@ class UserController < ApplicationController
       end
       flash[:error] = out
     end
-    render  :action => params[:next]
+    render :action => params[:next]
   end
 
 end
