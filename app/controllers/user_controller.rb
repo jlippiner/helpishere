@@ -11,7 +11,23 @@ class UserController < ApplicationController
   end
 
   def index
-    
+    #     deal with maps
+    if (@current_user.resources.count>0)
+      @map = GMap.new("map_div")
+      @map.control_init(:small_map => true)
+      @map.center_zoom_init([@current_user.resources.first.listing.latitude,@current_user.resources.first.listing.longitude],7)
+
+      markers = []
+      @current_user.resources.each do |t|
+        markers << GMarker.new([t.listing.latitude,t.listing.longitude],:title => t.listing.title,:info_window => t.listing.title + "<br>" + t.listing.address)
+      end
+      
+      managed_markers = ManagedMarker.new(markers,0,7)
+
+      mm = GMarkerManager.new(@map,:managed_markers => [managed_markers])
+      @map.declare_init(mm,"mgr")      
+
+    end
   end
 
   def welcome
@@ -119,7 +135,7 @@ class UserController < ApplicationController
       @user.errors.each do |e|
         out = out + e.join("<br>")
       end
-      flash[:error] = out 
+      flash[:error] = out
     end
     render  :action => params[:next]
   end

@@ -1,109 +1,124 @@
+<% content_for :head do %>
+  <% if @current_user.resources.count > 0 %>
+    <%= GMap.header(:host => request.host) %>
+    <%= @map.to_html %>
+  <% end %>
+<% end %>
+
 <h1>Welcome <%= @current_user.nickname %>.</h1>
 
-<div class="row">
-  <div class="left">
-    <h2>My Resources</h2>
-    <% if @current_user.resources.count == 0 %>
-      <p><em>You haven't added any resources.  <%= link_to "Click here", resource_new_path %> to add some now</em></p>
-    <% else %>
-      <ul>
-        <% for r in @current_user.resources.find(:all) %>
-          <li>
-            <%= link_to "#{r.listing.title} for  #{r.disease.name}", resource_index_path(r.id) %>
-            <%= link_to "(delete)", r, :confirm => "Are you sure?", :method => :delete  %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-    <div style="margin-top:30px">
-      <%= link_to "+ Add a resource", resource_new_path %>
-    </div>
-
-    <div style="margin-top:30px">
-      <h2>Profiles</h2>
-      <% if @current_user.profiles.count == 0 %>
-        <p><em>No profile found.  You need to create a profile to add resources.</em></p>
+<table border="0" cellpadding="3">
+  <tr>
+    <td valign="top">
+      <h2>My Resources</h2>
+      <% if @current_user.resources.count == 0 %>
+        <p><em>You haven't added any resources.  <%= link_to "Click here", resource_new_path %> to add some now</em></p>
       <% else %>
-        <%= "<em>Select the profile you would like to use:</em>" if @current_user.profiles.count > 1 %>
-        <ul  id="profile_list">
-          <%=  render  :partial => "profiles", :collection => @current_user.profiles  %>
-        </ul>
+        <table border="0" cellpadding="2">
+          <tr>
+            <td valign="top">
+              <div style="border:solid 1px gray">
+                <%= @map.div(:width => 200, :height => 200) %>
+              </div>
+            </td>
+            <td valign="top">
+              <ul>
+                <% for r in @current_user.resources.find(:all) %>
+                  <li>
+                    <%= link_to "#{r.listing.title} for  #{r.disease.name}", resource_index_path(r.id) %>
+                    <%= link_to "(delete)", r, :confirm => "Are you sure?", :method => :delete, :class => "small"  %>
+                  </li>
+                <% end %>
+              </ul>
+              <div style="margin:30px">
+                <%= link_to "+ Add a resource", resource_new_path %>
+              </div>
+            </td>
+          </tr>
+        </table>
       <% end %>
-      <div style="margin-top:30px">
-        <%= link_to "+ Create a profile", profile_new_path(@current_user) %>
-      </div>
-    </div>
-  </div>
-  <div class="right">
-    <div>
-      <div class="left">
-        <h2 style="padding:0px;margin:0px;">About Me</h2>
-      </div>
-      <div class="left" style="margin-left:15px;">
-        <%= link_to "(edit)", edit_user_path(@current_user) %>
-      </div>
-    </div>
-    <table cellpadding="5">
-      <tr>
-        <td colspan="2">
-          <%  if(!@current_user.photo_file_name.nil?) %>
-             <%= image_tag @current_user.photo.url(:thumb) %><br>
-<% else %>
-<a href="#" id="#add_picture" rel="toggle">+ Add your photo</a>
-<div id="add_picture" style="margin:5px 0px">
-  <% form_for :user, :url => { :action => "update_picture", :next => "index" },  :html => { :multipart => true } do |f|  %>
-    Select a picture: <%= f.file_field :photo, :size => 10%>
-    <%= submit_tag 'Update' %>
-  <% end %>
-</div>
-<% end %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Name:
-        </td>
-        <td style="font-weight:bold;">
-          <%= @current_user.name %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Nickname:
-        </td>
-        <td style="font-weight:bold;">
-          <%= @current_user.nickname %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Email:
-        </td>
-        <td style="font-weight:bold;">
-          <%= @current_user.email %>
-          <div id=""
-             </td>
-      </tr>
-      <tr>
-        <td valign="top">
-          Bio:
-        </td>
-        <td style="font-weight:bold;width:200px;">
-          <% if (@current_user.bio.nil?) %>
-            <%= (@current_user.bio.to_s=="") ? "None" : @current_user.bio%>
-          <% else %>
-            None
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
 
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
+      <div style="margin-top:30px">
+        <h2>Profiles</h2>
+        <% if @current_user.profiles.count == 0 %>
+          <p><em>No profile found.  You need to create a profile to add resources.</em></p>
+        <% else %>
+          <%= "<em>Select the profile you would like to use:</em>" if @current_user.profiles.count > 1 %>
+          <ul  id="profile_list">
+            <%=  render  :partial => "profiles", :collection => @current_user.profiles  %>
+          </ul>
+        <% end %>
+        <div style="margin-top:30px">
+          <%= link_to "+ Create a profile", profile_new_path(@current_user) %>
+        </div>
+      </div>
+    </td>
+
+    <td valign="top">
+      <h2>About Me</h2>
+      <table cellpadding="5">
+        <tr>
+          <td colspan="2">
+            <%  if(!@current_user.photo_file_name.nil?) %>
+              <%= image_tag @current_user.photo.url(:thumb) %><br>
+            <% else %>
+              <a href="#" id="#add_picture" rel="toggle">+ Add your photo</a>
+              <div id="add_picture" style="margin:5px 0px">
+                <% form_for :user, :url => { :action => "update_picture", :next => "index" },  :html => { :multipart => true } do |f|  %>
+                  Select a picture: <%= f.file_field :photo, :size => 10%>
+                  <%= submit_tag 'Update' %>
+                <% end %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Name:
+          </td>
+          <td style="font-weight:bold;">
+            <%= @current_user.name %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Nickname:
+          </td>
+          <td style="font-weight:bold;">
+            <%= @current_user.nickname %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Email:
+          </td>
+          <td style="font-weight:bold;">
+            <%= @current_user.email %>
+            <div id=""
+               </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            Bio:
+          </td>
+          <td style="font-weight:bold;width:200px;">
+            <% if (@current_user.bio.nil?) %>
+              <%= (@current_user.bio.to_s=="") ? "None" : @current_user.bio%>
+            <% else %>
+              None
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <%= link_to "Edit my information", edit_user_path(@current_user) %>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
 
 
 <script language="javascript">

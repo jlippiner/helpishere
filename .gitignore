@@ -3,3 +3,4 @@ tmp/*
 log/*
 config/database.yml
 config/keys.rb
+public/users/*

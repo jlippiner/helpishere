@@ -142,10 +142,9 @@ DIV.space-line {
 /* CSS Tables */
 .row {
     width: 100%;
-    min-width: 800px;
 }
 .row .left {
-    float: left;    
+    float: left; 
 }
 .row .right {
     float:right;    

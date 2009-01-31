@@ -1,3 +1,8 @@
+<% content_for :head do  %>
+   <%= GMap.header(:host => request.host) %>
+    <%= @map.to_html %>
+<% end %>
+
 <center>
   <div style="width:600px;text-align:left">
     <h1>Add Resource - Summary</h1>
@@ -13,8 +18,7 @@
       <table border="0" cellpadding="4">
         <tr>
           <td>
-            <img src="http://maps.google.com/staticmap?center=<%= "#{@resource.listing.latitude},#{@resource.listing.longitude}" %>&zoom=10&size=200x200&maptype=mobile\
-                 &markers=<%= "#{@resource.listing.latitude},#{@resource.listing.longitude}" %>&key=<%= GOOGLE_MAPS_KEY %>&sensor=false" alt="Map">
+            <%= @map.div(:width => 200, :height => 200) %>
           </td>
           <td>
             <p><b><%= @resource.listing.title %></b></p>

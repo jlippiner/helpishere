@@ -151,6 +151,13 @@ class ResourceController < ApplicationController
 
   def index
     @resource = Resource.find(params[:id])
+    if @resource
+      @map = GMap.new("map_div")
+      @map.control_init(:small_map => true)
+      @map.center_zoom_init([@resource.listing.latitude,@resource.listing.longitude],8)
+      @map.overlay_init(GMarker.new([@resource.listing.latitude,@resource.listing.longitude],:title => @resource.listing.title, :info_window => @resource.listing.title))
+
+    end
     render  :template => "resource/new_step_summary"
   end
 
@@ -174,7 +181,7 @@ class Result
     singleton_class.class_eval do
       define_method(name) do
         if value!=''
-        value
+          value
         else
           ' '
         end
