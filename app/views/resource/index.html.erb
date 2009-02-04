@@ -1,59 +1,59 @@
-<h1>Resources</h1>
-<% content_for :head do %>
-  <%= javascript_include_tag 'jquery.autocomplete.pack.js' %>
-  <%= stylesheet_link_tag 'jquery.autocomplete'  %>
-  <script type="text/javascript">
+<h1>My Resources</h1>
 
-    $(document).ready(function(){
-      jQuery.ajaxSetup({
-        'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-      })
-      $("#q").autocomplete( 'remote_search?format=js', {
-        mustMatch : false,
-        delay : 1000,
-        matchContains : false
-      }
-    );
+<table width="100%" style="margin-top:15px;" cellpadding="3">
+  <tr>
+    <th>
 
-      $("#q").result(function(event, data, formatted) {
-        if (data)
-          $(this).parent().next().find("input").val(data[1]);
-      });
+    </th>
+    <th align="right">
+      Sort by: <a Title="Name" href="#" id="sort_name">Name</a>&nbsp;&nbsp;
+      <a Title="Name" href="#" id="sort_city">City</a>&nbsp;&nbsp;
+    </th>
+  </tr>
+  <tr>
+    <td width="150" valign="top" style="font-size:10pt">
+      <% form_tag resource_filter_path do |f|   %>
+      <%  @cats.each do |c| %>
+            <%= check_box_tag "category_ids[]", c.id, true %><%= c.title.proper_case %><br>
+      <% end %>
+      <%= submit_tag "submit" %>
+      <% end %>
+    </td>
+    <td valign="top">
+      <div id="list">
+        <%= render :partial => "myresources_list", :collection => @list %>
+      </div>
+    </td>
+  </tr>
+</table>
 
-      $("#yList").hide();
-      $("#sForm").submit(function(){        
-        $("#spinner").show('fast');
-        $("#yList").hide();
-        $('#sOut').load('remote_search_2?value='+escape($("#s").val()),{},function (responseText, textStatus, XMLHttpRequest) {
-          $("#spinner").hide('fast');
-          $('#yList').show();
+<script language="javascript">
+  $(document).ready(function(){
+    $('#sort_name').click(function(){
+      $.ajax({
+        url: "remote/sort_name",
+        success: function (response) {
+          $('#list').html(response);
         }
-      );
-        return false
+      });
+      return false;
+    })
+
+    $('#sort_city').click(function(){
+      $.ajax({
+        url: "remote/sort_city",
+        success: function (response) {
+          $('#list').html(response);
+        }
       })
+      return false;
+    })
 
-    });
-  </script>
-<% end%>
+  })
+</script>
 
-<% if params[:v]=="2" %>
-  <% form_tag resource_index_path, :method => 'get', :id => "sForm"  do %>
-    <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "50"} %>
-    <%= submit_tag "Find Resource", :name => nil %>
-  <% end %>
-  <div id="spinner" style="text-align:center;margin:20px;display:none;">
-    <%= image_tag 'spinner.gif' %>
-  </div>
-  <div id="yList">
-    <p><em>Select resource from the list below</em></p>
-    <ul id="sOut"></ul>
-    <p style="border-top:dashed 1px gray">
-      <p><%= link_to "+ Add a resource not listed above" %></p>
-    </p>
-  </div>
-<% else %>
-  <% form_tag resource_index_path, :method => 'get', :autocomplete => "off"  do %>
-    <%= text_field_tag :q, params[:q], { :class => "text ui-large", :size => "50"} %>
-    <%= submit_tag "Add Resource", :name => nil %>
-  <% end %>
-<% end %>
+<style>
+  #list div {
+    padding:5px
+  }
+</style>

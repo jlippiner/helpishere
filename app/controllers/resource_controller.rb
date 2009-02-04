@@ -6,47 +6,7 @@ class ResourceController < ApplicationController
   before_filter :login_required,  :profile_required
   
   def new
-    @categories = Category.find(:all, :order=>'title')
-
-    case params[:step]
-    when "2"
-      h = {}
-      params.each{ |k,v| h[k] = CGI::unescape(v) if Listing.column_names.include?(k)}
-      h[:user_id]=@current_user.id
-      
-      @listing = Listing.find_by_title_and_address( h['title'], h['address'])
-      @listing ||= Listing.create(h)
-      
-      render  :template => "resource/new_step_overview"
-    when "3"
-      @resource = Resource.create(params[:resource]) do |r|
-        r.user = @current_user
-        r.listing_id = params[:id]
-        r.disease = @current_profile.disease        
-      end
-
-      render  :template => "resource/new_step_experience"
-    when "4"
-      @resource = Resource.find(params[:id])
-      @experience = Experience.create(params[:experience]) do |e|
-        e.resource = @resource
-        e.user = @current_user
-      end
-
-      @categories = Category.find(:all, :order=>'title')
-      render  :template => "resource/new_step_details"
-    when "5"
-      @resource = Resource.find(params[:id])
-      params[:resource][:category_ids] ||= []
-      
-      if @resource.update_attributes(params[:resource])
-        flash[:notice] = 'Updated'
-        @categories = Category.find(:all, :order=>'title')
-        render  :template => "resource/new_step_summary"
-      end
-    else
-      
-    end
+    @categories = Category.find(:all, :order=>'title')   
   end
 
   def remote_search
@@ -150,15 +110,39 @@ class ResourceController < ApplicationController
   end
 
   def index
+    @list = @current_profile.resources.sort_by { |m| m.listing.title}
+    @cats = @current_profile.resources.distinct_categories
+  end
+
+  def filter      
+      @ids = params[:category_ids]
+      @list = @current_profile.resources.select{|r| @ids.include? r.categories.id }
+      @r = Resource.new
+      render :template => "resource/index"
+  end
+
+  def remote
+    case params[:do]
+    when "sort_name"
+      @list = @current_profile.resources.sort_by { |m| m.listing.title}
+      render :partial => "myresources_list", :collection => @list
+    when "sort_city"
+      @list = @current_profile.resources.sort_by { |m| m.listing.city}
+      render :partial => "myresources_list", :collection => @list
+    when "filter_cats"
+
+    else
+    end
+  end
+
+  def summary
     @resource = Resource.find(params[:id])
     if @resource
       @map = GMap.new("map_div")
       @map.control_init(:small_map => true)
       @map.center_zoom_init([@resource.listing.latitude,@resource.listing.longitude],8)
       @map.overlay_init(GMarker.new([@resource.listing.latitude,@resource.listing.longitude],:title => @resource.listing.title, :info_window => @resource.listing.title))
-
     end
-    render  :template => "resource/new_step_summary"
   end
 
 end

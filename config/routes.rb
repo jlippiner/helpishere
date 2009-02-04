@@ -1,4 +1,5 @@
-ActionController::Routing::Routes.draw do |map|  
+ActionController::Routing::Routes.draw do |map|
+  map.connect 'sandbox/:action', :controller => "sandbox"
   map.resources :category
   map.connect  'category/:action/:id', :controller => "category"
 
@@ -33,13 +34,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
     r.index 'resource/index/:id', :action => "index"
+    r.summary 'resource/summary/:id', :action => "summary"
     r.connect 'resource/remote_search', :action => "remote_search"
     r.connect 'resource/remote_add', :action => "remote_add"
     r.connect 'resource/remote_delete/:id', :action => "remote_delete"
-    r.connect 'resource/new/:step/:source/:title/:address/:city/:state/:phone/:latitude/:longitude/:website',
-      :action => "new", :controller => "resource", :website => nil, :phone => nil, :latitude => nil, :longitude => nil,
-      :requirements => { :latitude => %r([^/;,?]+),  :longitude => %r([^/;,?]+),  :website => %r([^/;,?]+)}
-    r.steps 'resource/new/:step/:id', :action => "new"    
+    r.connect 'resource/remote/:do', :action => "remote"
+    r.filter 'resource/filter', :action => "filter"
     r.new 'resource/new', :action => "new", :controller => "resource"
   end
   map.resources :resource, :controller => "resource"

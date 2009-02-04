@@ -6,7 +6,7 @@
 <% end %>
 
 <h1>Welcome <%= @current_user.nickname %>.</h1>
-<table border="0" cellpadding="3">
+<table border="0" cellpadding="3" width="100%">
   <tr>
     <td valign="top">
       <h2>My Resources</h2>
@@ -24,7 +24,7 @@
               <ul>
                 <% for r in @current_user.resources.find(:all) %>
                   <li>
-                    <%= link_to "#{r.listing.title} for  #{r.disease.name}", resource_index_path(r.id) %>
+                    <%= link_to "#{r.listing.title} for  #{r.disease.name}", resource_summary_path(r.id) %>
                     <%= link_to "(delete)", r, :confirm => "Are you sure?", :method => :delete, :class => "small"  %>
                   </li>
                 <% end %>
