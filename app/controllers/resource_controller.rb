@@ -109,47 +109,70 @@ class ResourceController < ApplicationController
     redirect_to user_index_path
   end
 
-  def index
-    @list = @current_profile.resources.sort_by { |m| m.listing.title}
-    @cats = []
-    @current_profile.resources.each do |r|
-      r.categories.each do |c|        
-        @cats << c if !@cats.include?(c)
-      end      
-    end
 
+  def index
+    uniq_cats
+    @ids = @cats.map { |c| c.id.to_s  }    # @ids used to persist checkbox selection
+
+    session[:group] = params[:group]
+    if(!params[:letter].nil?)
+      group_resources_alphabetically(params[:letter])
+    else
+      group_resources    
+    end
+    
+        
+    session[:ids] = @ids
   end
 
-  def filter      
+  def filter
     @ids = params[:category_ids]
-    @list = []
-    @current_profile.resources.each do |r|
-      r.categories.each do |c|
-        @list << r if @ids.include?(c.id.to_s)
-      end
+
+    if(!@ids.nil?)
+      session[:ids] = @ids
+    else
+      @ids = session[:ids]
     end
 
-    @cats = []
-    @current_profile.resources.each do |r|
-      r.categories.each do |c|
-        @cats << c if !@cats.include?(c)
-      end
-    end
+    uniq_cats
+    group_resources
     
     render :template => "resource/index"
   end
 
-  def remote
-    case params[:do]
-    when "sort_name"
-      @list = @current_profile.resources.sort_by { |m| m.listing.title}
-      render :partial => "myresources_list", :collection => @list
-    when "sort_city"
-      @list = @current_profile.resources.sort_by { |m| m.listing.city}
-      render :partial => "myresources_list", :collection => @list
-    when "filter_cats"
 
+  def group_resources
+    if(session[:group]=='alpha')
+      group_resources_alphabetically
     else
+      group_resources_by_category
+    end
+  end
+
+
+  def group_resources_alphabetically(a_letter = nil)
+    #    group into buckets
+    @groups = []
+    @letters = []
+    ('A'..'Z').each do |c|
+      group = {:title => c, :data =>  @current_profile.resources.for_categories_and_starts_with(@ids,c)}
+      if !group[:data].empty?        
+        @groups << group if(a_letter.nil? || a_letter==c)
+        
+        @letters << c
+      end
+    end
+  end
+
+  def group_resources_by_category(options = {})
+    #    group into buckets
+    @groups = []
+    @cats.each do |c|
+      if (@ids.include?(c.id.to_s))
+        o = {:conditions => ["profile_id = ?",@current_profile], :include => [:profiles,:listing], :order => "title"}.merge(options)
+        group = {:title => c.title, :data => c.resources.find(:all,o)}
+        @groups << group
+      end
     end
   end
 
@@ -161,6 +184,12 @@ class ResourceController < ApplicationController
       @map.center_zoom_init([@resource.listing.latitude,@resource.listing.longitude],8)
       @map.overlay_init(GMarker.new([@resource.listing.latitude,@resource.listing.longitude],:title => @resource.listing.title, :info_window => @resource.listing.title))
     end
+  end
+
+
+  private
+  def uniq_cats
+    @cats =@current_profile.resources.map{|r| r.categories }.flatten.uniq.sort_by {|c| c.title}
   end
 
 end

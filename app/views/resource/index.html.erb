@@ -6,48 +6,76 @@
 
     </th>
     <th align="right">
-      Sort by: <a Title="Name" href="#" id="sort_name">Name</a>&nbsp;&nbsp;
-      <a Title="Name" href="#" id="sort_city">City</a>&nbsp;&nbsp;
+      Group: <%= link_to "By Category", resource_index_path(:group => "cat") %>&nbsp;
+      <%= link_to "Alphabetically", resource_index_path(:group => "alpha") %>
     </th>
   </tr>
+  <%  if(session[:group]=='alpha') %>
+    <tr>
+      <td></td>
+      <td align="center">
+        <% ('A'..'Z').each  do |c| %>
+          <% if(@letters.include?(c)) %>
+              <%= link_to c, resource_index_path(:group => "alpha", :letter => c), :style => "font-size:16pt" %>
+          <% else %>
+            <%= c %>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
   <tr>
     <td width="150" valign="top" style="font-size:10pt">
-      <% form_tag resource_filter_path do |f|   %>
-      <%  @cats.each do |c| %>
-            <%= check_box_tag "category_ids[]", c.id, check_cat(@list,c) %><%= c.title.proper_case %><br>
-      <% end %>
-      <%= submit_tag "submit" %>
+      <b>Categories</b><br>
+      <div style="font-size:8pt">
+        <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
+        <a rel="group_1" href="#select_none">Select None</a>
+      </div>
+      <div id="group_1">
+        <% form_tag resource_filter_path do |f|   %>
+          <%  @cats.each do |c| %>
+            <%= check_box_tag "category_ids[]", c.id, @ids.include?(c.id.to_s) %><%= c.title.proper_case %><br>
+          <% end %>
+        </div>
+        <div style="margin-top:10px">
+          <%= submit_tag "submit" %>
+        </div>
       <% end %>
     </td>
-    <td valign="top">
-      <div id="list">
-        <%= render :partial => "myresources_list", :collection => @list %>
-      </div>      
+    <td valign="top" style="border-left:dotted 1px gray;border-top:dotted 1px gray;padding-left:10px">
+      <% if !@groups.nil? %>
+        <% @groups.each do |g|  %>
+          <%# debugger %>
+          <h2><%= g[:title] %></h2>
+          <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="border:solid 1px gray;margin:20px;">
+            <%= render :partial => "myresources_list", :collection => g[:data] %>
+          </div>
+        <% end %>
+      <% end %>
     </td>
   </tr>
 </table>
 
 <script language="javascript">
   $(document).ready(function(){
-    $('#sort_name').click(function(){
-      $.ajax({
-        url: "remote/sort_name",
-        success: function (response) {
-          $('#list').html(response);
-        }
-      });
-      return false;
-    })
 
-    $('#sort_city').click(function(){
-      $.ajax({
-        url: "remote/sort_city",
-        success: function (response) {
-          $('#list').html(response);
-        }
-      })
+<% @groups.each do |g|  %>
+      $("<%= "#group_#{g[:title].sub(" ","_")}" %> div:odd").css("background-color", "#EFF1F1");
+      $("<%= "#group_#{g[:title].sub(" ","_")}" %> div:even").css("background-color", "#FFFFFF");
+<% end %>
+
+    // Select all
+    $("A[href='#select_all']").click( function() {
+      $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
       return false;
-    })
+    });
+
+    // Select none
+    $("A[href='#select_none']").click( function() {
+      $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
+      return false;
+    });
+
 
   })
 </script>

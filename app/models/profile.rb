@@ -1,8 +1,16 @@
 class Profile < ActiveRecord::Base
   belongs_to :disease
   belongs_to :user
-  has_many :resources, :through => :my_resources
   has_many :my_resources
+  has_many :resources, :through => :my_resources do
+    def for_categories(ids, options = {})
+      find(:all, options.merge(:conditions => ["categories.id IN (?)", ids], :include => [:categories]))
+    end
+
+     def for_categories_and_starts_with(ids, letter, options = {})
+      find(:all, options.merge(:conditions => ["categories.id IN (?) AND listings.title LIKE (?)", ids,letter + '%'], :include => [:categories,:listing]))
+    end
+  end
 
   validates_presence_of :disease_id, :location, :how_affected
   validates_presence_of :name, :message => "is blank.  Please select a disease and how you are affected."

@@ -33,7 +33,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.with_options(:controller => "resource", :name_prefix => "resource_") do |r|
-    r.index 'resource/index/:id', :action => "index"
+    r.index 'resource/index/:group', :action => "index", :group => "cat"
     r.summary 'resource/summary/:id', :action => "summary"
     r.connect 'resource/remote_search', :action => "remote_search"
     r.connect 'resource/remote_add', :action => "remote_add"
