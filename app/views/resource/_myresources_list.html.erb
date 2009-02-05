@@ -1,0 +1,17 @@
+<% result = myresources_list %>
+<div id="resource">
+  <%= "<b>#{result.listing.title}</b> - #{result.listing.address}& #{result.listing.city}" %><br>
+  <span style="font-size:small">Filed under:
+  <em>
+    <% result.categories.each do |c| %>
+        <%= c.title %>
+    <% end %>
+  </em></span>
+</div>
+
+<script language="javascript">
+  $(document).ready(function(){
+     $("#list div:odd").css("background-color", "#FFFFFF");
+     $("#list div:even").css("background-color", "#EFF1F1");
+   })
+</script>

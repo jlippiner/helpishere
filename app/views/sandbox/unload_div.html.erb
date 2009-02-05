@@ -1,0 +1,66 @@
+<h1>Testing On Exit Div</h1>
+<br>
+<a href="unload_page2">Click for page 2</a>
+
+<script language="javascript">
+
+var Page_Enter;
+var TimeLimit=20;
+var Page_ShowPopOnExit=false;
+var MySiteDomain='YOURSITE.COM';
+
+function XBrowserAddHandlerPops(target,eventName,handlerName) {
+  if ( target.addEventListener ) {
+    target.addEventListener(eventName, function(e){target[handlerName](e);}, false);
+  } else if ( target.attachEvent ) {
+    target.attachEvent("on" + eventName, function(e){target[handlerName](e);});
+  } else {
+    var originalHandler = target["on" + eventName];
+    if ( originalHandler ) {
+      target["on" + eventName] = function(e){originalHandler(e);target[handlerName](e);};
+    } else {
+      target["on" + eventName] = target[handlerName];
+    }
+  }
+}
+
+function InternalLink() {
+	Page_ShowPopOnExit = false;
+}
+
+function PageEnter() {
+   Page_Enter=new Date();
+}
+
+function SiteExit() {
+   var time_dif;
+   var Page_Exit=new Date();
+   time_dif=(Page_Exit.getTime()-Page_Enter.getTime())/1000;
+   time_dif=Math.round(time_dif);
+   if (time_dif<=TimeLimit && Page_ShowPopOnExit==true)
+	{
+	alert('Here is your popup!');
+	}
+}
+
+function LinkConvert()
+{
+var href;
+	var anchors = document.getElementsByTagName('a');
+
+	for(var y=0; y<anchors.length; y++)
+	{
+		href = anchors[y].href.toLowerCase();
+		if (!(href.indexOf("http://")!=-1 && href.indexOf(MySiteDomain)==-1))
+			{
+			anchors[y].clickhandler=InternalLink
+			XBrowserAddHandlerPops(anchors[y],"click","clickhandler");
+			}
+	}
+}
+
+XBrowserAddHandlerPops(window,"load","PageEnter");
+XBrowserAddHandlerPops(window,"load","LinkConvert");
+XBrowserAddHandlerPops(window,"unload","SiteExit");
+Page_ShowPopOnExit=true;
+</script>
