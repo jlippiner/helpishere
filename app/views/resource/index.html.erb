@@ -14,7 +14,7 @@
     <td width="150" valign="top" style="font-size:10pt">
       <% form_tag resource_filter_path do |f|   %>
       <%  @cats.each do |c| %>
-            <%= check_box_tag "category_ids[]", c.id, true %><%= c.title.proper_case %><br>
+            <%= check_box_tag "category_ids[]", c.id, check_cat(@list,c) %><%= c.title.proper_case %><br>
       <% end %>
       <%= submit_tag "submit" %>
       <% end %>
@@ -22,7 +22,7 @@
     <td valign="top">
       <div id="list">
         <%= render :partial => "myresources_list", :collection => @list %>
-      </div>
+      </div>      
     </td>
   </tr>
 </table>

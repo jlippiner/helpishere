@@ -111,14 +111,32 @@ class ResourceController < ApplicationController
 
   def index
     @list = @current_profile.resources.sort_by { |m| m.listing.title}
-    @cats = @current_profile.resources.distinct_categories
+    @cats = []
+    @current_profile.resources.each do |r|
+      r.categories.each do |c|        
+        @cats << c if !@cats.include?(c)
+      end      
+    end
+
   end
 
   def filter      
-      @ids = params[:category_ids]
-      @list = @current_profile.resources.select{|r| @ids.include? r.categories.id }
-      @r = Resource.new
-      render :template => "resource/index"
+    @ids = params[:category_ids]
+    @list = []
+    @current_profile.resources.each do |r|
+      r.categories.each do |c|
+        @list << r if @ids.include?(c.id.to_s)
+      end
+    end
+
+    @cats = []
+    @current_profile.resources.each do |r|
+      r.categories.each do |c|
+        @cats << c if !@cats.include?(c)
+      end
+    end
+    
+    render :template => "resource/index"
   end
 
   def remote
