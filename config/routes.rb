@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'sandbox/:action', :controller => "sandbox"
   map.resources :category
   map.connect  'category/:action/:id', :controller => "category"
+  map.resources :admin
 
   map.with_options(:controller => "diseases", :name_prefix => "disease_") do |disease|
     disease.welcome 'diseases/welcome', :action => "welcome"

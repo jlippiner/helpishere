@@ -1,0 +1,20 @@
+<h1>HiH Admin</h1>
+Host: <b><%= @host %></b><br>
+Database: <b><%= "#{@database} - u: #{@db_username} p: #{@db_password}" %></b><br>
+
+<h2>Users</h2>
+<div id="users">
+<% @users.each do |u| %>
+  <div>
+  <%= "Name: <b>#{u.name}</b>, Email: <b>#{u.email}</b>, Password: <b>#{u.password}</b> "%>
+  </div>
+<% end %>
+</div>
+
+<script language="javascript">
+  $(document).ready(function(){
+    $("#users div:even").attr("style","background-color:white")
+    $("#users div:odd").attr("style","background-color:lightgray")
+
+  })
+</script>
