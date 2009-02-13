@@ -31,7 +31,7 @@ class CategoryController < ApplicationController
   def destroy
     @category = Category.find(params[:id])
     @category.delete
-    flash[:notice] = fading_flash_message(@category.title + " deleted.",5)
+    flash.now[:notice] = fading_flash_message(@category.title + " deleted.",5)
     redirect_to category_index_path
   end
 

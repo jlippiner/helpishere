@@ -28,7 +28,7 @@ class DiseasesController < ApplicationController
   def destroy
     @disease = Disease.find(params[:id])
     @disease.delete
-    flash[:notice] = fading_flash_message(@disease.name + " deleted (what a nice concept)",5)
+    flash.now[:notice] = fading_flash_message(@disease.name + " deleted (what a nice concept)",5)
     redirect_to diseases_path
   end
 

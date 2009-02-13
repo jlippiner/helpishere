@@ -31,7 +31,7 @@
           </p>
         </div>
       </td>
-      <td valign="top">
+      <td valign="top" align="right">
       <div class="box" style="width:250px">
         <h3 style="color:#705E1C;text-align:center;">My Resources <span style="color:black">for</span>
         <%= @current_profile.disease.name %></h3>
@@ -114,7 +114,7 @@
         <%= f.text_area :comment, :rows => "10", :cols => "70"  %>
         <div class="row">
           <div class="left" style="padding:5px;">
-            <a href="#" id="hl_skip" style="font-size:10pt">Skip this step</a>
+            <a href="#" id="hl_skip" rel="" style="font-size:10pt">Skip this step</a>
           </div>
           <div class="right">
             <div class="submit">
@@ -143,6 +143,7 @@
             success: function (response) {
               log('experience added');
               $(document).trigger('close.facebox');
+              $.flash.notice(response);
               reset();
             }
           })
@@ -176,7 +177,8 @@
         $('.add_resource').livequery('click',function(){
           $.ajax({
             url: "remote_add/"+this.rel,
-            success: detailsSuccess
+            success: detailsSuccess,
+            dataType: 'json'
           })
         });
 
@@ -196,11 +198,13 @@
           log('clicked skip');
           $(document).trigger('close.facebox');
           reset();
+          $.flash.notice($(this).attr('rel') + " added!");
           return false;
         });
 
         var options = {
-          success:  detailsSuccess
+          success:  detailsSuccess,
+          dataType: 'json'
         };
 
         $("#facebox #form_details").livequery(function() {
@@ -232,19 +236,17 @@
           })
         });
 
-        function detailsSuccess(responseText, statusText)  {
+        function detailsSuccess(json, statusText)  {
           if(statusText=='success'){
-            log(responseText);
-
-            var json = JSON.parse(responseText);
-            log(json.l.listing.id);
-            log(json.r.resource.id);
+            log(json.listing.id);
+            log(json.resource.id);
 
             $('#resourceList').load("remote_reload_basket");
 
             // show experience
-            $('#experience_resource_id').attr('value',json.r.resource.id)
-            $('.resource_title').html(json.l.listing.title)
+            $('#experience_resource_id').attr('value',json.resource.id);
+            $('.resource_title').html(json.listing.title);
+            $('#hl_skip').attr('rel',json.listing.title);
 
             $('#show_experience').trigger('click');
             $('#facebox #experience_comment').focus();

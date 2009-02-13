@@ -6,7 +6,7 @@ class UserController < ApplicationController
   def logout
     session[:user_id] = @current_user = nil
     session[:profile_id] = @current_profile = nil
-    flash[:notice]="You are now logged out."
+    flash.now[:notice]="You are now logged out."
     render :action => "login"
   end
 
@@ -53,7 +53,7 @@ class UserController < ApplicationController
       url = session[:return_to] if !session[:return_to].nil?
       redirect_to url
     else
-      flash[:notice]="Invalid email or password.  Please try again"
+      flash.warning = "Invalid email or password.  Please try again"
       render :action => "login"
     end
   end
@@ -126,7 +126,7 @@ class UserController < ApplicationController
     @user = User.find(@current_user.id)
     if @user.update_attributes(params[:user])
       @current_user = @user
-      flash[:notice] = "Your information has been updated.  Have a wonderful day."
+      flash.now[:notice] = "Your information has been updated.  Have a wonderful day."
     end
 
     render :action => "index"
@@ -136,7 +136,7 @@ class UserController < ApplicationController
     @user = User.find(@current_user.id)
     if @user.update_attributes(params[:user])
       @current_user = @user
-      flash[:notice] = "Picture updated!  That's pretty."
+      flash.now[:notice] = "Picture updated!  That's pretty."
     else
       out = "ERROR: "
       @user.errors.each do |e|

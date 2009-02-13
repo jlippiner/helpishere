@@ -53,18 +53,8 @@
 
     </div>
     <div id="content">
-      <% unless flash[:notice].blank? %>
-        <div id="notification"><%= flash[:notice] %></div>
-        <script type="text/javascript">
-          setTimeout(function(){ $("#notification").fadeOut() }, 3000);
-        </script>
-      <% end %>
-      <% unless flash[:error].blank? %>
-        <div id="error"><%= flash[:error] %></div>
-      <% end %>
-      <% unless flash[:warning].blank? %>
-        <div id="warning"><%= flash[:warning] %></div>
-      <% end %>
+      <%= render_flash_messages  %>
+      
       <%= yield %>
     </div>
 

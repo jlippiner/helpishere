@@ -18,7 +18,7 @@ class ResourceController < ApplicationController
     @resource = Resource.find(params[:id])
     @resource.destroy
 
-    flash[:notice] = "Resource Deleted"
+    flash.now[:notice] = "Resource Deleted"
     redirect_to user_index_path
   end
 
@@ -70,7 +70,7 @@ class ResourceController < ApplicationController
     @resource = Resource.find(params[:id])
     @listing = @resource.listing
     if @listing.update_attributes(params[:listing])
-      flash[:notice] = @listing.title + " Updated!"
+      flash.now[:notice] = @listing.title + " Updated!"
       redirect_to resource_index_path
     else
       flash[:error] = "Something went wrong"
@@ -86,7 +86,7 @@ class ResourceController < ApplicationController
 
     @resource = Resource.find(params[:id])
     if @resource.update_attributes(params[:resource])
-      flash[:notice] = @resource.listing.title + " Details Updated!"
+      flash.now[:notice] = @resource.listing.title + " Details Updated!"
       redirect_to resource_index_path
     else
       flash[:error] = "Something went wrong"
@@ -110,7 +110,7 @@ class ResourceController < ApplicationController
     
     if @method=='update'
       if @resource.update_attributes(params[:resource])
-        flash[:notice] = @resource.listing.title + " Overview Updated!"
+        flash.now[:notice] = @resource.listing.title + " Overview Updated!"
         redirect_to resource_index_path
       else
         flash[:error] = "Something went wrong"
@@ -191,7 +191,7 @@ class ResourceController < ApplicationController
     end
 
     #    render :partial => "resource_basket_json", :collection => @current_profile.resources.find(:all, :order => "created_at DESC")    
-    out = {:r => resource, :l => resource.listing  }    
+    out = {:resource => resource.attributes, :listing => resource.listing.attributes}
     render :text => out.to_json()
   end
 
@@ -202,7 +202,7 @@ class ResourceController < ApplicationController
   def remote_experience
     resource = Resource.find(params[:experience][:resource_id])
     if Experience.create(params[:experience])
-      render :text => ""
+      render :text => resource.listing.title + ' added to this profile.'
     end
   end
 

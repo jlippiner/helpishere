@@ -12,9 +12,9 @@
       </tr>
       <tr>
         <td colspan="2" style="font-size:10pt">
-           <% if(result.overview.to_s.nilemp?) %>
-             <b><%= link_to "** Overview Needed.  Please contribute.", resource_overview_path(:method => "new", :id  => result) %></b>
-               <% end %>
+          <% if(result.overview.to_s.nilemp?) %>
+            <b><%= link_to "** Overview Needed.  Please contribute.", resource_overview_path(:method => "new", :id  => result) %></b>
+          <% end %>
         </td>
       </tr>
     </table>
@@ -24,7 +24,7 @@
     <div style="margin-bottom:10px">
       <%= "#{result.listing.address}<br> #{result.listing.city}, #{result.listing.state} #{result.listing.postalcode}<br>#{result.listing.country}" %>
     </div>
-     <div class="divider"></div>
+    <div class="divider"></div>
     <div>
       Who Pays:
       <em>
@@ -36,8 +36,8 @@
         <%= result.categories.map {|x| x.title}.join(", ")  %>
       </em>
     </div>
-    <% if(!result.overview.to_s.nilemp?) %>
-       <div class="divider"></div>
+    <% if(!result.overview.to_s.blank?) %>
+      <div class="divider"></div>
       <div>
         Overview:
         <p>
@@ -46,7 +46,27 @@
           </em>
         </p>
       </div>
-  <% end %>
+    <% end %>
+    <% if(result.experiences.count > 0) %>
+      <div class="divider"></div>
+      <div>
+        Experiences:
+        <br>
+        <% result.experiences.each do |e| %>
+          <em style="font-size:9pt"><%= e.created_at.strftime("Entered on %m/%d/%Y") %></em>
+          <p>
+            <b><%= e.title %></b>
+          </p>
+          <p>
+            <%= e.comment %>
+          </p>
+          <% unless e.would_recommend.blank? %>
+            Would you recommend: <%= e.would_recommend %>
+          <% end %>
+          <hr width="50%">
+        <% end %>
+      </div>
+    <% end %>
     <div style="margin-top:15px;text-align:right;font-size:8pt;background-color:lightgray;border-top:1px dotted gray">
       <%= link_to "Edit Contact Info", resource_edit_path(:section => "contact", :id => result) %>&nbsp;
       <%= link_to "Edit Details", resource_edit_path(:section => "details", :id => result)  %>&nbsp;

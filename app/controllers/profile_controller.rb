@@ -10,7 +10,7 @@ class ProfileController < ApplicationController
     @profile = Profile.create(params[:profile])
     if @profile.save
       session[:profile_id] = @profile.id
-      flash[:notice] = "Profile Saved"
+      flash.now[:notice] = "Profile Saved"
       redirect_to user_index_path
     else
       render  :action => "new"
@@ -29,7 +29,7 @@ class ProfileController < ApplicationController
     # need to update current user since it has a deleted profile
     @current_user = User.find_by_id(session[:user_id])
 
-    flash[:notice] = "Profile Deleted"
+    flash.now[:notice] = "Profile Deleted"
     redirect_to user_index_path
   end
 
@@ -42,7 +42,7 @@ class ProfileController < ApplicationController
     @profile = Profile.find(params[:id])
 
     if @profile.update_attributes(params[:profile])
-      flash[:notice] = "Profile Updated"
+      flash.now[:notice] = "Profile Updated"
       redirect_to user_index_path
     else      
       render :action => "edit", :template => "profile/new"

@@ -70,13 +70,20 @@ li {
     margin: 15px 25px;
     line-height:16pt;
 }
-#notification {
+.notice, .message {
     border: 5px solid #9c9;
     background-color: #cfc;
     padding: 5px;
     margin: 10px 0;
 }
-#error {
+.warning {
+    border: 5px solid yellow;
+    background-color: #FFFFCC;
+    padding: 5px;
+    margin: 10px 0;
+    color:black;
+}
+.error {
     border: 5px solid #990000;
     background-color: red;
     padding: 5px;

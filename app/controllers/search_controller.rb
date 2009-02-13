@@ -25,7 +25,7 @@ class SearchController < ApplicationController
     if @search.update_attributes(params[:search])
       redirect_to :action => "step3",:id => @search
     else
-      flash[:notice]='Something went wrong'
+      flash.now[:notice]='Something went wrong'
     end
   end
 
@@ -77,7 +77,7 @@ class SearchController < ApplicationController
     if @search.update_attributes(params[:search])
       redirect_to :action => "step4",:id => @search
     else
-      flash[:notice]='Something went wrong'
+      flash.now[:notice]='Something went wrong'
     end
   end
 
