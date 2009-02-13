@@ -25,6 +25,25 @@ class Profile < ActiveRecord::Base
     self.user_id = user.id
   end
 
+  # Return yahoo results that are unknown to the current profile
+  def unkown_yahoo_results(yahoo_results)
+    resources = self.resources
+    disease_resources = disease.resources
+    
+    @results = yahoo_results.inject([]) do |results,r|
+      resource = disease_resources.detect do |t|
+        (t.listing.address == r.address && t.listing.title == r.title && t.listing.city ==  r.city)
+      end
+
+      results ||= []
+      if (resource.blank?)  # Need this to include records found that are NOT in the database at all
+        results << {:resource_id => 0, :data => r }
+      elsif (!resource.blank? && !resources.detect { |t| resource.id == t.id })
+        results << {:resource_id => resource.id, :data => r }
+      end
+    end
+  end
+
 
  def self.new_for(user)
    self.new(:user => user)

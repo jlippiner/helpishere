@@ -1,8 +1,63 @@
 <% result = myresources_list %>
-<div>
-  <%= "<b>#{result.listing.title}</b> - #{result.listing.address}& #{result.listing.city}" %><br>
-  <span style="font-size:small">Filed under:
-  <em>
-    <%= result.categories.map {|x| x.title}.join(", ")  %>
-  </em></span>
+<div style="padding:5px">
+  <div class="resource_row">
+    <table border="0" width="100%">
+      <tr>
+        <td>
+          <%= "<b>#{result.listing.title}</b>" %>
+        </td>
+        <td align="right">
+          <%= result.listing.phone %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="font-size:10pt">
+           <% if(result.overview.to_s.nilemp?) %>
+             <b><%= link_to "** Overview Needed.  Please contribute.", resource_overview_path(:method => "new", :id  => result) %></b>
+               <% end %>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="resource_details">
+    <div style="margin-bottom:10px">
+      <%= "#{result.listing.address}<br> #{result.listing.city}, #{result.listing.state} #{result.listing.postalcode}<br>#{result.listing.country}" %>
+    </div>
+     <div class="divider"></div>
+    <div>
+      Who Pays:
+      <em>
+        <%= result.who_pays  %>
+      </em>
+    </div>
+    <div>Filed under:
+      <em>
+        <%= result.categories.map {|x| x.title}.join(", ")  %>
+      </em>
+    </div>
+    <% if(!result.overview.to_s.nilemp?) %>
+       <div class="divider"></div>
+      <div>
+        Overview:
+        <p>
+          <em>
+            <%= result.overview  %>
+          </em>
+        </p>
+      </div>
+  <% end %>
+    <div style="margin-top:15px;text-align:right;font-size:8pt;background-color:lightgray;border-top:1px dotted gray">
+      <%= link_to "Edit Contact Info", resource_edit_path(:section => "contact", :id => result) %>&nbsp;
+      <%= link_to "Edit Details", resource_edit_path(:section => "details", :id => result)  %>&nbsp;
+
+      <% if(result.overview.to_s.nilemp?) %>
+        <%= link_to "Add Overview", resource_overview_path(:method => "new", :id  => result) %>&nbsp;
+      <% else %>
+        <%= link_to "Edit Overview", resource_overview_path(:method => "edit", :id  => result) %>&nbsp;
+      <% end %>
+
+      <%= link_to "Add Experience" %>&nbsp;
+    </div>
+  </div>
 </div>

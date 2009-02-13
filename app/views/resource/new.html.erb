@@ -14,49 +14,6 @@
       <% else %>
         <% content_for :head do %>
           <%= javascript_tag "window.AUTH_TOKEN = '#{form_authenticity_token}';" %>
-          <script type="text/javascript">
-
-            $(document).ready(function(){
-              jQuery.ajaxSetup({
-                'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-              })
-
-              $('#s').focus();
-              $("#yList").hide();
-              $("#sForm").submit(function(){
-                $("#spinner").show('fast');
-                $("#yList").hide();
-                $('#sOut').load('remote_search?value='+escape($("#s").val()),{},
-                function (responseText, textStatus, XMLHttpRequest) {
-                  $("#spinner").hide('fast');
-                  $('#yList').show();
-                }
-              );
-                return false
-              })
-
-              $('.add_resource').livequery('click',function(){
-                $("#yList").hide();
-
-
-                $('#listing').attr('value',$(this).attr('rel'))
-                $('.resource_title').html($(this).attr('title'))
-                $("#show_details").trigger('click');
-                return false;
-              });
-
-              $('.delete_profile_resource').livequery('click',function(){
-                $.ajax({
-                  url: "remote_delete/"+this.id,
-                  success: function (response) {
-                    $('#resourceList').html(response);
-                  }
-                });
-
-                return false;
-              })
-            });
-          </script>
         <% end%>
 
         <% form_tag resource_new_path, :method => 'get', :id => "sForm"  do %>
@@ -107,18 +64,27 @@
           <div style="text-align:center;margin-top:10px">
             <%= f.select :who_pays, ["You do", "They do", "Insurance", "Government", "Various Charities", "No Cost", "Other"], {:include_blank => true}, {:class => "ui-large", :style => "font-size:16pt"} %>
           </div>
-        </div>        
+        </div>
         <div>
           What type of services does <span class="resource_title"></span> provide?
           <div style="font-weight:normal">
             <% i = 0 %>
             <table>
-              <% for category in @categories do %>
-                  <%= "<tr>" if i % 3 == 0  %>
-                  <td><%= check_box_tag "resource[category_ids][]", category.id%><%= label_tag "checkbox[#{category.id}]", category.title %></td>
-                  <%= "</tr>" if i % 2 == 3  %>
-                  <% i += 1 %>
-                <% end %>
+              <tr>
+                <% for category in @categories do %>
+                    <% if(i==0) %>
+                      <td valign='top'>
+                      <% end %>
+                      <% i = i+1 %>
+
+                      <%= check_box_tag "resource[category_ids][]", category.id%>
+                      <label rel="checkit"><%= category.title %></label><br>
+                      <% if(i==8) %>
+                      </td>
+                      <% i=0 %>
+                    <% end %>
+                  <% end %>
+                </tr>
               </table>
             </div>
           </div>
@@ -129,12 +95,112 @@
       <% end %>
     </div>
 
+    <a href="#experience" id="show_experience" rel="facebox" style="display:none"></a>
+    <div id="experience" style="width:600px;text-align:left;display:none">
+      <h2>Your Experience With <span class="resource_title"></span></h2>
+      <p>HelpIsHere members <b>depend</b> on the experiences of others to make informed decisions.</p>
+      <p>Please take a quick moment to describe any specific information or experiences about <span class="resource_title"></span>,
+      such as specific people to talk to, what to ask for or what to avoid.</p>
+      <div class="errorExplanation" style="display:none">
+        <h4>There are serious errors in your form submission, please see below for details.</h4>
+        <ol>
+
+        </ol>
+      </div>
+
+      <% form_for :experience, :url => 'remote_experience', :html => {:id => "form_experience"}  do |f| %>
+        <%= hidden_field "experience","user_id", {:value => @current_user.id} %>
+        <%= hidden_field "experience", "resource_id", {:value => "" } %>
+        <%= f.text_area :comment, :rows => "10", :cols => "70"  %>
+        <div class="row">
+          <div class="left" style="padding:5px;">
+            <a href="#" id="hl_skip" style="font-size:10pt">Skip this step</a>
+          </div>
+          <div class="right">
+            <div class="submit">
+              <%= submit_tag  'Submit', :class => "ui-large"%><br><br>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+
     <script language="javascript">
       $(document).ready(function(){
 
-        
+        jQuery.ajaxSetup({
+          'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+        })
+
+        function reset(){
+          $("#s").attr('value','').focus();
+          $('#yList').hide();
+        }
+
+        $('#facebox #form_experience').livequery("submit",function(){
+          $(this).ajaxSubmit({
+            success: function (response) {
+              log('experience added');
+              $(document).trigger('close.facebox');
+              reset();
+            }
+          })
+
+          return false;
+        });
+
+        $('#s').focus();
+        $("#yList").hide();
+        $("#sForm").submit(function(){
+          $("#spinner").show('fast');
+          $("#yList").hide();
+          $('#sOut').load('remote_search?value='+escape($("#s").val()),{},
+          function (responseText, textStatus, XMLHttpRequest) {
+            $("#spinner").hide('fast');
+            $('#yList').show();
+          }
+        );
+          return false
+        })
+
+        $('.add_resource_details').livequery('click',function(){
+          $("#yList").hide();
+
+          $('#listing').attr('value',$(this).attr('rel'))
+          $('.resource_title').html($(this).attr('title'))
+          $("#show_details").trigger('click');
+          return false;
+        });
+
+        $('.add_resource').livequery('click',function(){
+          $.ajax({
+            url: "remote_add/"+this.rel,
+            success: detailsSuccess
+          })
+        });
+
+        $('.delete_profile_resource').livequery('click',function(){
+          $.ajax({
+            url: "remote_delete/"+this.id,
+            success: function (response) {
+              $('#resourceList').html(response);
+
+            }
+          });
+
+          return false;
+        })
+
+        $('#facebox #hl_skip').livequery("click", function(){
+          log('clicked skip');
+          $(document).trigger('close.facebox');
+          reset();
+          return false;
+        });
+
         var options = {
-          success:  loadResources
+          success:  detailsSuccess
         };
 
         $("#facebox #form_details").livequery(function() {
@@ -160,21 +226,30 @@
 
             if ($(this).valid()) {
               $(this).ajaxSubmit(options);
-              jQuery(document).trigger('close.facebox'); 
             }
 
-            return false; //$('#facebox #form_details').valid();
+            return false;
           })
         });
 
-        
-        function loadResources(responseText, statusText)  {
+        function detailsSuccess(responseText, statusText)  {
           if(statusText=='success'){
-            $('#resourceList').html(responseText);
+            log(responseText);
+
+            var json = JSON.parse(responseText);
+            log(json.l.listing.id);
+            log(json.r.resource.id);
+
+            $('#resourceList').load("remote_reload_basket");
+
+            // show experience
+            $('#experience_resource_id').attr('value',json.r.resource.id)
+            $('.resource_title').html(json.l.listing.title)
+
+            $('#show_experience').trigger('click');
+            $('#facebox #experience_comment').focus();
           }
         }
-
-
       });
 
 

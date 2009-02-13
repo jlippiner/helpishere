@@ -39,6 +39,10 @@ $(document).ready(function() {
         $(this.id).hide();
     })
 
+    $("label[rel*=checkit]").click(function(){
+        cb = $(this).prev();
+        $(cb).attr('checked', !$(cb).attr('checked'))
+    })
       
 });
 

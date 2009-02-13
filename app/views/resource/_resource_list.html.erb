@@ -1,4 +1,8 @@
-<% result = resource_list %>
+<% result = resource_list[:data] %>
 <li style="margin-bottom:10px">
-  <a href="#" class="add_resource" title="<%= result.title %>" rel="<%= "title=#{esc(result.title)}&address=#{esc(result.address)}&city=#{esc(result.city)}&state=#{esc(result.state)}&phone=#{esc(result.phone)}&latitude=#{esc(result.latitude)}&longitude=#{esc(result.longitude)}&website=#{esc(result.businessurl)}" %>"><%= "<b>#{result.title}</b> - #{result.address}& #{result.city}" %></a>
+  <% if(resource_list[:resource_id]==0) %>
+    <a href="#" class="add_resource_details" title="<%= result.title %>" rel="<%= "title=#{esc(result.title)}&address=#{esc(result.address)}&city=#{esc(result.city)}&state=#{esc(result.state)}&phone=#{esc(result.phone)}&latitude=#{esc(result.latitude)}&longitude=#{esc(result.longitude)}&website=#{esc(result.businessurl)}" %>"><%= "<b>#{result.title}</b> - #{result.address}& #{result.city}" %></a>
+  <% else %>
+    <a href="#" class="add_resource" title="<%= result.title %>" rel="<%= resource_list[:resource_id] %>"><%= "<b>#{result.title}</b> - #{result.address}& #{result.city}" %></a>
+  <% end %>
 </li>

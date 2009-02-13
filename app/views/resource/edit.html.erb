@@ -1,0 +1,96 @@
+<h1>Edit <%= @listing.title %></h1>
+<% if (@section=='contact') %>
+<% form_for @listing, :url => {:action => 'update_listing' }  do |f| %>
+  <fieldset id="details">
+    <legend>Listing Information</legend>
+    <table border="0" class="input_table">
+      <tr>
+        <td>
+          Name:
+        </td>
+        <td><%= f.text_field :title   %></td>
+      </tr>
+      <tr>
+        <td>
+          Address:
+        </td>
+        <td><%= f.text_field :address   %></td>
+      </tr>
+      <tr>
+        <td>
+          City:
+        </td>
+        <td><%= f.text_field :city   %></td>
+      </tr>
+      <tr>
+        <td>
+          State:
+        </td>
+        <td><%= f.text_field :state   %></td>
+      </tr>
+      <tr>
+        <td>
+          Postal Code:
+        </td>
+        <td><%= f.text_field :postalcode   %></td>
+      </tr>
+      <tr>
+        <td>
+          Country:
+        </td>
+        <td><%= f.country_select(:country ,["United States"],{}) %></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right">
+          <%= submit_tag "Cancel" %>
+          <%= submit_tag "Update" %>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+  <% end %>
+<% elsif (@section=='details') %>
+
+  <% form_for @resource, :url => {:action => 'update_details' } do |f| %>
+  <fieldset id="listing">
+    <legend>Details</legend>
+    <div class="errorExplanation" style="display:none">
+      <h4>There are serious errors in your form submission, please see below for details.</h4>
+      <ol>
+
+      </ol>
+    </div>    
+      <input type="hidden" id="listing" name="listing" value=""/>
+      <div>
+        <b>Who pays for the services provided by the <%= @listing.title %>?</b>
+        <span style="text-align:center;margin-top:10px">
+          <%= f.select :who_pays, ["You do", "They do", "Insurance", "Government", "Various Charities", "No Cost", "Other"], {:include_blank => true}, {:class => "ui-large", :style => "font-size:16pt"} %>
+        </span>
+      </div>
+      <div style="margin-top:10px;width:700px">
+        <b>What type of services does the <%= @listing.title %> provide?</b>
+        <div style="font-weight:normal">
+          <% i = 0 %>
+          <table>
+            <tr>
+              <% for category in @categories do %>
+                  <% if i % 8 == 0 %>
+                    <%= "<td valign='top'>" %>
+                    <% x = 1 %>
+                  <% else x += 1 %>
+                  <% end %>
+                  <%= check_box_tag "resource[category_ids][]", category.id, @resource.categories.include?(category)%>
+                  <label rel="checkit"><%= category.title %></label><br>
+                  <%= "</td>" if x == 8  %>
+                  <% i += 1 %>
+                <% end %>
+            </tr></table>
+          </div>
+        </div>
+        <div class="submit" style="width:600px" align="right">
+           <%= submit_tag "Cancel" %>
+          <%= submit_tag  'Update'%>
+        </div>      
+    </fieldset>
+  <% end %>
+<% end %>

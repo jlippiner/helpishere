@@ -38,10 +38,17 @@ ActionController::Routing::Routes.draw do |map|
     r.summary 'resource/summary/:id', :action => "summary"
     r.connect 'resource/remote_search', :action => "remote_search"
     r.connect 'resource/remote_add', :action => "remote_add"
+    r.connect 'resource/remote_add/:id', :action => "remote_add"
     r.connect 'resource/remote_delete/:id', :action => "remote_delete"
     r.connect 'resource/remote/:do', :action => "remote"
     r.filter 'resource/filter', :action => "filter"
     r.new 'resource/new', :action => "new", :controller => "resource"
+    r.edit 'resource/edit/:section/:id', :action => "edit"
+    r.overview 'resource/overview/:method/:id', :action => "overview"
+    r.connect 'resource/update_listing/:id', :action => "update_listing"
+    r.connect 'resource/update_details/:id', :action => "update_details"
+    r.connnect 'resource/remote_reload_basket', :action => "remote_reload_basket"
+    r.connect "resource/remote_experience", :action => "remote_experience"
   end
   map.resources :resource, :controller => "resource"
   

@@ -1,3 +1,10 @@
+<% content_for :head do %>
+  <% if (@current_user.resources.count > 0 && !@map.nil?) %>
+    <%= GMap.header(:host => request.host) %>
+    <%= @map.to_html %>
+  <% end %>
+<% end %>
+
 <h1>My Resources</h1>
 
 <table width="100%" style="margin-top:15px;" cellpadding="3">
@@ -16,7 +23,7 @@
       <td align="center">
         <% ('A'..'Z').each  do |c| %>
           <% if(@letters.include?(c)) %>
-              <%= link_to c, resource_index_path(:group => "alpha", :letter => c), :style => "font-size:16pt" %>
+            <%= link_to c, resource_index_path(:group => "alpha", :letter => c), :style => "font-size:16pt" %>
           <% else %>
             <%= c %>
           <% end %>
@@ -25,29 +32,35 @@
     </tr>
   <% end %>
   <tr>
-    <td width="150" valign="top" style="font-size:10pt">
-      <b>Categories</b><br>
-      <div style="font-size:8pt">
-        <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
-        <a rel="group_1" href="#select_none">Select None</a>
+    <td width="150" valign="top">
+      <div style="border:solid 1px gray">
+        <%= @map.div(:width => 200, :height => 200) %>
       </div>
-      <div id="group_1">
-        <% form_tag resource_filter_path do |f|   %>
-          <%  @cats.each do |c| %>
-            <%= check_box_tag "category_ids[]", c.id, @ids.include?(c.id.to_s) %><%= c.title.proper_case %><br>
-          <% end %>
+
+      <div style="margin-top:20px">
+        <b>Categories</b><br>
+        <div style="font-size:8pt">
+          <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
+          <a rel="group_1" href="#select_none">Select None</a>
         </div>
-        <div style="margin-top:10px">
-          <%= submit_tag "submit" %>
-        </div>
-      <% end %>
+        <div id="group_1" style="font-size:10pt;">
+          <% form_tag resource_filter_path do |f|   %>
+            <%  @cats.each do |c| %>
+              <%= check_box_tag "category_ids[]", c.id, @ids.include?(c.id.to_s) %><%= c.title.proper_case %><br>
+            <% end %>
+          </div>
+          <div style="margin-top:10px">
+            <%= submit_tag "submit" %>
+          </div>
+        <% end %>
+      </div>
     </td>
     <td valign="top" style="border-left:dotted 1px gray;border-top:dotted 1px gray;padding-left:10px">
       <% if !@groups.nil? %>
         <% @groups.each do |g|  %>
           <%# debugger %>
           <h2><%= g[:title] %></h2>
-          <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="border:solid 1px gray;margin:20px;">
+          <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="margin:20px;">
             <%= render :partial => "myresources_list", :collection => g[:data] %>
           </div>
         <% end %>
@@ -58,11 +71,6 @@
 
 <script language="javascript">
   $(document).ready(function(){
-
-<% @groups.each do |g|  %>
-      $("<%= "#group_#{g[:title].sub(" ","_")}" %> div:odd").css("background-color", "#EFF1F1");
-      $("<%= "#group_#{g[:title].sub(" ","_")}" %> div:even").css("background-color", "#FFFFFF");
-<% end %>
 
     // Select all
     $("A[href='#select_all']").click( function() {
@@ -75,6 +83,21 @@
       $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
       return false;
     });
+
+    // details
+    $(".resource_details").hide();
+    $(".resource_row").click(function(){
+      if($(this).next().is(':hidden')) {
+        $($(this).parent()).addClass("card_select");
+      } else {
+        $($(this).parent()).removeClass("card_select");
+      }
+
+      $($(this).next()).toggle('slow');
+    }).hover(
+        function(){
+          $(this).addClass('highlight')},
+        function(){$(this).removeClass('highlight')})
 
 
   })

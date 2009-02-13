@@ -1,0 +1,26 @@
+<center>
+  <div style="width:800px;text-align:left;">
+    <h1>Overview for <%= @resource.listing.title %></h1>
+    <% if(params[:method]=='new')  %>
+      <div style="margin:10px;">
+        [COPY]
+      </div>
+    <% elsif(params[:method]=='edit') %>
+      You may edit the overview for <%= @resource.listing.title %> below.
+      <p>
+        <b>Please note:</b> this overview is common to EVERY member affected by <%= @current_profile.disease.name %>.  You should
+        only be editing this resource if you are correcting inaccuracies or adding additional information.
+      </p>
+    <% end %>
+    <div style="margin:15px">
+      <% form_for @resource, :url => {:action => "overview", :method => "update", :id => @resource} do |f| %>
+        <%= f.text_area :overview, :rows => "10", :cols => "80"  %>
+        <div class="buttons">
+          <%= submit_tag "Cancel" %>
+          <%= submit_tag "Submit" %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</center>

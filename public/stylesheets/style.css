@@ -17,8 +17,10 @@ body {
     font-size: smaller;
     margin:10px 25px;
 }
-.tab {
-    float:left;
+.tabs {
+    vertical-align:bottom;
+    padding:0px;
+    margin:0px;
 }
 form {
     margin: 0;
@@ -30,6 +32,8 @@ form table tr td {
 h1  {
     color: #D02B3C;
     margin-bottom:0px;
+    line-height:30px;
+    margin:10px 0px;;
 }
 h2  {
     clear:both;
@@ -39,6 +43,24 @@ h2  {
 }
 li {
     margin-bottom:10px;
+}
+.resource_row {
+    cursor:default;
+}
+.resource_details {
+    font-size:10pt;
+}
+.card_select {
+    border: 2px solid #705E1C;
+    background-color: #FFFFCC;
+}
+.highlight {    
+    background-color: #FFFFCC;
+}
+.divider {
+    border-top:dotted 1px gray;
+    margin:10px 0px;
+    text-align:center;
 }
 #content {
     background-color: #fff;
@@ -62,7 +84,7 @@ li {
     color:white;
 }
 .errorExplanation {
-    border: 5px solid #990000;    
+    border: 5px solid #990000;
     padding: 5px;
     margin: 25px;
     padding: 10px;
@@ -101,7 +123,11 @@ A.small {
 }
 .big-text {
     font-size: 1.2em;
-    }
+}
+.submit {
+    margin:15px 0px 10px 0px;
+    text-align:right;
+}
 input.text
 {
     /*padding: 0.3em 0;*/
@@ -124,6 +150,11 @@ input.ui-large
 input.error, textarea.error {
     border:solid 2px red;
 }
+.buttons {
+    width:700px;
+    text-align:right;
+    padding:10px 0px
+}
 select.error {
     border:solid 2px red;
     padding:5px;
@@ -136,7 +167,7 @@ select.error {
 }
 
 DIV.space-line {
-  clear: both; margin: 0; padding: 0; width: auto;
+    clear: both; margin: 0; padding: 0; width: auto;
 }
 
 /* CSS Tables */
@@ -144,9 +175,9 @@ DIV.space-line {
     width: 100%;
 }
 .row .left {
-    float: left; 
+    float: left;
 }
 .row .right {
-    float:right;    
+    float:right;
 }
 
