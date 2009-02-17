@@ -1,110 +1,427 @@
-<% content_for :head do %>
+<% content_for :head do %>  
+  <link rel="stylesheet" type="text/css" href="/stylesheets/search/default.css" id="default"  />
+  <!-- dummy stylesheet - href to be swapped -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/search/dummy.css" id="dummy_css"  />
+  <%= javascript_include_tag 'applesearch.js' %>
+  <%= javascript_tag "window.AUTH_TOKEN = '#{form_authenticity_token}';" %>
+  <style>
+    #content {padding:0px}
+  </style>
   <% if (@current_user.resources.count > 0 && !@map.nil?) %>
     <%= GMap.header(:host => request.host) %>
     <%= @map.to_html %>
   <% end %>
 <% end %>
 
-<h1>My Resources</h1>
-
-<table width="100%" style="margin-top:15px;" cellpadding="3">
-  <tr>
-    <th>
-
-    </th>
-    <th align="right">
-      Group: <%= link_to "By Category", resource_index_path(:group => "cat") %>&nbsp;
-      <%= link_to "Alphabetically", resource_index_path(:group => "alpha") %>
-    </th>
-  </tr>
-  <%  if(session[:group]=='alpha') %>
+<div style="padding:5px">
+  <table border="0" width="100%">
     <tr>
-      <td></td>
-      <td align="center">
-        <% ('A'..'Z').each  do |c| %>
-          <% if(@letters.include?(c)) %>
-            <%= link_to c, resource_index_path(:group => "alpha", :letter => c), :style => "font-size:16pt" %>
-          <% else %>
-            <%= c %>
-          <% end %>
-        <% end %>
+      <td>
+        <h1>My Resources</h1>
+      </td>
+      <td align="right">
+        <form id="searchform" action="index.html">
+          <fieldset>
+            <label for="query">Search Resources</label>
+            <input type="text" name="query" id="query" value="" />
+            <input type="submit" name="submitquery" id="submitquery" value="Go" />
+          </fieldset>
+        </form>
       </td>
     </tr>
-  <% end %>
-  <tr>
-    <td width="150" valign="top">
-      <div style="border:solid 1px gray">
-        <%= @map.div(:width => 200, :height => 200) %>
-      </div>
+  </table>
+</div>
 
-      <div style="margin-top:20px">
-        <b>Categories</b><br>
-        <div style="font-size:8pt">
-          <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
-          <a rel="group_1" href="#select_none">Select None</a>
-        </div>
-        <div id="group_1" style="font-size:10pt;">
-          <% form_tag resource_filter_path do |f|   %>
-            <%  @cats.each do |c| %>
-              <%= check_box_tag "category_ids[]", c.id, @ids.include?(c.id.to_s) %><%= c.title.proper_case %><br>
+
+<table border="0" cellpadding="0" width="100%" cellspacing="0">
+  <tr>
+    <td valign="top" width="410">
+      <!-- SIDE CONTACT LIST -->
+      <div style="position:relative;padding:0px;margin:0px;width:400px;">
+        <div style="overflow:auto;height:600px;margin:0px;font-size:10pt;padding-left:0px;border:1px solid gray;">
+          <div class="row" style="font-size:8pt;padding:5px;border-bottom:1px solid gray;width:390px;background:#F7DA73">
+            <div class="left">
+              <a href="#" id="toggle_filter">Filter by Category</a>
+            </div>
+            <div clas="right" style="text-align:right;">
+              <b>Group by:</b>
+              <a href="#" id="group_cat">By Category</a>&nbsp;
+              <a href="#" id="group_alpha">Alphabetically</a>
+            </div>
+          </div>
+
+
+          <div align="center" id="alpha_selector" style="display:none;font-size:8pt;padding:2px;border-bottom:1px solid gray;">
+            <% ('A'..'Z').each  do |c| %>
+              <% if(@letters.include?(c)) %>
+                <a href="#" class="alpha_letter" rel="<%= c %>" style="font-size:12pt"><%= c %></a>
+              <% else %>
+                <%= c %>
+              <% end %>
             <% end %>
           </div>
-          <div style="margin-top:10px">
-            <%= submit_tag "submit" %>
+
+          <div style="padding:10px;border-bottom:1px solid gray" id="filter">
+            <b>Categories</b>&nbsp;
+            <span style="font-size:8pt">
+              <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
+              <a rel="group_1" href="#select_none">Select None</a>
+            </span>
+            <div id="group_1" style="font-size:8pt;">
+              <%= render :partial => "resource_category_filter" %>
+            </div>
           </div>
-        <% end %>
+
+          <div id="contact_list">
+            <% if !@groups.nil? %>
+              <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;border-bottom:1px solid gray" id="all">All</div>
+              <div id="contact_groups">
+                <%= render :partial => 'resource_groups', :locals => {:groups => @groups}  %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div id="add_resource" style="border-top:1px solid black;color:white;font-weight:bold;padding:3px;background:gray;position: absolute; bottom: 0; left: 0; width: 394px;">
+          + Add New Resource
+        </div>
       </div>
     </td>
-    <td valign="top" style="border-left:dotted 1px gray;border-top:dotted 1px gray;padding-left:10px">
-      <% if !@groups.nil? %>
-        <% @groups.each do |g|  %>
-          <%# debugger %>
-          <h2><%= g[:title] %></h2>
-          <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="margin:20px;">
-            <%= render :partial => "myresources_list", :collection => g[:data] %>
-          </div>
+    <td valign="top" align="left">
+      <div id="contact_content">
+        <% if(@resource) %>
+          <%= render :partial => "one_resource",  :locals => {:gmap => @gmap, :resource => @resource} %>
         <% end %>
-      <% end %>
+      </div>
+
+      <div id="new_resource">
+        <center>
+          <% form_tag resource_new_path, :method => 'get', :id => "sForm"  do %>
+            Enter Resource Name or Category: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "20"} %>
+            <%= submit_tag "Find Resource", :name => nil, :class => "ui-large"  %>
+          <% end %>
+        </center>
+        <div id="spinner" style="text-align:center;margin:20px;display:none;">
+          <%= image_tag 'spinner.gif' %>
+        </div>
+        <div id="yList" style="margin-top:15px;border-top:solid 1px gray;display:none;">
+          <p><em>Select resource from the list below</em></p>
+          <ul id="sOut"></ul>
+          <p style="border-top:dashed 1px gray">
+            <b><%= link_to "+ Add a resource not listed above" %></b>
+          </p>
+        </div>
+      </div>
+
+
+      <div id="gMap" style="border:solid 1px gray;width:90%;margin:0px 15px">
+        <%= @map.div(:width => "100%", :height => 600) %>
+      </div>
+
+
+
     </td>
   </tr>
 </table>
 
-<script language="javascript">
-  $(document).ready(function(){
 
-    // Select all
-    $("A[href='#select_all']").click( function() {
-      $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
-      return false;
-    });
+<a href="#details" id="show_details" rel="facebox" style="display:none"></a>
+<div id="details" style="width:600px;text-align:left;display:none">
+  <p><span class="resource_title"></span> has never been associated with <%= @current_profile.disease.name %>.
+  Please take a moment to provide some more details for others who view this resource later.</p>
+  <div class="errorExplanation" style="display:none">
+    <h4>There are serious errors in your form submission, please see below for details.</h4>
+    <ol>
 
-    // Select none
-    $("A[href='#select_none']").click( function() {
-      $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
-      return false;
-    });
+    </ol>
+  </div>
+  <% form_for :resource, :url => 'remote/add_resource', :html => {:id => "form_details"}  do |f| %>
+    <input type="hidden" id="listing" name="listing" value=""/>
+    <fieldset class="steps">
+      <div>
+        Who pays for the services provided by <span class="resource_title"></span>?
+        <div style="text-align:center;margin-top:10px">
+          <%= f.select :who_pays, ["You do", "They do", "Insurance", "Government", "Various Charities", "No Cost", "Other"], {:include_blank => true}, {:class => "ui-large", :style => "font-size:16pt"} %>
+        </div>
+      </div>
+      <div>
+        What type of services does <span class="resource_title"></span> provide?
+        <div style="font-weight:normal">
+          <% i = 0 %>
+          <table>
+            <tr>
+              <% for category in @categories do %>
+                  <% if(i==0) %>
+                    <td valign='top'>
+                    <% end %>
+                    <% i = i+1 %>
 
-    // details
-    $(".resource_details").hide();
-    $(".resource_row").click(function(){
-      if($(this).next().is(':hidden')) {
-        $($(this).parent()).addClass("card_select");
-      } else {
-        $($(this).parent()).removeClass("card_select");
+                    <%= check_box_tag "resource[category_ids][]", category.id%>
+                    <label rel="checkit"><%= category.title %></label><br>
+                    <% if(i==8) %>
+                    </td>
+                    <% i=0 %>
+                  <% end %>
+                <% end %>
+                <%= "</td>" if (i<8) %>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="submit">
+          <%= submit_tag  'Submit', :class => "ui-large" %>
+        </div>
+      </fieldset>
+    <% end %>
+  </div>
+
+  <a href="#experience" id="show_experience" rel="facebox" style="display:none"></a>
+  <div id="experience" style="width:600px;text-align:left;display:none">
+    <h2>Your Experience With <span class="resource_title"></span></h2>
+    <p>HelpIsHere members <b>depend</b> on the experiences of others to make informed decisions.</p>
+    <p>Please take a quick moment to describe any specific information or experiences about <span class="resource_title"></span>,
+    such as specific people to talk to, what to ask for or what to avoid.</p>
+    <div class="errorExplanation" style="display:none">
+      <h4>There are serious errors in your form submission, please see below for details.</h4>
+      <ol>
+
+      </ol>
+    </div>
+
+    <% form_for :experience, :url => 'remote/add_experience', :html => {:id => "form_experience"}  do |f| %>
+      <%= hidden_field "experience","user_id", {:value => @current_user.id} %>
+      <%= hidden_field "experience", "resource_id", {:value => "" } %>
+      <%= f.text_area :comment, :rows => "10", :cols => "70"  %>
+      <div class="row">
+        <div class="left" style="padding:5px;">
+          <a href="#" id="hl_skip" rel="" style="font-size:10pt">Skip this step</a>
+        </div>
+        <div class="right">
+          <div class="submit">
+            <%= submit_tag  'Submit', :class => "ui-large"%><br><br>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <script language="javascript">
+    $(document).ready(function(){
+
+      // show hide map div?
+  <% if(@resource) %>
+        content_toggle('#contact_content');
+  <% elsif(params[:add]) %>
+        content_toggle('#new_resource');
+        $("#s").attr('value','').focus();
+  <% else %>
+        content_toggle('#gMap');
+  <% end %>
+
+
+      // Select all
+      $("A[href='#select_all']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
+        return false;
+      });
+
+      // Select none
+      $("A[href='#select_none']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
+        return false;
+      });
+
+      // details
+      $(".resource_row").livequery('click',function(){
+        $('#contact_content').load('remote/load_contact?id=' + $(this).attr('rel'));
+        content_toggle('#contact_content');
+      })
+
+      // OPTIONS VIEW
+      $('#filter').hide();
+      $('#toggle_filter').click(function(){
+        if($('#filter').is(':hidden'))
+          $('#toggle_filter').html('Hide Filters');
+        else {
+          $('#toggle_filter').html('Filter by Category');
+        }
+        $('#filter').slideToggle();
+        return false;
+      });
+
+      // Grouping Options
+      $('#group_cat').click(function(){
+        $('#contact_groups').load('remote/group_contacts?group_by=cat');
+        $('#alpha_selector').hide();
+        return false;
+      })
+      $('#group_alpha').click(function(){
+        $('#contact_groups').load('remote/group_contacts?group_by=alpha')
+        $('#alpha_selector').show();
+        return false;
+      })
+      $('.alpha_letter').click(function(){
+        $('#contact_groups').load('remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
+        return false;
+      })
+
+      // All option
+      $('#all').click(function(){
+        reset();
+      })
+
+      // Add Resource
+      $('#add_resource').click(function(){
+        content_toggle('#new_resource');
+        $('#s').focus();
+      })
+
+      function content_toggle(div) {
+        $('#gMap').hide();
+        $('#new_resource').hide();
+        $('#contact_content').hide();
+
+        $(div).show()
       }
 
-      $($(this).next()).toggle('slow');
-    }).hover(
-        function(){
-          $(this).addClass('highlight')},
-        function(){$(this).removeClass('highlight')})
+      // NEW RESOURCE FUNCTIONS
+      jQuery.ajaxSetup({
+        'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+      })
+
+      function reset(){
+        $("#s").attr('value','').focus();
+        $('#contact_groups').load('remote/show_all_contacts');
+        $('#group_1').load('remote/reload_category_filter');
+      }
 
 
-  })
-</script>
+      $("#sForm").submit(function(){
+        $("#spinner").show('fast');
+        $('#yList').hide();
+        $.ajax({
+          url: 'remote/yp_search',
+          data: 'value='+escape($("#s").val()),
+          success: function(response,statusText) {
+            if(statusText=='success'){
+              $("#spinner").hide('fast');
+              $('#sOut').html(response);
+              $('#yList').show();
+            }
+          }
+        });
+        return false;
+      });
 
-<style>
-  #list div {
-    padding:5px
-  }
-</style>
+      $('.add_resource_details').livequery('click',function(){
+        $('#listing').attr('value',$(this).attr('rel'))
+        $('.resource_title').html($(this).attr('title'))
+        $("#show_details").trigger('click');
+        return false;
+      });
+
+      $('.add_resource').livequery('click',function(){
+        $.ajax({
+          url: "remote/add_resource?id="+this.rel,
+          success: detailsSuccess,
+          dataType: 'json'
+        })
+        return false;
+      });
+
+      $('#facebox #hl_skip').livequery("click", function(){
+        log('clicked skip');
+        $(document).trigger('close.facebox');
+        $.flash.notice($(this).attr('rel') + " added!");
+        reset();
+        return false;
+      });
+
+      var options = {
+        success:  detailsSuccess,
+        dataType: 'json'
+      };
+
+      $("#facebox #form_details").livequery(function() {
+        $(this).submit(function(){
+
+          log('submitted')
+          var container = $('div.errorExplanation');
+          $(this).validate({
+            errorContainer: container,
+            errorLabelContainer: $("ol", container),
+            wrapper: 'li',
+            rules:  {
+              'resource[who_pays]': {
+                required: true
+              }
+            },
+            messages: {
+              'resource[who_pays]': {
+                required: 'Please let us know who pays for this resource'
+              }
+            }
+          }).form();
+
+          if ($(this).valid()) {
+            $(this).ajaxSubmit(options);
+          }
+
+          return false;
+        })
+      });
+
+      $('#facebox #form_experience').livequery("submit",function(){
+        $(this).ajaxSubmit({
+          success: function (response) {
+            log('experience added');
+            $(document).trigger('close.facebox');
+            $.flash.notice(response);
+            reset();
+          }
+        })
+        return false;
+      });
+
+      function detailsSuccess(json, statusText)  {
+        if(statusText=='success'){
+          log(json.listing.id);
+          log(json.resource.id);
+
+          // show experience
+          $('#experience_resource_id').attr('value',json.resource.id);
+          $('.resource_title').html(json.listing.title);
+          $('#hl_skip').attr('rel',json.listing.title);
+
+          $('#show_experience').trigger('click');
+          $('#facebox #experience_comment').focus();
+        }
+      }
+
+      // delete a resource
+      $('#delete_experience').livequery('click',function(){
+        log('delete');
+        var answer = confirm('Are you sure you want to remove this resource from your list?');
+        if(answer) {
+          $.ajax({
+            url: 'remote/delete',
+            data: 'id='+$(this).attr('rel'),
+            success: function(response) {
+              $.flash.notice(response);
+              reset();
+              content_toggle('#gMap');
+            }
+          })
+        }
+        return false;
+      })
+
+
+    })
+  </script>
+
+  <style>
+    #list div {
+      padding:5px
+    }
+  </style>

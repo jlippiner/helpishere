@@ -21,13 +21,13 @@
               <tr>
               <% if @current_user %>
                 <td valign="bottom">
-                    <%= link_to image_tag('tab_home.jpg', :border => "0"), user_index_path %>
+                    <%= link_to image_tag('tabs/tab_home.jpg', :border => "0"), user_index_path %>
                 </td>
               <% end %>
-              <td valign="bottom"><%= image_tag 'tab_search.jpg' %></td>
-              <td valign="bottom"><%= link_to image_tag('tab_add.jpg', :border => "0"), resource_new_path %></td>
+              <td valign="bottom"><%= image_tag 'tabs/tab_search.jpg' %></td>
+              <td valign="bottom"><%= link_to image_tag('tabs/tab_add.jpg', :border => "0"), resource_new_path %></td>
               <% if @current_user %>
-                <td valign="bottom"><%= link_to image_tag('tab_myresources.jpg', :border => "0"), resource_index_path %></td>
+                <td valign="bottom"><%= link_to image_tag('tabs/tab_myresources.jpg', :border => "0"), resource_index_path %></td>
               <% end %>
               </tr>
             </table>

@@ -6,9 +6,9 @@ div.rating:after{content:'.';display:block;height:0;width:0;clear:both;visibilit
 
 div.cancel,div.star{float:left;width:17px;height:15px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden}
 
-div.cancel,div.cancel a{background:url('delete.gif') no-repeat 0 -16px}
+div.cancel,div.cancel a{background:url('icons/delete.gif') no-repeat 0 -16px}
 
-div.star,div.star a{background:url('star.gif') no-repeat 0 0px}
+div.star,div.star a{background:url('icons/star.gif') no-repeat 0 0px}
 
 div.cancel a,div.star a{display:block;width:16px;height:100%;background-position:0 0px;border:solid 0px #FF0000}
 

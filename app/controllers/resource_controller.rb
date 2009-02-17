@@ -15,27 +15,23 @@ class ResourceController < ApplicationController
   end
 
   def destroy
-    @resource = Resource.find(params[:id])
-    @resource.destroy
+    resource = Resource.find(params[:id])
+    @current_profile.resources.delete(resource)
 
-    flash.now[:notice] = "Resource Deleted"
-    redirect_to user_index_path
+    flash.notice = resource.listing.title + " Deleted"
+    redirect_to resource_index_path
   end
 
-
+  
   def index
-    uniq_cats
-    @ids = @cats.map { |c| c.id.to_s  }    # @ids used to persist checkbox selection
+    @categories = Category.find(:all, :order=>'title')
 
-    session[:group] = params[:group]
-    if(!params[:letter].nil?)
-      group_resources_alphabetically(params[:letter])
-    else
-      group_resources    
-    end
+    load_contact_list
     
-        
-    session[:ids] = @ids
+    #    see if an ID was passed for display
+    if(params[:id])
+      load_one_resource
+    end
   end
 
   def filter
@@ -70,10 +66,10 @@ class ResourceController < ApplicationController
     @resource = Resource.find(params[:id])
     @listing = @resource.listing
     if @listing.update_attributes(params[:listing])
-      flash.now[:notice] = @listing.title + " Updated!"
+      flash.notice = @listing.title + " Updated!"
       redirect_to resource_index_path
     else
-      flash[:error] = "Something went wrong"
+      flash.error = "Something went wrong"
       redirect_to resource_edit_path(params[:id])
     end
   end
@@ -86,10 +82,10 @@ class ResourceController < ApplicationController
 
     @resource = Resource.find(params[:id])
     if @resource.update_attributes(params[:resource])
-      flash.now[:notice] = @resource.listing.title + " Details Updated!"
+      flash.notice = @resource.listing.title + " Details Updated!"
       redirect_to resource_index_path
     else
-      flash[:error] = "Something went wrong"
+      flash.error = "Something went wrong"
       redirect_to resource_edit_path(params[:id])
     end
   end
@@ -98,7 +94,7 @@ class ResourceController < ApplicationController
     @resource = Resource.find(params[:id])
     if @resource
       @map = GMap.new("map_div")
-      @map.control_init(:small_map => true)
+      @map.control_init()
       @map.center_zoom_init([@resource.listing.latitude,@resource.listing.longitude],8)
       @map.overlay_init(GMarker.new([@resource.listing.latitude,@resource.listing.longitude],:title => @resource.listing.title, :info_window => @resource.listing.title))
     end
@@ -119,42 +115,58 @@ class ResourceController < ApplicationController
     end
   end
 
+  def remote
+    case params[:do]
+    when "group_contacts"
+      session[:contact_group]=params[:group_by]
+      load_contact_list
+      render :partial => 'resource_groups', :locals => {:groups => @groups}
+    when "show_all_contacts"
+      load_contact_list
+      render :partial => 'resource_groups', :locals => {:groups => @groups}
+    when "reload_category_filter"
+      load_contact_list
+      render :partial => "resource_category_filter"
+    when "yp_search"
+      yahoo_results = get_from_yahoo(params[:value])# (title, address, city, state, zip, country, phone)
+      @results = @current_profile.unkown_yahoo_results(yahoo_results)
 
-  def remote_search
-    yahoo_results = get_from_yahoo(params[:value])# (title, address, city, state, zip, country, phone)
-    @results = @current_profile.unkown_yahoo_results(yahoo_results)
-
-    sleep(1)
-    render  :partial => "resource_list", :collection => @results
-  end
-
-  def remote_search_bak
-    yahoo_results = get_from_yahoo(params[:value])
-
-    #    check existing resources and remove if found
-    titles =@current_profile.resources.map{|r| r.listing.title + r.listing.address + r.listing.city }.flatten
-    all_titles = @current_profile.disease.resources.map{|r| {:id => r.id, :title => r.listing.title, :address => r.listing.address, :city => r.listing.city  } }.flatten
-
-    @results = []
-    yahoo_results.each do |r|
-      unless(titles.include?(r.title + r.address + r.city))
-        resource_id = 0
-        all_titles.each do |a|
-          if([a[:title] + a[:address] + a[:city]].include?(r.title + r.address + r.city))
-            resource_id = a[:id]
-            break
-          end
-        end 
-        @results << {:resource_id => resource_id, :data => r }
+      sleep(1)
+      render  :partial => "resource_list", :collection => @results
+    when "add_resource"
+      add_resource
+    when "add_experience"
+      resource = Resource.find(params[:experience][:resource_id])
+      if Experience.create(params[:experience])
+        render :text => resource.listing.title + ' added to this profile.'
+      else
+        render :text => "Experience could not be added"
       end
+    when "delete"
+      resource = Resource.find(params[:id])
+      if resource
+        @current_profile.resources.delete(resource)
+        render :text => resource.listing.title.proper_case + ' deleted.'
+      end
+    when "load_contact"
+      load_one_resource
+      render :partial => "one_resource",  :locals => {:gmap => @gmap, :resource => @resource}
     end
-
-    sleep(1)
-
-    render  :partial => "resource_list", :collection => @results
   end
 
-  def remote_add
+
+  private
+
+  def load_one_resource
+    @resource = Resource.find(params[:id])
+
+    @gmap = GMap.new("map_div")
+    @gmap.control_init(:small_map => true)
+    @gmap.center_zoom_init([@resource.listing.latitude,@resource.listing.longitude],8)
+    @gmap.overlay_init(GMarker.new([@resource.listing.latitude,@resource.listing.longitude],:title => @resource.listing.title, :info_window => @resource.listing.title))
+  end
+
+  def add_resource
     unless(params[:id])
       parts = params[:listing].split(/&|=/)
       l = Hash[*parts]
@@ -193,27 +205,7 @@ class ResourceController < ApplicationController
     #    render :partial => "resource_basket_json", :collection => @current_profile.resources.find(:all, :order => "created_at DESC")    
     out = {:resource => resource.attributes, :listing => resource.listing.attributes}
     render :text => out.to_json()
-  end
-
-  def remote_reload_basket
-    render :partial => "resource_basket", :collection => @current_profile.resources.find(:all, :order => "created_at DESC")
-  end
-
-  def remote_experience
-    resource = Resource.find(params[:experience][:resource_id])
-    if Experience.create(params[:experience])
-      render :text => resource.listing.title + ' added to this profile.'
-    end
-  end
-
-  def remote_delete
-    resource = Resource.find(params[:id])
-    if resource
-      @current_profile.resources.delete(resource)
-    end
-
-    render  :partial => "resource_basket", :collection => @current_profile.resources
-  end
+  end  
 
   def get_from_yahoo(query)
     if (!query.include?(','))
@@ -252,20 +244,42 @@ class ResourceController < ApplicationController
     results
   end
 
+  def load_contact_list
+    uniq_cats
+    @ids = @cats.map { |c| c.id.to_s  }    # @ids used to persist checkbox selection
 
-  private
+    session[:ids] = @ids
+    if(!params[:letter].nil?)
+      group_resources_alphabetically(params[:letter])
+    else
+      group_resources
+    end
+
+  end
+
   def uniq_cats
     @cats =@current_profile.resources.map{|r| r.categories }.flatten.uniq.sort_by {|c| c.title}
   end
 
   def group_resources
-    if(session[:group]=='alpha')
+    if(session[:contact_group]=='alpha')
       group_resources_alphabetically
     else
+      prepare_letters
       group_resources_by_category
     end
   end
 
+
+  def prepare_letters
+    #    group into buckets
+    @letters = []
+    ('A'..'Z').each do |c|      
+      if !@current_profile.resources.for_categories_and_starts_with(@ids,c).empty?
+        @letters << c
+      end
+    end
+  end
 
   def group_resources_alphabetically(a_letter = nil)
     #    group into buckets
@@ -298,8 +312,8 @@ class ResourceController < ApplicationController
       if (@current_profile.resources.count > 0)
         #     deal with maps
         @map = GMap.new("map_div")
-        @map.control_init(:small_map => true, :map_type => false)
-        @map.center_zoom_init([@current_profile.resources.first.listing.latitude,@current_profile.resources.first.listing.longitude],10)
+        @map.control_init(:large_map => true, :map_type => true)
+        @map.center_zoom_init([@current_profile.resources.first.listing.latitude,@current_profile.resources.first.listing.longitude],12)
 
         markers = []
         @current_profile.resources.each do |t|

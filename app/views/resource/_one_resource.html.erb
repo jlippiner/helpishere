@@ -1,0 +1,134 @@
+<style>
+  #a_resource {
+    font-size: 10pt;
+  }
+
+  #a_resource h2 {
+    margin:3px 0px;
+  }
+
+  #a_resource #address {
+    margin:5px 0px
+  }
+
+  #a_resource #controls {
+    text-align:right;
+    font-size:8pt;
+    background-color:#EFEFEF;
+    border-top:1px dotted gray;
+    padding:0px 5px;
+  }
+
+  #a_resource #phone {
+    margin: 15px 0px;
+    font-weight:bold;
+  }
+
+  #a_resource #map {
+    padding: 5px;
+  }
+
+  #a_resource #overview {
+    margin: 5px;
+    padding: 5px;
+    background: #FFFFCC;
+  }
+  #a_resource #experiences {
+    border-top:1px solid #F7DA73;
+    padding: 5px;
+  }
+
+  #a_resource #experience {
+    border-bottom:1px dotted gray
+  }
+</style>
+
+<div id="a_resource">
+  <div id="controls">
+    <%= link_to "Edit Contact Info", resource_edit_path(:section => "contact", :id => resource) %>&nbsp;
+    <%= link_to "Edit Details", resource_edit_path(:section => "details", :id => resource)  %>&nbsp;
+
+    <% if(resource.overview.to_s.nilemp?) %>
+      <%= link_to "Add Overview", resource_overview_path(:method => "new", :id  => resource) %>&nbsp;
+    <% else %>
+      <%= link_to "Edit Overview", resource_overview_path(:method => "edit", :id  => resource) %>&nbsp;
+    <% end %>
+
+    <%= link_to "Add Experience" %>&nbsp;
+
+    <a href="#" id="delete_experience" rel="<%= resource.id %>">Delete Resource</a>
+  </div>
+
+  <table border="0" width="100%">
+    <tr>
+      <td valign="top">
+        <h2><%= resource.listing.title %></h2>
+
+        <div id="address">
+          <%= resource.listing.address %><br>
+          <%= resource.listing.city %> <%= resource.listing.state %> <%= resource.listing.postalcode %><br>
+          <%= resource.listing.country %>
+        </div>
+        <div id="phone">
+          <%= resource.listing.phone %>
+        </div>
+
+        <div id="categories">
+          Filed under:
+          <em>
+            <%= resource.categories.map {|x| x.title}.join(", ")  %>
+          </em>
+        </div>
+
+        <div id="who_pays">
+          Who Pays:
+          <em>
+            <%= resource.who_pays  %>
+          </em>
+        </div>
+      </td>
+      <td valign="top" align="right">
+        <div id="map">
+          <img src="http://maps.google.com/staticmap?center=<%= "#{resource.listing.latitude},#{resource.listing.longitude}" %>&zoom=10&size=200x200&maptype=mobile\
+               +                 &markers=<%= "#{resource.listing.latitude},#{resource.listing.longitude}" %>&key=<%= GOOGLE_MAPS_KEY %>&sensor=false" alt="Map" style="border:1px solid gray">
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div id="overview">
+    <% if (!resource.overview.blank?) %>
+      <%= resource.overview  %>
+    <% else %>
+      No overview submtted for this resource.  Please contribute and add one by <%= link_to "clicking here", resource_overview_path(resource) %>
+    <% end %>
+  </div>
+
+  <div id="experiences">
+    <% if(resource.experiences.count > 0) %>
+      <h3 style="border-bottom:1px dotted gray"><%= "#{pluralize(resource.experiences.count,'Experience')} found for #{resource.listing.title.proper_case}" %></h3>
+      <% resource.experiences.each do |e| %>
+        <div id="experience">
+        <table border="0" width="100%">
+          <tr>
+            <td valign="middle" width="100" style="font-size:9pt;line-height:9pt;">
+              <%= image_tag e.user.photo.url(:tiny) %><br>
+              <%= e.user.nickname %><br>
+            </td>
+            <td>
+              <p><b><%= e.title %></b> <em style="font-size:9pt"><%= e.created_at.strftime("Entered on %m/%d/%Y") %></em></p>
+              <p>
+                <%= e.comment %>
+              </p>
+              <% unless e.would_recommend.blank? %>
+                Would you recommend: <%= e.would_recommend %>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+</div>

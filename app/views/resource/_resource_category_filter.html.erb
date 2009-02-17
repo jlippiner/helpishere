@@ -1,0 +1,9 @@
+<% form_tag resource_filter_path do |f|   %>
+  <% for c in @cats do %>
+      <%= check_box_tag "category_ids[]", c.id, @ids.include?(c.id.to_s) %>
+      <label rel="checkit"><%= c.title.proper_case %></label><br>
+    <% end %>
+    <div style="margin-top:10px" align="right">
+      <%= submit_tag "submit" %>
+    </div>
+  <% end %>

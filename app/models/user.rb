@@ -22,7 +22,8 @@ class User < ActiveRecord::Base
   },
     :default_style => :thumb,
     :convert_options => {
-    :thumb => "-border 5 -frame 3x3"
+    :thumb => "-border 5 -frame 3x3",
+    :tiny => "-border 5 -frame 3x3"
     }
 
 end

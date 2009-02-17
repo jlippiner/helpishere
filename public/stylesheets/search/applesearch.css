@@ -1,0 +1,27 @@
+#searchform {
+	background: #fff url("/images/search/srch_l.gif") 0 0 no-repeat;
+	padding-left: 19px;
+    width:200px;
+	}
+#searchform .sbox_r {
+	background: #fff url('/images/search/srch_r.gif') 0 0 no-repeat;
+	float: left;
+	width: 19px;
+	height: 19px;
+	}
+#searchform .sbox_r_f2 {
+	background: #fff url('/images/search/srch_r.gif') 0 -19px no-repeat;
+	float: left;
+	width: 19px;
+	height: 19px;
+	}
+#searchform input {
+	background: #fff url('/images/search/srch_bg.gif') 0 0 repeat-x;
+	float: left;
+	border: 0;
+	height: 19px; 
+	width: 132px;
+	padding: 3px;
+	font: 11px/13px arial;
+	color: #000;
+	}

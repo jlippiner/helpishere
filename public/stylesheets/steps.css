@@ -81,7 +81,7 @@ fieldset.steps div.submit {
 }
 
 #join_form label.error {
-  background:url("/images/unchecked.gif") no-repeat 0px 0px;
+  background:url("/images/icons/unchecked.gif") no-repeat 0px 0px;
 
   padding-left: 16px;
 
@@ -93,7 +93,7 @@ fieldset.steps div.submit {
 }
 
 #join_form label.checked {
-  background:url("/images/checked.gif") no-repeat 0px 0px;
+  background:url("/images/icons/checked.gif") no-repeat 0px 0px;
 }
 
 #join_form .success_msg {

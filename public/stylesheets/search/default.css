@@ -1,0 +1,30 @@
+/* Search Form //----------------------------------------------------------*/
+
+	#searchform {
+		margin: 0;
+		padding: 0;
+		}
+	#searchform fieldset {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		}
+	#searchform label { 
+		color: #999; 
+		display: none; 
+		}
+	#searchform input { 
+		width: 180px; 
+		color: #222; 
+		}
+	#searchform #submitquery { 
+		display: none; 
+		}
+
+/* Misc Classes //----------------------------------------------------------*/
+
+	.clear { 
+		clear: both; 
+		margin: 0; 
+		padding: 0; 
+		}
