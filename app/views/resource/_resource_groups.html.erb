@@ -1,5 +1,5 @@
 <% groups.each do |g|  %>
-  <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;"><%= g[:title] %></div>
+  <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;"><%= g[:title] %> (<%= g[:data].length %>)</div>
   <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="border-top:1px solid gray;">
     <%= render :partial => "myresources_list", :collection => g[:data] %>
   </div>

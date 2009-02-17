@@ -33,22 +33,7 @@ class ResourceController < ApplicationController
       load_one_resource
     end
   end
-
-  def filter
-    @ids = params[:category_ids]
-
-    if(!@ids.nil?)
-      session[:ids] = @ids
-    else
-      @ids = session[:ids]
-    end
-
-    uniq_cats
-    group_resources
-    
-    render :template => "resource/index"
-  end
-
+  
   def edit
     @resource = Resource.find(params[:id])
     @listing = @resource.listing
@@ -59,7 +44,7 @@ class ResourceController < ApplicationController
 
   def update_listing
     if params[:commit]=='Cancel'
-      redirect_to resource_index_path
+      redirect_to resource_index_path(params[:id])
       return false
     end
     
@@ -76,7 +61,7 @@ class ResourceController < ApplicationController
 
   def update_details
     if params[:commit]=='Cancel'
-      redirect_to resource_index_path
+      redirect_to resource_index_path(params[:id])
       return false
     end
 
@@ -127,6 +112,8 @@ class ResourceController < ApplicationController
     when "reload_category_filter"
       load_contact_list
       render :partial => "resource_category_filter"
+    when "filter_cats"
+      filter
     when "yp_search"
       yahoo_results = get_from_yahoo(params[:value])# (title, address, city, state, zip, country, phone)
       @results = @current_profile.unkown_yahoo_results(yahoo_results)
@@ -156,6 +143,21 @@ class ResourceController < ApplicationController
 
 
   private
+
+  def filter
+    @ids = params[:value]
+
+    if(!@ids.nil?)
+      session[:ids] = @ids
+    else
+      @ids = session[:ids]
+    end
+
+    uniq_cats
+    group_resources
+
+    render :partial => 'resource_groups', :locals => {:groups => @groups}
+  end
 
   def load_one_resource
     @resource = Resource.find(params[:id])

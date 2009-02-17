@@ -2,11 +2,10 @@
   <link rel="stylesheet" type="text/css" href="/stylesheets/search/default.css" id="default"  />
   <!-- dummy stylesheet - href to be swapped -->
   <link rel="stylesheet" type="text/css" href="/stylesheets/search/dummy.css" id="dummy_css"  />
-  <%= javascript_include_tag 'applesearch.js' %>
+  <%= stylesheet_link_tag 'resources' %>
+  <%= javascript_include_tag 'applesearch.js', 'json.js' %>
   <%= javascript_tag "window.AUTH_TOKEN = '#{form_authenticity_token}';" %>
-  <style>
-    #content {padding:0px}
-  </style>
+
   <% if (@current_user.resources.count > 0 && !@map.nil?) %>
     <%= GMap.header(:host => request.host) %>
     <%= @map.to_html %>
@@ -17,7 +16,7 @@
   <table border="0" width="100%">
     <tr>
       <td>
-        <h1>My Resources</h1>
+        <h1><%= "#{pluralize(@current_profile.resources.count,'Resource')} for #{@current_profile.name}" %></h1>
       </td>
       <td align="right">
         <form id="searchform" action="index.html">
@@ -62,7 +61,14 @@
           </div>
 
           <div style="padding:10px;border-bottom:1px solid gray" id="filter">
-            <b>Categories</b>&nbsp;
+            <div class="row">
+              <div class="left">
+                <b>Categories</b>&nbsp;
+              </div>
+              <div class="right">
+                <%= image_tag 'spinner.gif', :id => "cat_spin", :style => "display:none" %>
+              </div>
+            </div>
             <span style="font-size:8pt">
               <a rel="group_1" href="#select_all">Select All</a>&nbsp;|&nbsp;
               <a rel="group_1" href="#select_none">Select None</a>
@@ -74,7 +80,7 @@
 
           <div id="contact_list">
             <% if !@groups.nil? %>
-              <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;border-bottom:1px solid gray" id="all">All</div>
+              <div style="background:#AAAAAA;font-weight:bold;padding-left:4px;border-bottom:1px solid gray" id="all">All</div>
               <div id="contact_groups">
                 <%= render :partial => 'resource_groups', :locals => {:groups => @groups}  %>
               </div>
@@ -135,7 +141,7 @@
 
     </ol>
   </div>
-  <% form_for :resource, :url => 'remote/add_resource', :html => {:id => "form_details"}  do |f| %>
+  <% form_for :resource, :url => '/resource/remote/add_resource', :html => {:id => "form_details"}  do |f| %>
     <input type="hidden" id="listing" name="listing" value=""/>
     <fieldset class="steps">
       <div>
@@ -188,7 +194,7 @@
       </ol>
     </div>
 
-    <% form_for :experience, :url => 'remote/add_experience', :html => {:id => "form_experience"}  do |f| %>
+    <% form_for :experience, :url => '/resource/remote/add_experience', :html => {:id => "form_experience"}  do |f| %>
       <%= hidden_field "experience","user_id", {:value => @current_user.id} %>
       <%= hidden_field "experience", "resource_id", {:value => "" } %>
       <%= f.text_area :comment, :rows => "10", :cols => "70"  %>
@@ -207,7 +213,6 @@
 
   <script language="javascript">
     $(document).ready(function(){
-
       // show hide map div?
   <% if(@resource) %>
         content_toggle('#contact_content');
@@ -217,211 +222,6 @@
   <% else %>
         content_toggle('#gMap');
   <% end %>
-
-
-      // Select all
-      $("A[href='#select_all']").click( function() {
-        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
-        return false;
-      });
-
-      // Select none
-      $("A[href='#select_none']").click( function() {
-        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
-        return false;
-      });
-
-      // details
-      $(".resource_row").livequery('click',function(){
-        $('#contact_content').load('remote/load_contact?id=' + $(this).attr('rel'));
-        content_toggle('#contact_content');
-      })
-
-      // OPTIONS VIEW
-      $('#filter').hide();
-      $('#toggle_filter').click(function(){
-        if($('#filter').is(':hidden'))
-          $('#toggle_filter').html('Hide Filters');
-        else {
-          $('#toggle_filter').html('Filter by Category');
-        }
-        $('#filter').slideToggle();
-        return false;
-      });
-
-      // Grouping Options
-      $('#group_cat').click(function(){
-        $('#contact_groups').load('remote/group_contacts?group_by=cat');
-        $('#alpha_selector').hide();
-        return false;
-      })
-      $('#group_alpha').click(function(){
-        $('#contact_groups').load('remote/group_contacts?group_by=alpha')
-        $('#alpha_selector').show();
-        return false;
-      })
-      $('.alpha_letter').click(function(){
-        $('#contact_groups').load('remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
-        return false;
-      })
-
-      // All option
-      $('#all').click(function(){
-        reset();
-      })
-
-      // Add Resource
-      $('#add_resource').click(function(){
-        content_toggle('#new_resource');
-        $('#s').focus();
-      })
-
-      function content_toggle(div) {
-        $('#gMap').hide();
-        $('#new_resource').hide();
-        $('#contact_content').hide();
-
-        $(div).show()
-      }
-
-      // NEW RESOURCE FUNCTIONS
-      jQuery.ajaxSetup({
-        'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-      })
-
-      function reset(){
-        $("#s").attr('value','').focus();
-        $('#contact_groups').load('remote/show_all_contacts');
-        $('#group_1').load('remote/reload_category_filter');
-      }
-
-
-      $("#sForm").submit(function(){
-        $("#spinner").show('fast');
-        $('#yList').hide();
-        $.ajax({
-          url: 'remote/yp_search',
-          data: 'value='+escape($("#s").val()),
-          success: function(response,statusText) {
-            if(statusText=='success'){
-              $("#spinner").hide('fast');
-              $('#sOut').html(response);
-              $('#yList').show();
-            }
-          }
-        });
-        return false;
-      });
-
-      $('.add_resource_details').livequery('click',function(){
-        $('#listing').attr('value',$(this).attr('rel'))
-        $('.resource_title').html($(this).attr('title'))
-        $("#show_details").trigger('click');
-        return false;
-      });
-
-      $('.add_resource').livequery('click',function(){
-        $.ajax({
-          url: "remote/add_resource?id="+this.rel,
-          success: detailsSuccess,
-          dataType: 'json'
-        })
-        return false;
-      });
-
-      $('#facebox #hl_skip').livequery("click", function(){
-        log('clicked skip');
-        $(document).trigger('close.facebox');
-        $.flash.notice($(this).attr('rel') + " added!");
-        reset();
-        return false;
-      });
-
-      var options = {
-        success:  detailsSuccess,
-        dataType: 'json'
-      };
-
-      $("#facebox #form_details").livequery(function() {
-        $(this).submit(function(){
-
-          log('submitted')
-          var container = $('div.errorExplanation');
-          $(this).validate({
-            errorContainer: container,
-            errorLabelContainer: $("ol", container),
-            wrapper: 'li',
-            rules:  {
-              'resource[who_pays]': {
-                required: true
-              }
-            },
-            messages: {
-              'resource[who_pays]': {
-                required: 'Please let us know who pays for this resource'
-              }
-            }
-          }).form();
-
-          if ($(this).valid()) {
-            $(this).ajaxSubmit(options);
-          }
-
-          return false;
-        })
-      });
-
-      $('#facebox #form_experience').livequery("submit",function(){
-        $(this).ajaxSubmit({
-          success: function (response) {
-            log('experience added');
-            $(document).trigger('close.facebox');
-            $.flash.notice(response);
-            reset();
-          }
-        })
-        return false;
-      });
-
-      function detailsSuccess(json, statusText)  {
-        if(statusText=='success'){
-          log(json.listing.id);
-          log(json.resource.id);
-
-          // show experience
-          $('#experience_resource_id').attr('value',json.resource.id);
-          $('.resource_title').html(json.listing.title);
-          $('#hl_skip').attr('rel',json.listing.title);
-
-          $('#show_experience').trigger('click');
-          $('#facebox #experience_comment').focus();
-        }
-      }
-
-      // delete a resource
-      $('#delete_experience').livequery('click',function(){
-        log('delete');
-        var answer = confirm('Are you sure you want to remove this resource from your list?');
-        if(answer) {
-          $.ajax({
-            url: 'remote/delete',
-            data: 'id='+$(this).attr('rel'),
-            success: function(response) {
-              $.flash.notice(response);
-              reset();
-              content_toggle('#gMap');
-            }
-          })
-        }
-        return false;
-      })
-
-
+     
     })
   </script>
-
-  <style>
-    #list div {
-      padding:5px
-    }
-  </style>

@@ -1,6 +1,237 @@
 // RESOURCE.JS
 
+function content_toggle(div) {
+    $('#gMap').hide();
+    $('#new_resource').hide();
+    $('#contact_content').hide();
+
+    $(div).show()
+}
+
 $(document).ready(function(){
+
+    // Select all
+    $("A[href='#select_all']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
+        get_cb_json();
+        return false;
+    });
+
+    // Select none
+    $("A[href='#select_none']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
+        get_cb_json();
+        return false;
+    });
+
+    // details
+    $(".resource_row").livequery('click',function(){
+        $('#contact_content').load('/resource/remote/load_contact?id=' + $(this).attr('rel'));
+        content_toggle('#contact_content');
+    })
+
+    // OPTIONS VIEW
+    $('#filter').hide();
+    $('#toggle_filter').click(function(){
+        if($('#filter').is(':hidden'))
+            $('#toggle_filter').html('Hide Filters');
+        else {
+            $('#toggle_filter').html('Filter by Category');
+        }
+        $('#filter').slideToggle();
+        return false;
+    });
+
+    // Grouping Options
+    $('#group_cat').click(function(){
+        $('#contact_groups').load('/resource/remote/group_contacts?group_by=cat');
+        $('#alpha_selector').hide();
+        return false;
+    })
+    $('#group_alpha').click(function(){
+        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha')
+        $('#alpha_selector').show();
+        return false;
+    })
+    $('.alpha_letter').click(function(){
+        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
+        return false;
+    })
+
+    // All option
+    $('#all').click(function(){
+        reset();
+    })
+
+    // Add Resource
+    $('#add_resource').click(function(){
+        content_toggle('#new_resource');
+        $('#s').focus();
+    })
+  
+
+    // NEW RESOURCE FUNCTIONS
+    jQuery.ajaxSetup({
+        'beforeSend': function(xhr) {
+            xhr.setRequestHeader("Accept", "text/javascript")
+        }
+    })
+
+    function reset(){
+        $("#s").attr('value','').focus();
+        $('#contact_groups').load('/resource/remote/show_all_contacts');
+        $('#group_1').load('/resource/remote/reload_category_filter');
+    }
+
+
+    $("#sForm").submit(function(){
+        $("#spinner").show('fast');
+        $('#yList').hide();
+        $.ajax({
+            url: 'remote/yp_search',
+            data: 'value='+escape($("#s").val()),
+            success: function(response,statusText) {
+                if(statusText=='success'){
+                    $("#spinner").hide('fast');
+                    $('#sOut').html(response);
+                    $('#yList').show();
+                }
+            }
+        });
+        return false;
+    });
+
+    $('.add_resource_details').livequery('click',function(){
+        $('#listing').attr('value',$(this).attr('rel'))
+        $('.resource_title').html($(this).attr('title'))
+        $("#show_details").trigger('click');
+        return false;
+    });
+
+    $('.add_resource').livequery('click',function(){
+        $.ajax({
+            url: "remote/add_resource?id="+this.rel,
+            success: detailsSuccess,
+            dataType: 'json'
+        })
+        return false;
+    });
+
+    $('#facebox #hl_skip').livequery("click", function(){
+        log('clicked skip');
+        $(document).trigger('close.facebox');
+        $.flash.notice($(this).attr('rel') + " added!");
+        reset();
+        return false;
+    });
+
+    var options = {
+        success:  detailsSuccess,
+        dataType: 'json'
+    };
+
+    $("#facebox #form_details").livequery(function() {
+        $(this).submit(function(){
+
+            log('submitted')
+            var container = $('div.errorExplanation');
+            $(this).validate({
+                errorContainer: container,
+                errorLabelContainer: $("ol", container),
+                wrapper: 'li',
+                rules:  {
+                    'resource[who_pays]': {
+                        required: true
+                    }
+                },
+                messages: {
+                    'resource[who_pays]': {
+                        required: 'Please let us know who pays for this resource'
+                    }
+                }
+            }).form();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit(options);
+            }
+
+            return false;
+        })
+    });
+
+    $('#facebox #form_experience').livequery("submit",function(){
+        $(this).ajaxSubmit({
+            success: function (response) {
+                log('experience added');
+                $(document).trigger('close.facebox');
+                $.flash.notice(response);
+                reset();
+            }
+        })
+        return false;
+    });
+
+    function detailsSuccess(json, statusText)  {
+        if(statusText=='success'){
+            log(json.listing.id);
+            log(json.resource.id);
+
+            // show experience
+            $('#experience_resource_id').attr('value',json.resource.id);
+            $('.resource_title').html(json.listing.title);
+            $('#hl_skip').attr('rel',json.listing.title);
+
+            $('#show_experience').trigger('click');
+            $('#facebox #experience_comment').focus();
+        }
+    }
+
+
+
+    function get_cb_json() {
+        var checked = new Array();
+        $("input[rel*=cat_cb]").each(function(){
+            if(this.checked) checked.push(parseInt(this.value));
+        });
+
+        var json=$.toJSON(checked);
+
+        $('#cat_spin').show();
+        $.ajax({
+            url: '/resource/remote/filter_cats',
+            data: 'value='+json,
+            success: function(response){
+                $('#contact_groups').html(response);
+                $('#cat_spin').hide();
+            }
+        })
+
+        return json;
+    }
+
+    // filter by category
+    $('.cat_reload').click(function(){
+        log(get_cb_json());
+    })    
+
+    // delete a resource
+    $('#delete_experience').livequery('click',function(){
+        log('delete');
+        var answer = confirm('Are you sure you want to remove this resource from your list?');
+        if(answer) {
+            $.ajax({
+                url: '/resource/remote/delete',
+                data: 'id='+$(this).attr('rel'),
+                success: function(response) {
+                    $.flash.notice(response);
+                    reset();
+                    content_toggle('#gMap');
+                }
+            })
+        }
+        return false;
+    })
+
 
     $('#searchPopup').css('opacity','0'); // set the search popup messgae to 0 opacity
 
@@ -35,4 +266,8 @@ $(document).ready(function(){
             $(this).css('color', '#777');
         }
     });
+
+
+
+
 });
