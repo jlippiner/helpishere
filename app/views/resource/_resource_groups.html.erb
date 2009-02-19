@@ -1,8 +1,10 @@
 <% groups.each do |g|  %>
-  <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;"><%= g[:title] %> (<%= g[:data].length %>)</div>
-  <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="border-top:1px solid gray;">
-    <%= render :partial => "myresources_list", :collection => g[:data] %>
-  </div>
+  <% if g[:data].length > 0 %>
+    <div style="background:#EFEFEF;font-weight:bold;padding-left:4px;"><%= g[:title] %> (<%= g[:data].length %>)</div>
+    <div id="<%= "group_#{g[:title].sub(" ","_")}" %>" style="border-top:1px solid gray;">
+      <%= render :partial => "myresources_list", :collection => g[:data] %>
+    </div>
+  <% end %>
 <% end %>
 
 <script language="javascript">

@@ -97,7 +97,7 @@ function log(message, type) {
     if(typeof(console) != "undefined" ) {
         console[type](message);
     } else {
-        alert(message);
+        window.status = message;
     }
 }
 

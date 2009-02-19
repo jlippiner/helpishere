@@ -108,19 +108,20 @@
 	applesearch.getLabelText = function()
 	{
 		var srchform = document.getElementById('searchform');
+        var labelText = "";
 		if(srchform) {
 			var labels = srchform.getElementsByTagName('label');
 	
 			if (labels) {
 				var labelFor = labels[0].getAttribute('for');
-				var labelText = labels[0].firstChild.nodeValue;
+				labelText = labels[0].firstChild.nodeValue;
 			} else {
 				// just in case, set default text
-				var labelText = 'Search';
+				labelText = 'Search';
 			}
 		} else {
 			// just in case, set default text
-			var labelText = 'Search';
+			 labelText = 'Search';
 		}
 		return labelText;
 	}
@@ -129,7 +130,7 @@
 
 	// called when on user input - toggles clear fld btn
 	applesearch.onChange = function (fldID, btnID)
-	{
+	{        
 		// check whether to show delete button
 		var fld = document.getElementById( fldID );
 		var btn = document.getElementById( btnID );
@@ -146,6 +147,7 @@
 			// reset the field's placeholder text
 			fld.value = labelText;
 			fld.style.color = labelColor;
+            // log something            
 		}
 	}
 

@@ -16,16 +16,10 @@
   <table border="0" width="100%">
     <tr>
       <td>
-        <h1><%= "#{pluralize(@current_profile.resources.count,'Resource')} for #{@current_profile.name}" %></h1>
+        <h1><%= "#{pluralize(@current_profile.resources.count,'Resource')} for #{@current_profile.name}" %></h1><br>
+
       </td>
       <td align="right">
-        <form id="searchform" action="index.html">
-          <fieldset>
-            <label for="query">Search Resources</label>
-            <input type="text" name="query" id="query" value="" />
-            <input type="submit" name="submitquery" id="submitquery" value="Go" />
-          </fieldset>
-        </form>
       </td>
     </tr>
   </table>
@@ -40,18 +34,25 @@
         <div style="overflow:auto;height:600px;margin:0px;font-size:10pt;padding-left:0px;border:1px solid gray;">
           <div class="row" style="font-size:8pt;padding:5px;border-bottom:1px solid gray;width:390px;background:#F7DA73">
             <div class="left">
-              <a href="#" id="toggle_filter">Filter by Category</a>
+              <form id="searchform">
+                <fieldset>
+                  <label for="query">Search Resources</label>
+                  <input type="text" name="query" id="query" value="" />
+                  <input type="submit" name="submitquery" id="submitquery" value="Go" />
+                </fieldset>
+              </form>              
             </div>
-            <div clas="right" style="text-align:right;">
-              <b>Group by:</b>
-              <a href="#" id="group_cat">By Category</a>&nbsp;
-              <a href="#" id="group_alpha">Alphabetically</a>
+            <div clas="right" style="text-align:right;padding-right:5px;">
+              <a href="#" id="toggle_filter">Category Filter</a>&nbsp;
+              <a href="#" id="group_by">                
+                <%=  session[:contact_group]=='alpha' ?  "Group by Category" :"Group A..Z"    %>
+              </a>
             </div>
           </div>
 
 
-          <div align="center" id="alpha_selector" style="display:none;font-size:8pt;padding:2px;border-bottom:1px solid gray;">
-            <% ('A'..'Z').each  do |c| %>
+          <div align="center" id="alpha_selector" style="display:<%=  session[:contact_group]=='alpha'?"":"none" %>;font-size:8pt;padding:2px;border-bottom:1px solid gray;">
+            <% (('0'..'9').to_a + ('A'..'Z').to_a).each  do |c| %>
               <% if(@letters.include?(c)) %>
                 <a href="#" class="alpha_letter" rel="<%= c %>" style="font-size:12pt"><%= c %></a>
               <% else %>
@@ -80,7 +81,10 @@
 
           <div id="contact_list">
             <% if !@groups.nil? %>
-              <div style="background:#AAAAAA;font-weight:bold;padding-left:4px;border-bottom:1px solid gray" id="all">All</div>
+              <div style="background:#AAAAAA;font-weight:bold;padding-left:4px;border-bottom:1px solid gray" id="all">
+                All
+                (<span id="all_count"><%= resource_count %></span>)
+              </div>
               <div id="contact_groups">
                 <%= render :partial => 'resource_groups', :locals => {:groups => @groups}  %>
               </div>
@@ -222,6 +226,6 @@
   <% else %>
         content_toggle('#gMap');
   <% end %>
-     
+
     })
   </script>

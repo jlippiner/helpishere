@@ -9,21 +9,7 @@ function content_toggle(div) {
 }
 
 $(document).ready(function(){
-
-    // Select all
-    $("A[href='#select_all']").click( function() {
-        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
-        get_cb_json();
-        return false;
-    });
-
-    // Select none
-    $("A[href='#select_none']").click( function() {
-        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
-        get_cb_json();
-        return false;
-    });
-
+    
     // details
     $(".resource_row").livequery('click',function(){
         $('#contact_content').load('/resource/remote/load_contact?id=' + $(this).attr('rel'));
@@ -36,32 +22,11 @@ $(document).ready(function(){
         if($('#filter').is(':hidden'))
             $('#toggle_filter').html('Hide Filters');
         else {
-            $('#toggle_filter').html('Filter by Category');
+            $('#toggle_filter').html('Category Filter');
         }
         $('#filter').slideToggle();
         return false;
     });
-
-    // Grouping Options
-    $('#group_cat').click(function(){
-        $('#contact_groups').load('/resource/remote/group_contacts?group_by=cat');
-        $('#alpha_selector').hide();
-        return false;
-    })
-    $('#group_alpha').click(function(){
-        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha')
-        $('#alpha_selector').show();
-        return false;
-    })
-    $('.alpha_letter').click(function(){
-        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
-        return false;
-    })
-
-    // All option
-    $('#all').click(function(){
-        reset();
-    })
 
     // Add Resource
     $('#add_resource').click(function(){
@@ -80,7 +45,13 @@ $(document).ready(function(){
     function reset(){
         $("#s").attr('value','').focus();
         $('#contact_groups').load('/resource/remote/show_all_contacts');
-        $('#group_1').load('/resource/remote/reload_category_filter');
+        $.ajax({
+            url:'/resource/remote/reload_category_filter',
+            success: function(response){
+                $('#group_1').html(response);
+                $('#all_count').load('/resource/remote/list_count');
+            }
+        })
     }
 
 
@@ -187,6 +158,75 @@ $(document).ready(function(){
     }
 
 
+    // CATEGORY FILTER FUNCTIONS
+
+    // Select all
+    $("A[href='#select_all']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', true);
+        filter_list();
+        return false;
+    });
+
+    // Select none
+    $("A[href='#select_none']").click( function() {
+        $("#" + $(this).attr('rel') + " INPUT[type='checkbox']").attr('checked', false);
+        filter_list();
+        return false;
+    });
+
+
+    // Grouping Options
+    function toggle_groupby(){
+        var gb;
+        if($('#group_by').html()=='Group By Category') {
+            gb = 'cat'
+            $('#alpha_selector').hide();
+            $('#group_by').html('Group A..Z');
+        }else{
+            gb = 'alpha'
+            $('#alpha_selector').show();
+            $('#group_by').html('Group By Category');
+        }
+        return gb
+    }
+
+    $('#group_by').click(function(){        
+        var gb = toggle_groupby();
+        $.ajax({
+            url: '/resource/remote/group_contacts?group_by='+gb,
+            success: function(response){
+                filter_list();
+                //$('#contact_groups').html(response);
+            }
+        })
+        return false;
+    })
+
+    $('.alpha_letter').click(function(){
+        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
+        $('#all_count').load('/resource/remote/list_count');
+        return false;
+    })
+
+    // All option
+    $('#all').click(function(){
+        $('#query').val('')
+        reset();
+    })
+
+    function filter_list(){            
+        json=get_cb_json();
+        $('#cat_spin').show();
+        $.ajax({
+            url: '/resource/remote/filter_cats',
+            data: 'value='+json,
+            success: function(response){                
+                $('#contact_groups').html(response);
+                $('#cat_spin').hide();
+                $('#all_count').load('/resource/remote/list_count');
+            }
+        })
+    }
 
     function get_cb_json() {
         var checked = new Array();
@@ -194,24 +234,14 @@ $(document).ready(function(){
             if(this.checked) checked.push(parseInt(this.value));
         });
 
-        var json=$.toJSON(checked);
-
-        $('#cat_spin').show();
-        $.ajax({
-            url: '/resource/remote/filter_cats',
-            data: 'value='+json,
-            success: function(response){
-                $('#contact_groups').html(response);
-                $('#cat_spin').hide();
-            }
-        })
-
+        var json=$.toJSON(checked);      
         return json;
     }
 
     // filter by category
     $('.cat_reload').click(function(){
-        log(get_cb_json());
+        log('cat click');
+        filter_list();
     })    
 
     // delete a resource
@@ -231,6 +261,43 @@ $(document).ready(function(){
         }
         return false;
     })
+
+    // Search Form Functions
+    $('#searchform').submit(function(){
+        json=get_cb_json();
+        q = $('#query').val();
+        if(q!=''){
+            $('#cat_spin').show();
+            $.ajax({
+                url: '/resource/remote/search_contacts',
+                data: 'value='+json+'&q='+escape(q),
+                success: function(response){
+                    $('#contact_groups').html(response);
+                    $('#cat_spin').hide();
+                    $('#all_count').load('/resource/remote/list_count');
+                }
+            })
+        }
+        return false;
+    })
+
+
+    // handle clear of search box
+    $('#srch_clear').livequery('click',function(){
+        reset();
+    })
+
+    var qEntered=false;
+    $('#query').click(function(){
+        if($(this).val()=='' && qEntered && (navigator.userAgent.toLowerCase().indexOf('safari') >= 0)) {
+            log('clearing');
+            reset();
+            qEntered=false;
+        }
+    }).keydown(function(){
+        qEntered=true;
+    })
+    
 
 
     $('#searchPopup').css('opacity','0'); // set the search popup messgae to 0 opacity

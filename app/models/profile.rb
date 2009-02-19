@@ -10,6 +10,11 @@ class Profile < ActiveRecord::Base
      def for_categories_and_starts_with(ids, letter, options = {})
       find(:all, options.merge(:conditions => ["categories.id IN (?) AND listings.title LIKE (?)", ids,letter + '%'], :include => [:categories,:listing]))
     end
+
+     def for_categories_and_listing_contains(ids, query, options = {})
+       query = '%' + query.upcase + '%'
+       find(:all, options.merge(:conditions => ["categories.id IN (:cat_ids) AND (UCASE(listings.title) LIKE (:query) OR UCASE(listings.address) LIKE (:query) OR UCASE(listings.city) LIKE (:query) OR UCASE(listings.postalcode) LIKE (:query))", {:cat_ids => ids, :query => query}], :include => [:categories,:listing]))
+    end
   end
 
   validates_presence_of :disease_id, :location, :how_affected
@@ -36,9 +41,9 @@ class Profile < ActiveRecord::Base
       end
 
       results ||= []
-      if (resource.blank?)  # Need this to include records found that are NOT in the database at all
+      if (resource.blank:query)  # Need this to include records found that are NOT in the database at all
         results << {:resource_id => 0, :data => r }
-      elsif (!resource.blank? && !resources.detect { |t| resource.id == t.id })
+      elsif (!resource.blank:query && !resources.detect { |t| resource.id == t.id })
         results << {:resource_id => resource.id, :data => r }
       end
     end

@@ -104,16 +104,19 @@ class ResourceController < ApplicationController
     case params[:do]
     when "group_contacts"
       session[:contact_group]=params[:group_by]
-      load_contact_list
-      render :partial => 'resource_groups', :locals => {:groups => @groups}
+      render :text => session[:contact_group]
     when "show_all_contacts"
       load_contact_list
       render :partial => 'resource_groups', :locals => {:groups => @groups}
     when "reload_category_filter"
       load_contact_list
       render :partial => "resource_category_filter"
+    when "list_count"      
+      render :text => session[:list_count]
     when "filter_cats"
       filter
+    when "search_contacts"
+      search
     when "yp_search"
       yahoo_results = get_from_yahoo(params[:value])# (title, address, city, state, zip, country, phone)
       @results = @current_profile.unkown_yahoo_results(yahoo_results)
@@ -145,7 +148,7 @@ class ResourceController < ApplicationController
   private
 
   def filter
-    @ids = params[:value]
+    @ids = params[:value].gsub(/\[|\]/,'').split(',')
 
     if(!@ids.nil?)
       session[:ids] = @ids
@@ -153,10 +156,58 @@ class ResourceController < ApplicationController
       @ids = session[:ids]
     end
 
-    uniq_cats
-    group_resources
+    load_contact_list
 
     render :partial => 'resource_groups', :locals => {:groups => @groups}
+  end
+
+  def load_contact_list()
+    uniq_cats
+    
+    @ids ||= @cats.map { |c| c.id.to_s  }    # @ids used to persist checkbox selection
+
+    session[:ids] = @ids
+    if(!params[:letter].nil?)
+      group_resources_alphabetically(params[:letter])
+    else
+      group_resources
+    end
+
+    list_count
+  end
+
+  def search
+    q = params[:q]
+    @ids = params[:value].gsub(/\[|\]/,'').split(',')
+
+    if(!@ids.nil?)
+      session[:ids] = @ids
+    else
+      @ids = session[:ids]
+    end
+
+
+    @cats = Category.find(:all,:conditions => {:id => @ids} )
+
+    #    group into buckets
+    #    group into buckets
+    @groups = []
+    @cats.each do |c|
+      @groups << {:title => c.title, :data => @current_profile.resources.for_categories_and_listing_contains(c.id.to_s,q)}
+    end
+    list_count
+    
+    render :partial => 'resource_groups', :locals => {:groups => @groups}
+  end
+
+  def list_count
+    r = []
+    @groups.each do |g|
+      g[:data].each do |x|
+        r << x.id if !r.include?(x.id)
+      end
+    end
+    session[:list_count]=r.length.to_s
   end
 
   def load_one_resource
@@ -246,18 +297,6 @@ class ResourceController < ApplicationController
     results
   end
 
-  def load_contact_list
-    uniq_cats
-    @ids = @cats.map { |c| c.id.to_s  }    # @ids used to persist checkbox selection
-
-    session[:ids] = @ids
-    if(!params[:letter].nil?)
-      group_resources_alphabetically(params[:letter])
-    else
-      group_resources
-    end
-
-  end
 
   def uniq_cats
     @cats =@current_profile.resources.map{|r| r.categories }.flatten.uniq.sort_by {|c| c.title}
@@ -276,7 +315,8 @@ class ResourceController < ApplicationController
   def prepare_letters
     #    group into buckets
     @letters = []
-    ('A'..'Z').each do |c|      
+    check = ('A'..'Z').to_a  + ('0'..'9').to_a
+    check.each do |c|
       if !@current_profile.resources.for_categories_and_starts_with(@ids,c).empty?
         @letters << c
       end
@@ -287,7 +327,8 @@ class ResourceController < ApplicationController
     #    group into buckets
     @groups = []
     @letters = []
-    ('A'..'Z').each do |c|
+    check = ('A'..'Z').to_a  + ('0'..'9').to_a
+    check.each do |c|
       group = {:title => c, :data =>  @current_profile.resources.for_categories_and_starts_with(@ids,c)}
       if !group[:data].empty?
         @groups << group if(a_letter.nil? || a_letter==c)
