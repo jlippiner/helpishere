@@ -67,7 +67,12 @@ $(document).ready(function(){
                     $('#sOut').html(response);
                     $('#yList').show();
                 }
-            }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                     $("#spinner").hide('fast');
+                    $('#sOut').html(XMLHttpRequest);
+                    $('#yList').show();
+                }
         });
         return false;
     });
@@ -196,7 +201,7 @@ $(document).ready(function(){
             url: '/resource/remote/group_contacts?group_by='+gb,
             success: function(response){
                 filter_list();
-                //$('#contact_groups').html(response);
+            //$('#contact_groups').html(response);
             }
         })
         return false;
@@ -277,7 +282,13 @@ $(document).ready(function(){
                     $('#contact_groups').html(response);
                     $('#cat_spin').hide();
                     $('#all_count').load('/resource/remote/list_count');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // typically only one of textStatus or errorThrown
+                    // will have info
+                    this; // the options for this ajax request
                 }
+
             })
         }
         return false;

@@ -119,7 +119,7 @@ class ResourceController < ApplicationController
       search
     when "yp_search"
       yahoo_results = get_from_yahoo(params[:value])# (title, address, city, state, zip, country, phone)
-      @results = @current_profile.unkown_yahoo_results(yahoo_results)
+      @results = @current_profile.unknown_yahoo_results(yahoo_results)
 
       sleep(1)
       render  :partial => "resource_list", :collection => @results
