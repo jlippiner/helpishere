@@ -203,8 +203,7 @@ $(document).ready(function(){
     })
 
     $('.alpha_letter').click(function(){
-        $('#contact_groups').load('/resource/remote/group_contacts?group_by=alpha&letter='+$(this).attr('rel'));
-        $('#all_count').load('/resource/remote/list_count');
+        filter_list($(this).attr('rel'));
         return false;
     })
 
@@ -214,11 +213,14 @@ $(document).ready(function(){
         reset();
     })
 
-    function filter_list(){            
+    function filter_list(letter){
+        var url='/resource/remote/filter_cats';
+        if(letter!=undefined) url+='?letter='+letter
+
         json=get_cb_json();
         $('#cat_spin').show();
         $.ajax({
-            url: '/resource/remote/filter_cats',
+            url: url,
             data: 'value='+json,
             success: function(response){                
                 $('#contact_groups').html(response);
