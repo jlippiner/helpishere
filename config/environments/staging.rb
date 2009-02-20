@@ -1,7 +1,7 @@
 # Settings specified here will take precedence over those in config/environment.rb
 #
 # Stagine Server Key
-GOOGLE_MAPS_KEY = "ABQIAAAA-ClHV9cqqgGz8JA-fGno7BSqsR9f-x1HZ2VWWhkUm3d7g6SwJBTjWIlpp3-usoUsLW6a9TCSTcegrw"
+GOOGLE_MAPS_KEY = "ABQIAAAARoDhu_94PHiI4hO8cjurOhSGUviAQ8E5_ubSRX4VW8z9p8_bgRQzRIg6NpKVYj9c-h2axnnYUC_gqQ"
 
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
