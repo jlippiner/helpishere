@@ -49,6 +49,9 @@ li {
     border-bottom:1px inset black;
     padding:3px 0px;
 }
+.resource_row .title {
+    padding-left:8px;
+}
 .resource_details {
     font-size:10pt;
 }
@@ -72,20 +75,20 @@ li {
     margin: 15px 25px;
     line-height:16pt;
 }
-.notice, .message {
+#flash_messages .notice, #flash_messages .message {
     border: 5px solid #9c9;
     background-color: #cfc;
     padding: 5px;
     margin: 10px 0;
 }
-.warning {
+#flash_messages .warning {
     border: 5px solid yellow;
     background-color: #FFFFCC;
     padding: 5px;
     margin: 10px 0;
     color:black;
 }
-.error {
+#flash_messages .error {
     border: 5px solid #990000;
     background-color: red;
     padding: 5px;

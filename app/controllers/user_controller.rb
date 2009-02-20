@@ -94,21 +94,21 @@ class UserController < ApplicationController
     end
   end
 
-  def remote_handler
-    #    first check for nickname
-    @value = params["user"]["nickname"]
-    if !@value.nil?
-      @valid = User.find_by_nickname(@value).nil?
-    else
-      @value = params["user"]["email"]
-      if (@current_user.email==@value)
-        #        need to do this to allow people updating their
-        #        info to use same email address
-        @valid = true
+  def remote
+    ret = false
+    case params[:do]
+    when "nickname"
+      val = params["user"]["nickname"]
+        ret = User.find_by_nickname(val).nil? unless val.blank?
+    when "email"
+      val = params["user"]["email"]
+      if(@current_user)
+        ret = @current_user.email = val #        need to do this to allow people updating their info to use same email address
       else
-        @valid = User.find_by_email(@value).nil?
+        ret = User.find_by_email(val).nil?
       end
     end
+    render :text => ret
   end
   
   def change_profile

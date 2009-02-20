@@ -33,6 +33,7 @@ class ApplicationController < ActionController::Base
   def profile_required
     return true if !@current_profile.nil?
     session[:return_to] = request.request_uri
+    flash[:notice] = "You need to create a profile before you can use this feature."
     redirect_to user_index_path and return false
   end
 

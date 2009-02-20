@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.with_options(:controller => "user", :name_prefix => "user_") do |user|
-    user.connect 'user/remote_handler', :action => "remote_handler"
+    user.connect 'user/remote/:do', :action => "remote"
     user.connect 'user', :action => "index"
     user.login 'user/login',  :action => "login"
     user.join  'user/join',  :action => 'join'

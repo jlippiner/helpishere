@@ -66,13 +66,6 @@ $(document).ready(function() {
       
 });
 
-function showResponse(responseText, statusText)  {
-    if(statusText=='success'){
-        log(responseText);
-        eval(responseText);
-    }
-}
-
 function redirect(url) {
     log(url);
     document.location=url;
@@ -103,8 +96,12 @@ function log(message, type) {
 
 // Join Script
 
-function join_hih_complete() {
-    alert('welcome')
+function showResponse(responseText, statusText)  {
+    log(statusText + ': ' + responseText);
+    if(statusText=='success'&&responseText!='save failed'){
+        jQuery(document).trigger('close.facebox');
+        eval(responseText);
+    }
 }
 
 $(document).ready(function() {
@@ -112,18 +109,18 @@ $(document).ready(function() {
         success:  showResponse
     };
 
+  
     $('#facebox #join_form').livequery(function() {        
         $(this).submit(function(){
 
-            log('submitted')
-            var container = $('div.errorExplanation');
+            log('submitted join form')            
             $(this).validate({
                 rules: {
                     'user[name]': "required",
                     'user[nickname]': {
                         required: true,
                         minlength: 2,
-                        remote: "/user/remote_handler"
+                        remote: "/user/remote/nickname"
                     },
                     'user[password]': {
                         required: true,
@@ -137,7 +134,7 @@ $(document).ready(function() {
                     'user[email]': {
                         required: true,
                         email: true,
-                        remote: "/user/remote_handler"
+                        remote: "/user/remote/email"
                     }
                 },
                 messages: {
@@ -171,23 +168,15 @@ $(document).ready(function() {
                     else
                         error.appendTo( element.parent().next() );
                 },
-                // specifying a submitHandler prevents the default submit, good for the demo
-                submitHandler: function() {
-                
-                },
                 // set this class to error-labels to indicate valid fields
                 success: function(label) {
                     // set &nbsp; as text for IE
                     label.html("&nbsp;").addClass("checked");
-                },
-                invalidHandler: function() {
-                    return false;
                 }
             }).form();
 
             if ($(this).valid()) {
-                $(this).ajaxSubmit(options);
-                jQuery(document).trigger('close.facebox');
+                $(this).ajaxSubmit(options);                
             }
 
             return false; //$('#facebox #form_details').valid();
