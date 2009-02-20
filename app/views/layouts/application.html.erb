@@ -53,8 +53,10 @@
 
     </div>
     <div id="content">
-      <%= render_flash_messages  %>
-      
+      <div id="flash">
+        <%= render_flash_messages  %>
+      </div>
+
       <%= yield %>
     </div>
 

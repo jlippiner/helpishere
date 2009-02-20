@@ -75,20 +75,20 @@ li {
     margin: 15px 25px;
     line-height:16pt;
 }
-#flash_messages .notice, #flash_messages .message {
+#flash .notice, #flash .message {
     border: 5px solid #9c9;
     background-color: #cfc;
     padding: 5px;
     margin: 10px 0;
 }
-#flash_messages .warning {
+#flash .warning {
     border: 5px solid yellow;
     background-color: #FFFFCC;
     padding: 5px;
     margin: 10px 0;
     color:black;
 }
-#flash_messages .error {
+#flash .error {
     border: 5px solid #990000;
     background-color: red;
     padding: 5px;
