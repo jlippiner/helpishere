@@ -46,6 +46,8 @@ li {
 }
 .resource_row {
     cursor:default;
+    border-bottom:1px inset black;
+    padding:3px 0px;
 }
 .resource_details {
     font-size:10pt;

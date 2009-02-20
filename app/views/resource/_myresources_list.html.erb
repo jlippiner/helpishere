@@ -2,10 +2,10 @@
 <div class="resource_row" rel="<%= result.id %>">
   <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-      <td style="border-bottom:1px inset black;padding:3px 3px 3px 7px">
+      <td>
         <%= "#{result.listing.title}" %>
       </td>
-      <td align="right" style="border-bottom:1px inset black; padding:3px">
+      <td align="right" style="padding-right:3px">
         <%= image_tag 'icons/overview_you.gif', :title => "You provided an overview of this resource" if(!result.overview.to_s.nilemp?)  %>
         <%= image_tag 'icons/experience_you.gif', :title => "You provided experiences for this resource"  if(result.experiences.count > 0)  %>
       </td>

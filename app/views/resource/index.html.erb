@@ -107,7 +107,7 @@
       <div id="new_resource">
         <center>
           <% form_tag resource_new_path, :method => 'get', :id => "sForm"  do %>
-            Enter Resource Name or Category: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "20"} %>
+            Resource or Category: <%= text_field_tag :s, nil, { :class => "text ui-large", :size => "20"} %>
             <%= submit_tag "Find Resource", :name => nil, :class => "ui-large"  %>
           <% end %>
         </center>
