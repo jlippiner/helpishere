@@ -1,0 +1,54 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head runat="server">
+    <title>HelpIsHere.org - Resource Search Engine For Those Affected By Life Altering Disease</title>
+    <%= stylesheet_link_tag 'splash_styles' %>
+  </head>
+  <body style="margin: 0px; font-family: Helvetica,Arial,sans-serif; font-size: 12pt;">
+    <div style="background:white;">
+      <div style="height:235px;background:white">
+        <div style="width: 100%; height: 125px; background-color: #F7DA73; border-bottom: solid 3px #502F0D">
+          &nbsp;
+        </div>
+        <div style="width: 100%; text-align: center; position: absolute; top: 5px;">
+          <img src="/images/HiH_Splash_Logo.png" alt="HelpIsHere Logo" />
+        </div>
+      </div>
+      <div style="width: 100%; text-align: center; background: white">
+        <div id="flash">
+          <%= render_flash_messages  %>
+        </div>
+          <h1>WHAT NOW?</h1>
+        <center>
+        <div style="text-align: left; width: 500px">
+          <p>
+            HelpIsHere.org will help you answer this critical post-diagnosis question.
+          </p>
+          <p>
+            We are a resource search engine for those impacted by life-altering diseases.
+          </p>
+          <p>
+            We'll help you find and navigate resources specific to your disease, demographic,
+            and geographic location.
+          </p>
+          <p>
+            HelpIsHere.org is here to help.
+          </p>
+          <p>
+            <em>Launching late 2009.</em>
+          </p>
+          <!-- SIGN UP BOX WOULD GO HERE -->
+        </div>
+        </center>
+      </div>
+      <div style="text-align: center; padding-top: 30px; color: white; font-size: 10pt;
+           width: 100%; background: #99972D; border-top: solid 3px #502F0D;margin-top:20px">
+        <p style="font-weight: bold;">
+        A Project Of The Gwendowlyn Strong Foundation</p>
+        <p>
+        copyright 2008-2009</p>
+      </div>
+    </div>
+  </body>
+</html>

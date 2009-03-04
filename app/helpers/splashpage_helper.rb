@@ -1,0 +1,2 @@
+module SplashpageHelper
+end

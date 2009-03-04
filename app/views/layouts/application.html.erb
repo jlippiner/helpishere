@@ -11,27 +11,11 @@
   </head>
   <body>
     <div id="header">
-      <table width="100%" cellpadding="0" cellspacing="0">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td>
+          <td rowspan="2" width="300">
             <%= image_tag 'header_logo.jpg' %>
-          </td>
-          <td valign="bottom">
-            <table id="tabs" cellspacing="0" cellpadding="0">
-              <tr>
-              <% if @current_user %>
-                <td valign="bottom">
-                    <%= link_to image_tag('tabs/tab_home.jpg', :border => "0"), user_index_path %>
-                </td>
-              <% end %>
-              <td valign="bottom"><%= image_tag 'tabs/tab_search.jpg' %></td>
-              <td valign="bottom"><%= link_to image_tag('tabs/tab_add.jpg', :border => "0"), resource_new_path %></td>
-              <% if @current_user %>
-                <td valign="bottom"><%= link_to image_tag('tabs/tab_myresources.jpg', :border => "0"), resource_index_path %></td>
-              <% end %>
-              </tr>
-            </table>
-          </td>
+          </td>        
           <td align="right" valign="top">
             <div id="login_logout">
               <% if @current_user %>
@@ -47,6 +31,24 @@
                 <%= link_to "Login", user_login_path %>
               <% end %>
             </div>
+          </td>
+        </tr>
+        <tr>
+           <td valign="bottom">
+              <table id="tabs" cellspacing="0" cellpadding="0">
+                <tr>
+                <% if @current_user %>
+                  <td valign="bottom">
+                      <%= link_to image_tag('tabs/tab_home.jpg', :border => "0"), user_index_path %>
+                  </td>
+                <% end %>
+                <td valign="bottom"><%= image_tag 'tabs/tab_search.jpg' %></td>
+                <td valign="bottom"><%= link_to image_tag('tabs/tab_add.jpg', :border => "0"), resource_new_path %></td>
+                <% if @current_user %>
+                  <td valign="bottom"><%= link_to image_tag('tabs/tab_myresources.jpg', :border => "0"), resource_index_path %></td>
+                <% end %>
+                </tr>
+              </table>
           </td>
         </tr>
       </table>
