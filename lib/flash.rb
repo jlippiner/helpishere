@@ -20,7 +20,7 @@ module ActionController
 end
 
 module EasyFlash
- module FlashMessageConductor
+  module FlashMessageConductor
     FLASH_MESSAGE_TYPES = [ :error, :notice, :message, :warning ]
   
 
