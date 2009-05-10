@@ -19,9 +19,9 @@
         <div id="flash">
           <%= render_flash_messages  %>
         </div>
-        <h1>A Project Of The Gwendolyn Strong Foundation</h1>
+        <h1 style="font-size:16pt">A Project Of The Gwendolyn Strong Foundation</h1>
         <center>
-          <div style="text-align: left; width: 600px">
+          <div style="text-align: left; font-size:11pt; width: 600px">
             <p>
               In October 2007, Gwendoly Strong was born a perfectly healthy baby.
               At 9-weeks-old she was hospitalized with what was thought to be Infant Botulism,
@@ -32,19 +32,20 @@
             <p>
               Anyone facing a terrible, life altering disease has reached a point where
               they ask, "What now?"  While hundreds of online support groups and networks do
-              exist, finding the basic answers to the questions you face everyday is often like
+              exist, finding answers to the questions faced everyday is often 
               the proverbial "neddle in a haystack."
             </p>
             <p>In late 2009 HelpIsHere.org intends to change all this.  We will bring the
             most important questions, answers and resources to the forefront to hopefully
-            help you learn, reach out, connect and cope.</p>
+            help those in need get the answers they need from those who have been there
+            before them.</p>
             <p>
-              To make this goal a reality, we need your help.  Whether it's $5 or $50, your
+              To make this goal a reality, <b>we need your help.</b>  Whether it's $5 or $50, your
               contribution will make a difference.
             </p>
-            <p>
+            <p style="margin:35px">
               <center>
-                <%= link_to image_tag("btn_donatenow_lg.jpg"), "http://www.gwendolynstrongfoundation.com/donation" %>
+                <%= link_to image_tag("btn_donatenow_lg.jpg", :border => 0, :alt => "Donate to Gwendolyn Strong Foundation."  ), "http://www.gwendolynstrongfoundation.com/donation" %>
               </center>
             </p>
             <!-- SIGN UP BOX WOULD GO HERE -->
