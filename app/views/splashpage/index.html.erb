@@ -1,67 +1,73 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head runat="server">
-    <title>HelpIsHere.org - Resource Search Engine For Those Affected By Life Altering Disease</title>
-    <%= stylesheet_link_tag 'splash_styles' %>
-  </head>
-  <body style="margin: 0px; font-family: Helvetica,Arial,sans-serif; font-size: 12pt;">
-    <div style="background:white;">
-      <div style="height:235px;background:white">
-        <div style="width: 100%; height: 125px; background-color: #F7DA73; border-bottom: solid 3px #502F0D">
-          &nbsp;
-        </div>
-        <div style="width: 100%; text-align: center; position: absolute; top: 5px;">
-          <img src="/images/HiH_Splash_Logo.png" alt="HelpIsHere Logo" />
-        </div>
-      </div>
-      <div style="width: 100%; text-align: center; background: white">
-        <div id="flash">
-          <%= render_flash_messages  %>
-        </div>
-        <h1 style="font-size:16pt">A Project Of The Gwendolyn Strong Foundation</h1>
-        <center>
-          <div style="text-align: left; font-size:11pt; width: 600px">
-            <p>
-              In October 2007, Gwendoly Strong was born a perfectly healthy baby.
-              At 9-weeks-old she was hospitalized with what was thought to be Infant Botulism,
-              a serious, but treatable illness. However, just before her 6 month birthday, her parent's
-              worst fears were realized when she was diagnosed with the terminal,
-              degenerative disease SMA Type 1.
-            </p>
-            <p>
-              Anyone facing a terrible, life altering disease has reached a point where
-              they ask, "What now?"  While hundreds of online support groups and networks do
-              exist, finding answers to the questions faced everyday is often 
-              the proverbial "neddle in a haystack."
-            </p>
-            <p>In late 2009 HelpIsHere.org intends to change all this.  We will bring the
-            most important questions, answers and resources to the forefront to hopefully
-            help those in need get the answers they need from those who have been there
-            before them.</p>
-            <p>
-              To make this goal a reality, <b>we need your help.</b>  Whether it's $5 or $50, your
-              contribution will make a difference.
-            </p>
-            <p style="margin:35px">
-              <center>
-                <%= link_to image_tag("btn_donatenow_lg.jpg", :border => 0, :alt => "Donate to Gwendolyn Strong Foundation."  ), "http://www.gwendolynstrongfoundation.com/donation" %>
-              </center>
-            </p>
-            <!-- SIGN UP BOX WOULD GO HERE -->
-          </div>
-        </center>
-      </div>
-      <div style="text-align: center; padding-top: 30px; color: white; font-size: 10pt;
-           width: 100%; background: #99972D; border-top: solid 3px #502F0D;margin-top:20px">
-        <p style="font-weight: bold;">
-        A Project Of The Gwendolyn Strong Foundation</p>
-        <p>
-        copyright 2008-2009</p>
-      </div>
-    </div>
-   <!-- Wripple Tracking tag --> 
-   <script type="text/javascript"> var wrpl_id='996332902'; var wrpl_goal='TEST';</script>
-   <script type="text/javascript"> var wrplJsHost = (("https:" == document.location.protocol) ? "https://" : "http://"); document.write(unescape("%3Cscript src='" + wrplJsHost + "0.0.0.0:3000/visits/track.js' type='text/javascript'%3E%3C/script%3E")); </script> <!-- End Wripple tag -->
-  </body>
+	<head runat="server">
+		<title>
+			HelpIsHere.org - Resource Search Engine For Those Affected By Life Altering Disease
+		</title><%= stylesheet_link_tag 'splash_styles' %>
+	</head>
+	<body style="margin: 0px; font-family: Helvetica,Arial,sans-serif; font-size: 12pt;">
+		<div style="background:white;">
+			<div style="height:235px;background:white">
+				<div style="width: 100%; height: 125px; background-color: #F7DA73; border-bottom: solid 3px #502F0D">
+					&nbsp;
+				</div>
+				<div style="width: 100%; text-align: center; position: absolute; top: 5px;">
+					<img src="/images/HiH_Splash_Logo.png" alt="HelpIsHere Logo" />
+				</div>
+			</div>
+			<div style="width: 100%; text-align: center; background: white">
+				<div id="flash">
+					<%= render_flash_messages  %>
+				</div>
+				<h1 style="font-size:16pt">
+					A Project of the Gwendolyn Strong Foundation
+				</h1>
+				<center>
+					<div style="text-align: left; font-size:11pt; width: 600px">
+						<p>
+							In October 2007, Gwendolyn Strong was born perfectly healthy. At 9-weeks-old she was hospitalized with what was thought to be Infant Botulism, a
+            serious, but treatable illness. However, just before her 6-month birthday, her parent's worst fears were realized when she was properly diagnosed with
+            the terminal, degenerative disease Spinal Muscular Atrophy (SMA) Type 1.
+						</p>
+						<p>
+							In the months since Gwendolyn's diagnosis her parents have been consistently frustrated by the lack of proactive, actionable
+                            information to help guide them through their journey with their daughter's illness. While countless online support groups and networks
+                            exist for all life-altering diseases or illnesses, efficiently finding helpful answers to the "What now?" questions leads to the
+                            proverbial "needle in a haystack" -- at a time when guidance is most crucial.
+						</p>
+						<p>
+							The Gwendolyn Strong Foundation is determined to change all this. In late 2009, HelpIsHere.org will bring the most important questions,
+                            answers, and resources to the forefront to help those impacted by life-altering diseases get answers directly from those who have been
+                            through it before them -- people just like them. Nothing like HelpIsHere.org exists and the need is enormous.
+						</p>
+						<p>
+							To make HelpIsHere.org a reality, we need your help. Whether it's $5 or $50 or more, your contribution will make a difference for
+                            millions of people impacted by life-altering diseases.
+						</p>
+						<p style="margin:35px"></p>
+						<center>
+							<%= link_to image_tag("btn_donatenow_lg.jpg", :border => 0, :alt => "Donate to Gwendolyn Strong Foundation."  ), "http://www.gwendolynstrongfoundation.com/donation" %>
+						</center><!-- SIGN UP BOX WOULD GO HERE -->
+					</div>
+				</center>
+			</div>
+			<div style="text-align: center; padding-top: 30px; color: white; font-size: 10pt; width: 100%; background: #99972D; border-top: solid 3px #502F0D;margin-top:20px">
+				<p style="font-weight: bold;">
+					<a href="gwendolynstrongfoundation.org" target="_blank">A Project of the Gwendolyn Strong Foundation</a>
+				</p>
+				<p>
+					copyright 2008-2009
+				</p>
+			</div>
+		</div><!-- Wripple Tracking tag --><script type="text/javascript">
+//<![CDATA[
+		var wrpl_id='996332902'; var wrpl_goal='TEST';
+		//]]>
+		</script><script type="text/javascript">
+//<![CDATA[
+		var wrplJsHost = (("https:" == document.location.protocol) ? "https://" : "http://"); document.write(unescape("%3Cscript src='" + wrplJsHost + "0.0.0.0:3000/visits/track.js' type='text/javascript'%3E%3C/script%3E")); 
+		//]]>
+		</script><!-- End Wripple tag -->
+	</body>
 </html>
